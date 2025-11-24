@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 
 public abstract class DateHelper {
 
-    public LocalDateTime getCurrentLocalDateTime() { return LocalDateTime.now(); }
+    public static LocalDateTime getCurrentLocalDateTime() { return LocalDateTime.now(); }
 }

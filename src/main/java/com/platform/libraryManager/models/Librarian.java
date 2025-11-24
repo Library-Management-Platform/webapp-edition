@@ -1,6 +1,5 @@
 package com.platform.libraryManager.models;
 
-import com.platform.libraryManager.enums.RoleEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +14,6 @@ public class Librarian extends User {
     public Librarian() { super(); }
 
     public Librarian (
-            RoleEnum role,
             String username,
             String email,
             String password,
@@ -23,14 +21,13 @@ public class Librarian extends User {
             LocalDateTime updatedAt,
             Library library
     ) {
-        super(role, username, email, password, createdAt, updatedAt);
+        super(username, email, password, createdAt, updatedAt);
         setLibrary(library);
     }
 
 
     public Librarian(
             Long id,
-            RoleEnum role,
             String username,
             String email,
             String password,
@@ -38,7 +35,7 @@ public class Librarian extends User {
             LocalDateTime updatedAt,
             Library library
     ) {
-        super(id, role, username, email, password, createdAt, updatedAt);
+        super(id, username, email, password, createdAt, updatedAt);
         setLibrary(library);
     }
 

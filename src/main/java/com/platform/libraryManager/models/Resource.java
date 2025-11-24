@@ -7,10 +7,13 @@ import com.platform.libraryManager.enums.ResourceTypeEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "resources")
 public class Resource {
+
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true) private List<Loan> loans;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @ManyToOne @JoinColumn(name = "library_id") private Library library;

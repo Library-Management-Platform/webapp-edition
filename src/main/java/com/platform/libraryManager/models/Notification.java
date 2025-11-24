@@ -15,9 +15,9 @@ public class Notification {
     @ManyToOne @JoinColumn(name = "user_id") private User user;
 
     private String message;
-    private boolean read;
     private LocalDateTime sentAt;
 
+    @Column(name = "is_read") private boolean read;
     @Enumerated(EnumType.STRING) private NotificationTypeEnum type;
 
     public Notification() {}

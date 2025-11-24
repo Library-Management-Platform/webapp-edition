@@ -13,8 +13,8 @@ public class Loan {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
 
-    @ManyToOne @JoinColumn(name = "client_id") private Client client;
-    @ManyToOne @JoinColumn(name = "resource_id") private Resource resource;
+    @ManyToOne @JoinColumn(name = "client_id", nullable = false) private Client client;
+    @ManyToOne @JoinColumn(name = "resource_id", nullable = false) private Resource resource;
 
     private LocalDateTime startDate;
     private LocalDateTime dueDate;
