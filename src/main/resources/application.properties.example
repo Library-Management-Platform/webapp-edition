@@ -16,3 +16,11 @@ spring.datasource.driver-class-name=org.postgresql.Driver
 spring.datasource.url=jdbc:postgresql://<HOST>:<PORT>/<DATABASE>?sslmode=require&channel_binding=require
 spring.datasource.username=<USERNAME>
 spring.datasource.password=<PASSWORD>
+
+
+# --- Argon2 Hashing Configuration ---
+spring.security.password.argon2.salt-length=16
+spring.security.password.argon2.hash-length=32
+spring.security.password.argon2.parallelism=1
+spring.security.password.argon2.memory=4096
+spring.security.password.argon2.iterations=3

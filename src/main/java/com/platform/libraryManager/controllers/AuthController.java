@@ -1,12 +1,18 @@
 package com.platform.libraryManager.controllers;
 
-import com.platform.libraryManager.models.Client;
+import com.platform.libraryManager.helpers.RedirectHelper;
 import com.platform.libraryManager.payloads.authPayloads.SignUpAuthPayload;
+import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpResponse;
+import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpSuccessResponse;
 import com.platform.libraryManager.services.AuthService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Map;
 
 @Controller
 public class AuthController {
@@ -14,21 +20,26 @@ public class AuthController {
     @Autowired AuthService authService;
 
     @GetMapping("/login")
-    public String login() {
-        return "login"; // login.html
-    }
-
-
+    public String login() { return "login"; }
 
     @GetMapping("/sign-up")
-    public String signUp() {
-        return "sign-up"; // login.html
-    }
+    public String signUp() { return "sign-up"; }
+
+
+
 
     @PostMapping("/sign-up")
-    public String signUp(SignUpAuthPayload signUpAuthPayload) {
-        authService.signUp(signUpAuthPayload);
-        return "redirect:/login";
+    public String signUp(
+            SignUpAuthPayload signUpAuthPayload,
+            RedirectAttributes redirectAttributes
+    ) {
+        AuthSignUpResponse authSignUpResponse = authService.signUp(signUpAuthPayload);
+
+        return RedirectHelper.addFlashAttributesAndRedirect(
+                redirectAttributes,
+                Map.of("message", authSignUpResponse.getMessage()),
+                authSignUpResponse.success() ? "redirect:/login" : "redirect:/sign-up"
+        );
     }
 
 

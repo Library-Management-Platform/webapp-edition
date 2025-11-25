@@ -1,15 +1,18 @@
-package com.platform.libraryManager.configuration;
+package com.platform.libraryManager.configurationProperties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
+
+@Component
 @ConfigurationProperties(prefix = "spring.datasource")
-public class DatasourceConfiguration {
+public class DatasourceConfigurationProperties {
 
     private String url;
     private String name;
     private String host;
     private int port;
-    private String user;
+    private String username;
     private String password;
 
     public String getUrl() { return url; }
@@ -24,8 +27,8 @@ public class DatasourceConfiguration {
     public int getPort() { return port; }
     public void setPort(int port) { this.port = port; }
 
-    public String getUser() { return user; }
-    public void setUser(String user) { this.user = user; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
