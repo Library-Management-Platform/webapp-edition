@@ -1,12 +1,17 @@
 package com.platform.libraryManager.controllers;
 
 import com.platform.libraryManager.helpers.RedirectHelper;
+import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
 import com.platform.libraryManager.payloads.authPayloads.SignUpAuthPayload;
+import com.platform.libraryManager.responses.endpointResponses.authResponses.loginResponses.AuthLoginResponse;
 import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpResponse;
 import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpSuccessResponse;
 import com.platform.libraryManager.services.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +33,29 @@ public class AuthController {
 
 
 
+    @PostMapping("/login")
+    public String login(
+            LoginAuthPayload loginAuthPayload,
+            RedirectAttributes redirectAttributes,
+            HttpServletRequest request
+    ) {
+
+        final AuthLoginResponse authLoginResponse = authService.login(loginAuthPayload, request);
+
+        return RedirectHelper.addFlashAttributesAndRedirect(
+                redirectAttributes,
+                Map.of("message", authLoginResponse.getMessage()),
+                authLoginResponse.success() ? "redirect:/client/dashboard" : "redirect:/login"
+        );
+    }
+
+
     @PostMapping("/sign-up")
     public String signUp(
             SignUpAuthPayload signUpAuthPayload,
             RedirectAttributes redirectAttributes
     ) {
-        AuthSignUpResponse authSignUpResponse = authService.signUp(signUpAuthPayload);
+        final AuthSignUpResponse authSignUpResponse = authService.signUp(signUpAuthPayload);
 
         return RedirectHelper.addFlashAttributesAndRedirect(
                 redirectAttributes,

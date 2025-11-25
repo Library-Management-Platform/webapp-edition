@@ -2,6 +2,7 @@ package com.platform.libraryManager.configurations;
 
 
 import com.platform.libraryManager.configurationProperties.PasswordHashingConfigurationProperties;
+import com.platform.libraryManager.providers.PasswordHashingProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,13 +17,15 @@ public class PasswordHashingConfiguration {
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new Argon2PasswordEncoder(
-                passwordHashingConfigurationProperties.getSaltLength(),
-                passwordHashingConfigurationProperties.getHashLength(),
-                passwordHashingConfigurationProperties.getParallelism(),
-                passwordHashingConfigurationProperties.getMemory(),
-                passwordHashingConfigurationProperties.getIterations()
+    public PasswordHashingProvider passwordEncoder() {
+        return new PasswordHashingProvider(
+                new Argon2PasswordEncoder(
+                        passwordHashingConfigurationProperties.getSaltLength(),
+                        passwordHashingConfigurationProperties.getHashLength(),
+                        passwordHashingConfigurationProperties.getParallelism(),
+                        passwordHashingConfigurationProperties.getMemory(),
+                        passwordHashingConfigurationProperties.getIterations()
+                )
         );
     }
 }

@@ -59,6 +59,25 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.13.0</version> <!-- latest → 0.13.0 :contentReference[oaicite:0]{index=0} -->
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.13.0</version> <!-- latest → 0.13.0 :contentReference[oaicite:1]{index=1} -->
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.13.0</version> <!-- latest → 0.13.0 :contentReference[oaicite:2]{index=2} -->
+            <scope>runtime</scope>
+        </dependency>
+
+
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
