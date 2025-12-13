@@ -1,13 +1,6 @@
 package com.platform.libraryManager.managers.authManagers;
 
-import com.platform.libraryManager.helpers.JSONHelper;
-import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
-import com.platform.libraryManager.providers.JWTProvider;
-import com.platform.libraryManager.providers.PasswordHashingProvider;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.loginResponses.AuthLoginResponse;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.loginResponses.AuthLoginSuccessResponse;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.loginResponses.AuthLoginWrongPasswordErrorResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.getUniqueClientResponses.GetUniqueClientResponse;
+
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +8,21 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
+
+
+
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginErrorResponse;
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginResponse;
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginSuccessResponse;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
+
+
+import com.platform.libraryManager.helpers.JSONHelper;
+import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
+import com.platform.libraryManager.providers.JWTProvider;
+import com.platform.libraryManager.providers.PasswordHashingProvider;
+
 
 @Component
 public class AuthLoginManager {
@@ -56,6 +62,6 @@ public class AuthLoginManager {
             return new AuthLoginSuccessResponse(jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueClientResponse.getClient())));
 
         }
-        else return new AuthLoginWrongPasswordErrorResponse();
+        return new AuthLoginErrorResponse(401, "The password you entered is incorrect. Please verify your password and try again.");
     }
 }

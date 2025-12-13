@@ -3,15 +3,12 @@ package com.platform.libraryManager.controllers;
 import com.platform.libraryManager.helpers.RedirectHelper;
 import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
 import com.platform.libraryManager.payloads.authPayloads.SignUpAuthPayload;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.loginResponses.AuthLoginResponse;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpResponse;
-import com.platform.libraryManager.responses.endpointResponses.authResponses.signUpResponses.AuthSignUpSuccessResponse;
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginResponse;
+import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpResponse;
 import com.platform.libraryManager.services.AuthService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

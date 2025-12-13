@@ -1,10 +1,12 @@
 package com.platform.libraryManager.services;
 
 import com.platform.libraryManager.payloads.clientPayloads.GetUniqueClientPayload;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.createClientResponses.CreateClientResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.getUniqueClientResponses.GetUniqueClientErrorResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.getUniqueClientResponses.GetUniqueClientResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.getUniqueClientResponses.GetUniqueClientSuccessResponse;
+import com.platform.libraryManager.responses.endpoints.client.create.CreateClientErrorResponse;
+import com.platform.libraryManager.responses.endpoints.client.create.CreateClientResponse;
+import com.platform.libraryManager.responses.endpoints.client.create.CreateClientSuccessResponse;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientErrorResponse;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientSuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,6 @@ import com.platform.libraryManager.factories.ClientFactory;
 import com.platform.libraryManager.models.Client;
 import com.platform.libraryManager.payloads.clientPayloads.CreateClientPayload;
 import com.platform.libraryManager.repositories.ClientRespository;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.createClientResponses.CreateClientExistsErrorResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.createClientResponses.CreateClientInvalidDataEnteredErrorResponse;
-import com.platform.libraryManager.responses.endpointResponses.clientResponses.createClientResponses.CreateClientSuccessResponse;
 
 
 @Service
@@ -47,10 +46,11 @@ public class ClientService {
             return new CreateClientSuccessResponse();
 
         }catch(DataIntegrityViolationException exception) {
-            return new CreateClientExistsErrorResponse();
+            return new CreateClientErrorResponse(409, "Client Already Exists");
 
         }catch(Exception exception) {
-            return new CreateClientInvalidDataEnteredErrorResponse();
+            return new CreateClientErrorResponse(400, "Invalid Client data format.");
+
         }
     }
 
