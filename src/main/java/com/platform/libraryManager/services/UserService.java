@@ -29,7 +29,6 @@ public class UserService {
             return new GetUniqueUserSuccessResponse(user);
 
         }catch (Exception exception) {
-            System.out.println(exception);
             return new GetUniqueUserErrorResponse();
         }
 
