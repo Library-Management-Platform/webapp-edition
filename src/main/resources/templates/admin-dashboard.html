@@ -13,8 +13,20 @@
         <!-- Include header fragment -->
         <div th:replace="fragments/header :: header(${username}, ${role})"></div>
 
-        <div class="container mt-5">
-            <div>HI HI HI </div>
+        <div class="row" style="max-width: 90vw; max-height: 100vh">
+            <!-- Include sidebar fragment -->
+            <div class="col-md-3 col-lg-2">
+                <div th:replace="fragments/sidebar :: adminSidebar"></div>
+            </div>
+
+            <div class="col-md-9 col-lg-10">
+                <h1>Welcome, Admin!</h1>
+                <!-- Main content goes here -->
+            </div>
+
+
+
+
         </div>
 
         <!-- Include footer fragment -->

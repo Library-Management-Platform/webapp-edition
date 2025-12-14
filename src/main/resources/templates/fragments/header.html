@@ -5,7 +5,7 @@
             <a class="navbar-brand" href="#">Library System</a>
             <div class="d-flex align-items-center">
                 <span class="text-white me-3">
-                    Logged in as <b th:text="${username}"></b> (<span th:text="${role}"></span>)
+                    <b th:text="${username}"></b> (<span th:text="${role}"></span>)
                 </span>
                 <a class="btn btn-outline-light" th:href="@{/logout}">Logout</a>
             </div>
