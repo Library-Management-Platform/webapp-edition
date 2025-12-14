@@ -9,28 +9,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     
-    <!-- Custom CSS -->
     <style>
         .resource-card {
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
             height: 100%;
         }
         .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .availability-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1;
-        }
-        .category-filter .nav-link.active {
-            background-color: #0d6efd;
-            color: white;
-        }
-        .resource-type-badge {
-            font-size: 0.8rem;
+            transform: translateY(-3px);
         }
     </style>
 </head>
@@ -46,156 +31,130 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <h1 class="h2"><i class="bi bi-collection-play me-2"></i>Browse Resources</h1>
-                        <p class="text-muted">Discover books, digital documents, and multimedia resources</p>
-                    </div>
-                    <div>
-                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#advancedSearchModal">
-                            <i class="bi bi-funnel me-1"></i> Advanced Search
-                        </button>
+                        <p class="text-muted">
+                            <span th:text="${totalItems != null ? totalItems : '0'}">0</span> resources found
+                            <span th:if="${keyword}" class="ms-2">
+                                for "<span th:text="${keyword}"></span>"
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Filter Section -->
+        <!-- Search Bar -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <!-- Quick Search Bar -->
-                        <form th:action="@{/client/resources/search}" method="get" class="mb-3">
-                            <div class="input-group input-group-lg">
-                                <input type="text" 
-                                       class="form-control" 
-                                       name="keyword"
-                                       th:value="${param.keyword}"
-                                       placeholder="Search by title, author, ISBN, or description..."
-                                       aria-label="Search resources">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="bi bi-search me-1"></i> Search
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <!-- Category Filters -->
-                        <div class="category-filter">
-                            <ul class="nav nav-pills justify-content-center">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="#" data-filter="all">All Resources</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" data-filter="books">
-                                        <i class="bi bi-book me-1"></i> Books
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" data-filter="digital">
-                                        <i class="bi bi-file-earmark-text me-1"></i> Digital Documents
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#" data-filter="media">
-                                        <i class="bi bi-camera-video me-1"></i> Multimedia
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
+                <form th:action="@{/client/resources/search}" method="get" class="mb-3">
+                    <div class="input-group">
+                        <input type="text" 
+                               class="form-control" 
+                               name="query"
+                               th:value="${query}"
+                               placeholder="Search by title, author, or keyword...">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search me-1"></i> Search
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
         
         <!-- Resources Grid -->
-        <div class="row" id="resourcesGrid">
-            <!-- Resource Cards will be displayed here -->
+        <div class="row">
+            <!-- Resource Cards -->
             <div th:each="resource : ${resources}" class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                <div class="card resource-card border h-100">
-                    <!-- Availability Badge -->
-                    <span th:class="${resource.availableCopies > 0} ? 
-                        'badge bg-success availability-badge' : 
-                        'badge bg-danger availability-badge'">
-                        <th:block th:text="${resource.availableCopies > 0} ? 'Available' : 'Unavailable'"></th:block>
-                    </span>
-                    
-                    <!-- Resource Type Badge -->
-                    <span th:class="${resource.type == 'BOOK'} ? 'badge bg-info resource-type-badge position-absolute top-0 start-0 m-2' :
-                                     ${resource.type == 'DIGITAL'} ? 'badge bg-warning text-dark resource-type-badge position-absolute top-0 start-0 m-2' :
-                                     'badge bg-secondary resource-type-badge position-absolute top-0 start-0 m-2'">
-                        <th:block th:text="${resource.type}"></th:block>
-                    </span>
-                    
-                    <!-- Card Body -->
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title" th:text="${resource.title}">Resource Title</h5>
+                <div class="card resource-card h-100">
+                    <div class="card-body">
+                        <!-- Status Badge -->
+                        <div class="mb-2">
+                            <span th:if="${resource.status.name() == 'AVAILABLE'}" 
+                                  class="badge bg-success">Available</span>
+                            <span th:if="${resource.status.name() == 'RESERVED'}" 
+                                  class="badge bg-warning text-dark">Reserved</span>
+                            <span th:if="${resource.status.name() == 'LOANED'}" 
+                                  class="badge bg-secondary">Loaned</span>
+                        </div>
+                        
+                        <!-- Type Badge -->
+                        <div class="mb-2">
+                            <span class="badge bg-info">
+                                <span th:text="${resource.type}">Type</span>
+                            </span>
+                        </div>
+                        
+                        <!-- Title and Author -->
+                        <h5 class="card-title" th:text="${resource.title}">Title</h5>
                         <h6 class="card-subtitle mb-2 text-muted" th:text="${resource.author}">Author</h6>
                         
-                        <p class="card-text flex-grow-1" th:text="${#strings.abbreviate(resource.description, 100)}">
-                            Resource description...
-                        </p>
+                        <!-- Category -->
+                        <div class="mb-3">
+                            <span class="badge bg-light text-dark">
+                                <span th:text="${resource.category}">Category</span>
+                            </span>
+                        </div>
                         
-                        <div class="mt-auto">
-                            <div class="row small text-muted mb-2">
-                                <div class="col-6">
-                                    <i class="bi bi-calendar3 me-1"></i>
-                                    <span th:text="${resource.publicationYear}">Year</span>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <i class="bi bi-journal-bookmark me-1"></i>
-                                    <span th:text="${resource.isbn}">ISBN</span>
-                                </div>
-                            </div>
+                        <!-- Buttons -->
+                        <div class="mt-3">
+                            <a th:href="@{/client/resources/{id}(id=${resource.id})}" 
+                               class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="bi bi-info-circle me-1"></i> View Details
+                            </a>
                             
-                            <div class="d-grid gap-2">
-                                <a th:href="@{/client/resources/{id}(id=${resource.id})}" 
-                                   class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-info-circle me-1"></i> Details
-                                </a>
-                                <button th:if="${resource.availableCopies > 0}" 
-                                        class="btn btn-success btn-sm"
-                                        th:onclick="'borrowResource(' + ${resource.id} + ')'">
-                                    <i class="bi bi-bookmark-plus me-1"></i> Borrow
-                                </button>
-                                <button th:unless="${resource.availableCopies > 0}" 
-                                        class="btn btn-outline-secondary btn-sm"
-                                        th:onclick="'reserveResource(' + ${resource.id} + ')'">
-                                    <i class="bi bi-clock me-1"></i> Reserve
-                                </button>
+                            <!-- Reserve Button (only if available) -->
+                            <div th:if="${resource.status.name() == 'AVAILABLE'}">
+                                <form th:action="@{/client/resources/{id}/reserve(id=${resource.id})}" method="post">
+                                    <button type="submit" class="btn btn-success btn-sm w-100">
+                                        <i class="bi bi-bookmark-plus me-1"></i> Reserve
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Empty State -->
-            <div th:if="${#lists.isEmpty(resources)}" class="col-12">
+            <!-- No Results Message -->
+            <div th:if="${resources.empty}" class="col-12">
                 <div class="text-center py-5">
                     <i class="bi bi-search display-1 text-muted"></i>
                     <h3 class="mt-3">No resources found</h3>
-                    <p class="text-muted">Try adjusting your search or filter criteria</p>
-                    <a href="/client/resources" class="btn btn-primary mt-2">
-                        <i class="bi bi-arrow-clockwise me-1"></i> View All Resources
+                    <p class="text-muted">
+                        <span th:if="${keyword}">No results for "<span th:text="${keyword}"></span>"</span>
+                        <span th:unless="${keyword}">No resources available</span>
+                    </p>
+                    <a th:href="@{/client/resources}" class="btn btn-primary mt-2">
+                        <i class="bi bi-arrow-clockwise me-1"></i> View All
                     </a>
                 </div>
             </div>
         </div>
         
         <!-- Pagination -->
-        <div th:if="${!#lists.isEmpty(resources)}" class="row mt-4">
+        <div th:if="${totalPages > 1}" class="row mt-4">
             <div class="col-12">
                 <nav aria-label="Page navigation">
                     <ul class="pagination justify-content-center">
+                        <!-- Previous -->
                         <li class="page-item" th:class="${currentPage == 0} ? 'disabled' : ''">
-                            <a class="page-link" th:href="@{/client/resources(page=${currentPage - 1}, size=${pageSize})}">
+                            <a class="page-link" 
+                               th:href="@{/client/resources(page=${currentPage - 1}, size=${pageSize}, keyword=${keyword})}">
                                 Previous
                             </a>
                         </li>
-                        <li th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
-                            th:class="'page-item' + (${page} == ${currentPage} ? ' active' : '')">
-                            <a class="page-link" th:href="@{/client/resources(page=${page}, size=${pageSize})}"
-                               th:text="${page + 1}">1</a>
+                        
+                        <!-- Pages -->
+                        <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                            th:class="'page-item' + (${pageNum - 1} == ${currentPage} ? ' active' : '')">
+                            <a class="page-link" 
+                               th:href="@{/client/resources(page=${pageNum - 1}, size=${pageSize}, keyword=${keyword})}"
+                               th:text="${pageNum}"></a>
                         </li>
+                        
+                        <!-- Next -->
                         <li class="page-item" th:class="${currentPage == totalPages - 1} ? 'disabled' : ''">
-                            <a class="page-link" th:href="@{/client/resources(page=${currentPage + 1}, size=${pageSize})}">
+                            <a class="page-link" 
+                               th:href="@{/client/resources(page=${currentPage + 1}, size=${pageSize}, keyword=${keyword})}">
                                 Next
                             </a>
                         </li>
@@ -208,142 +167,29 @@
     <!-- Include Footer -->
     <div th:replace="fragments/client-footer :: footer"></div>
     
-    <!-- Advanced Search Modal -->
-    <div class="modal fade" id="advancedSearchModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Advanced Search</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form th:action="@{/client/resources/advanced-search}" method="get">
-                    <div class="modal-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Title</label>
-                                <input type="text" class="form-control" name="title">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Author</label>
-                                <input type="text" class="form-control" name="author">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Resource Type</label>
-                                <select class="form-select" name="type">
-                                    <option value="">All Types</option>
-                                    <option value="BOOK">Books</option>
-                                    <option value="DIGITAL">Digital Documents</option>
-                                    <option value="MEDIA">Multimedia</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Category</label>
-                                <select class="form-select" name="category">
-                                    <option value="">All Categories</option>
-                                    <option th:each="cat : ${categories}" 
-                                            th:value="${cat.id}"
-                                            th:text="${cat.name}">Category</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Publication Year (From)</label>
-                                <input type="number" class="form-control" name="yearFrom" min="1900" max="2024">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Publication Year (To)</label>
-                                <input type="number" class="form-control" name="yearTo" min="1900" max="2024">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap JS Bundle -->
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Custom JavaScript -->
+    <!-- Simple JavaScript for confirmation -->
     <script>
-        // Filter resources by category
-        document.querySelectorAll('.category-filter .nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const filter = this.getAttribute('data-filter');
-                
-                // Update active state
-                document.querySelectorAll('.category-filter .nav-link').forEach(l => {
-                    l.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                // Filter cards
-                document.querySelectorAll('#resourcesGrid .col-xl-3').forEach(card => {
-                    if (filter === 'all') {
-                        card.style.display = 'block';
-                    } else {
-                        const type = card.querySelector('.resource-type-badge').textContent.toLowerCase();
-                        card.style.display = type.includes(filter) ? 'block' : 'none';
+        document.addEventListener('DOMContentLoaded', function() {
+            // Confirm reservation
+            document.querySelectorAll('form[action*="/reserve"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    if (!confirm('Reserve this resource?')) {
+                        e.preventDefault();
                     }
                 });
             });
-        });
-        
-        // Borrow resource function
-        function borrowResource(resourceId) {
-            if (confirm('Are you sure you want to borrow this resource?')) {
-                fetch(`/client/resources/${resourceId}/borrow`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Resource borrowed successfully!');
-                        location.reload();
-                    } else {
-                        alert('Failed to borrow resource. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
+            
+            // Show success message if URL has reserved parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('reserved')) {
+                alert('Resource reserved successfully!');
+                // Clean URL
+                const newUrl = window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
             }
-        }
-        
-        // Reserve resource function
-        function reserveResource(resourceId) {
-            if (confirm('Would you like to reserve this resource?')) {
-                fetch(`/client/resources/${resourceId}/reserve`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Resource reserved successfully!');
-                        location.reload();
-                    } else {
-                        alert('Failed to reserve resource. Please try again.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                });
-            }
-        }
-        
-        // Auto-submit search when type changes
-        document.querySelector('select[name="type"]').addEventListener('change', function() {
-            this.form.submit();
         });
     </script>
 </body>

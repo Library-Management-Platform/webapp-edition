@@ -51,7 +51,7 @@ public class AuthController {
                 ),
                 authLoginResponse.success()
                         ? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.ADMIN) ? "redirect:/admin/dashboard"
-                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/dashboard"
+                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/resources"
                         : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.LIBRARIAN) ? "redirect:/librarian/dashboard"
                         : "redirect:/login"
                         : "redirect:/login"
