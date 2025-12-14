@@ -1,6 +1,7 @@
 package com.platform.libraryManager.managers.authManagers;
 
 
+import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,11 +16,10 @@ import java.util.List;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginErrorResponse;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginResponse;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginSuccessResponse;
-import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
 
 
 import com.platform.libraryManager.helpers.JSONHelper;
-import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
+import com.platform.libraryManager.payloads.auth.LoginAuthPayload;
 import com.platform.libraryManager.providers.JWTProvider;
 import com.platform.libraryManager.providers.PasswordHashingProvider;
 
@@ -35,12 +35,12 @@ public class AuthLoginManager {
     }
 
     private void setCsrfAuthentication(
-            GetUniqueClientResponse getUniqueClientResponse,
+            GetUniqueUserResponse getUniqueUserResponse,
             HttpServletRequest request
     ) {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(
-                        getUniqueClientResponse.getClient().getUsername(),
+                        getUniqueUserResponse.getUser().getUsername(),
                         null,
                         List.of(new SimpleGrantedAuthority("CLIENT"))
                 )
@@ -53,13 +53,13 @@ public class AuthLoginManager {
     }
 
     public AuthLoginResponse confirmLogin(
-            GetUniqueClientResponse getUniqueClientResponse,
+            GetUniqueUserResponse getUniqueUserResponse,
             LoginAuthPayload loginAuthPayload,
             HttpServletRequest request
     ) {
-        if(verifyPassword(loginAuthPayload.getPassword(), getUniqueClientResponse.getClient().getPassword())) {
-            setCsrfAuthentication(getUniqueClientResponse, request);
-            return new AuthLoginSuccessResponse(jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueClientResponse.getClient())));
+        if(verifyPassword(loginAuthPayload.getPassword(), getUniqueUserResponse.getUser().getPassword())) {
+            setCsrfAuthentication(getUniqueUserResponse, request);
+            return new AuthLoginSuccessResponse(jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser())));
 
         }
         return new AuthLoginErrorResponse(401, "The password you entered is incorrect. Please verify your password and try again.");

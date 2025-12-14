@@ -2,7 +2,7 @@ package com.platform.libraryManager.factories;
 
 import com.platform.libraryManager.helpers.DateHelper;
 import com.platform.libraryManager.models.Client;
-import com.platform.libraryManager.payloads.clientPayloads.CreateClientPayload;
+import com.platform.libraryManager.payloads.client.CreateClientPayload;
 
 public abstract class ClientFactory {
 

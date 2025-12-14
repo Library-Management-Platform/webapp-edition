@@ -1,6 +1,6 @@
 package com.platform.libraryManager.services;
 
-import com.platform.libraryManager.payloads.clientPayloads.GetUniqueClientPayload;
+import com.platform.libraryManager.payloads.client.GetUniqueClientPayload;
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientErrorResponse;
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientResponse;
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientSuccessResponse;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.platform.libraryManager.factories.ClientFactory;
 import com.platform.libraryManager.models.Client;
-import com.platform.libraryManager.payloads.clientPayloads.CreateClientPayload;
+import com.platform.libraryManager.payloads.client.CreateClientPayload;
 import com.platform.libraryManager.repositories.ClientRespository;
 
 

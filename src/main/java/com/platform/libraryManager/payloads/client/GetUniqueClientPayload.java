@@ -1,4 +1,4 @@
-package com.platform.libraryManager.payloads.clientPayloads;
+package com.platform.libraryManager.payloads.client;
 
 
 import java.time.LocalDateTime;

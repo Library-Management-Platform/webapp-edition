@@ -1,13 +1,14 @@
 package com.platform.libraryManager.services;
 
 
+import com.platform.libraryManager.payloads.user.GetUniqueUserPayload;
 import com.platform.libraryManager.providers.PasswordHashingProvider;
 
 import com.platform.libraryManager.managers.authManagers.AuthLoginManager;
-import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
-import com.platform.libraryManager.payloads.authPayloads.SignUpAuthPayload;
-import com.platform.libraryManager.payloads.clientPayloads.CreateClientPayload;
-import com.platform.libraryManager.payloads.clientPayloads.GetUniqueClientPayload;
+import com.platform.libraryManager.payloads.auth.LoginAuthPayload;
+import com.platform.libraryManager.payloads.auth.SignUpAuthPayload;
+import com.platform.libraryManager.payloads.client.CreateClientPayload;
+import com.platform.libraryManager.payloads.client.GetUniqueClientPayload;
 
 
 
@@ -21,10 +22,9 @@ import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpRes
 import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpSuccessResponse;
 
 
-import com.platform.libraryManager.responses.endpoints.client.create.CreateClientErrorResponse;
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientResponse;
-import com.platform.libraryManager.responses.endpoints.client.create.CreateClientSuccessResponse;
 import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
+import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,19 +33,20 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     @Autowired ClientService clientService;
+    @Autowired UserService userService;
     @Autowired AuthLoginManager authLoginManager;
     @Autowired PasswordHashingProvider passwordHashingProvider;
 
 
     public AuthLoginResponse login(LoginAuthPayload loginAuthPayload, HttpServletRequest request) {
 
-        final GetUniqueClientResponse getUniqueClientResponse = clientService.getUniqueClient(
-                new GetUniqueClientPayload(loginAuthPayload.getUsername())
+        final GetUniqueUserResponse getUniqueUserResponse = userService.getUniqueUser(
+                new GetUniqueUserPayload(loginAuthPayload.getUsername())
         );
 
         try {
 
-            if(getUniqueClientResponse.success()) return authLoginManager.confirmLogin(getUniqueClientResponse, loginAuthPayload, request);
+            if(getUniqueUserResponse.success()) return authLoginManager.confirmLogin(getUniqueUserResponse, loginAuthPayload, request);
             return new AuthLoginErrorResponse(404, "The username you entered does not exist in our records. Please check your username and try again.");
 
         }catch(Exception exception) {
