@@ -2,7 +2,7 @@ package com.platform.libraryManager.responses.endpoints.client.getUnique;
 
 import com.platform.libraryManager.models.Client;
 import com.platform.libraryManager.responses.Response;
-import com.platform.libraryManager.responses.ResponseType;
+import com.platform.libraryManager.responses.types.ResponseType;
 
 public abstract class GetUniqueClientResponse extends Response {
 

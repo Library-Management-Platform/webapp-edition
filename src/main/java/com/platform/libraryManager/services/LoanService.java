@@ -1,8 +1,10 @@
 package com.platform.libraryManager.services;
 
 import com.platform.libraryManager.enums.LoanStatusEnum;
+import com.platform.libraryManager.enums.ResourceStatusEnum;
 import com.platform.libraryManager.models.*;
 import com.platform.libraryManager.repositories.LoanRepository;
+import com.platform.libraryManager.repositories.ResourceRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,10 +15,13 @@ import java.util.Optional;
 @Transactional
 public class LoanService {
 
+    private final ResourceRepository resourceRepository;
+
     private final LoanRepository loanRepository;
 
-    public LoanService(LoanRepository loanRepository) {
+    public LoanService(LoanRepository loanRepository, ResourceRepository resourceRepository) {
         this.loanRepository = loanRepository;
+        this.resourceRepository = resourceRepository;
     }
 
     // --------------------------------------------------
@@ -26,25 +31,34 @@ public class LoanService {
     /**
      * Client reserves a resource if it is available
      */
-    public Loan reserveResource(Client client, Resource resource, Library library) {
+   public Loan reserveResource(Client client, Resource resource, Library library) {
 
-        // Check resource availability
-        Optional<Loan> existingLoan = loanRepository.findFirstByResourceAndStatusIn(
-                resource,
-                List.of(
-                        LoanStatusEnum.RESERVED,
-                        LoanStatusEnum.BORROWED,
-                        LoanStatusEnum.IN_PROGRESS
-                )
-        );
+    // Check resource availability
+    Optional<Loan> existingLoan = loanRepository.findFirstByResourceAndStatusIn(
+            resource,
+            List.of(
+                    LoanStatusEnum.RESERVED,
+                    LoanStatusEnum.BORROWED,
+                    LoanStatusEnum.IN_PROGRESS
+            )
+    );
 
-        if (existingLoan.isPresent()) {
-            throw new IllegalStateException("Resource is not available for reservation");
-        }
-
-        Loan loan = new Loan(client, resource, library);
-        return loanRepository.save(loan);
+    if (existingLoan.isPresent()) {
+        throw new IllegalStateException("Resource is not available for reservation");
     }
+
+    // Create the loan
+    Loan loan = new Loan(client, resource, library);
+    loan.setStatus(LoanStatusEnum.RESERVED); // optional if Loan constructor doesn't already set it
+    Loan savedLoan = loanRepository.save(loan);
+
+    // Update the resource status to RESERVED
+    resource.setStatus(ResourceStatusEnum.RESERVED); // assuming status is a String; otherwise use enum
+    resourceRepository.save(resource);
+
+    return savedLoan;
+}
+
 
     /**
      * Client views their own loans

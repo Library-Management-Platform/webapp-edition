@@ -1,6 +1,9 @@
 package com.platform.libraryManager.responses;
 
-public abstract class Response {
+import com.platform.libraryManager.responses.types.IResponse;
+import com.platform.libraryManager.responses.types.ResponseType;
+
+public abstract class Response implements IResponse {
 
     private int code;
     private String message;
@@ -25,6 +28,4 @@ public abstract class Response {
 
     public ResponseType getType() { return type; }
     public void setType(ResponseType type) { this.type = type; }
-
-    public abstract boolean success();
 }

@@ -53,7 +53,7 @@ public class Loan {
 
     // ---- Constructors ----
 
-    protected Loan() {
+    Loan() {
         // JPA only
     }
 
@@ -113,4 +113,8 @@ public class Loan {
     public LoanStatusEnum getStatus() { return status; }
     public Integer getRating() { return rating; }
     public String getComment() { return comment; }
+
+    public void setStatus(LoanStatusEnum status) {
+       this.status = status ;
+    }
 }

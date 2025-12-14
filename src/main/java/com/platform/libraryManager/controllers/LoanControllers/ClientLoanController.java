@@ -1,21 +1,23 @@
 package com.platform.libraryManager.controllers.LoanControllers;
 
+import com.platform.libraryManager.enums.ResourceStatusEnum;
 import com.platform.libraryManager.models.Client;
-import java.security.Principal;
-import com.platform.libraryManager.payloads.clientPayloads.GetUniqueClientPayload;
-import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
-import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientSuccessResponse;
-import com.platform.libraryManager.services.ClientService;
 import com.platform.libraryManager.models.Loan;
 import com.platform.libraryManager.models.Library;
 import com.platform.libraryManager.models.Resource;
 import com.platform.libraryManager.repositories.LibraryRepository;
 import com.platform.libraryManager.repositories.ResourceRepository;
+import com.platform.libraryManager.services.ClientService;
 import com.platform.libraryManager.services.LoanService;
+import com.platform.libraryManager.payloads.client.GetUniqueClientPayload;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
+import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientSuccessResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -25,37 +27,36 @@ public class ClientLoanController {
     private final LoanService loanService;
     private final ResourceRepository resourceRepository;
     private final LibraryRepository libraryRepository;
-    private final ClientService clientService; // Ajout de ClientService
+    private final ClientService clientService;
 
     public ClientLoanController(
             LoanService loanService,
             ResourceRepository resourceRepository,
             LibraryRepository libraryRepository,
-            ClientService clientService // Injection de ClientService
+            ClientService clientService
     ) {
         this.loanService = loanService;
         this.resourceRepository = resourceRepository;
         this.libraryRepository = libraryRepository;
-        this.clientService = clientService; // Initialisation
+        this.clientService = clientService;
     }
 
-    // Méthode utilitaire pour récupérer le client à partir du nom d'utilisateur (Principal)
-    private Client getClientFromPrincipal(Principal principal) {
+    // ===============================
+    // Utility to get authenticated client
+    // ===============================
+    private Client getAuthenticatedClient(Principal principal) {
         if (principal == null) {
-            throw new IllegalStateException("Utilisateur non authentifié.");
+            throw new IllegalStateException("User not authenticated. Please login.");
         }
-        String username = principal.getName();
         
-        // Création du payload en utilisant le constructeur avec le nom d'utilisateur
-        GetUniqueClientPayload payload = new GetUniqueClientPayload(username); 
-
+        String username = principal.getName();
+        GetUniqueClientPayload payload = new GetUniqueClientPayload(username);
         GetUniqueClientResponse response = clientService.getUniqueClient(payload);
 
         if (response instanceof GetUniqueClientSuccessResponse successResponse) {
             return successResponse.getClient();
         } else {
-            // Gérer l'erreur si le client n'est pas trouvé
-            throw new IllegalArgumentException("Client non trouvé pour l'utilisateur: " + username);
+            throw new IllegalArgumentException("Client not found for username: " + username);
         }
     }
 
@@ -63,14 +64,38 @@ public class ClientLoanController {
     // View my loans
     // ===============================
     @GetMapping
-    public String myLoans(
-            Principal principal, // Récupération de l'utilisateur connecté
-            Model model
-    ) {
-        Client client = getClientFromPrincipal(principal); // Récupération du client
-        List<Loan> loans = loanService.getLoansForClient(client);
-        model.addAttribute("loans", loans);
-        return "client/loans";
+    public String myLoans(Principal principal, Model model) {
+        try {
+            Client client = getAuthenticatedClient(principal);
+            List<Loan> loans = loanService.getLoansForClient(client);
+            model.addAttribute("loans", loans);
+            model.addAttribute("client", client);
+            return "client/loans";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
+    }
+
+    // ===============================
+    // Show reserve form
+    // ===============================
+    @GetMapping("/new")
+    public String showNewLoanForm(Principal principal, Model model) {
+        try {
+            Client client = getAuthenticatedClient(principal);
+            List<Resource> resources = resourceRepository.findAll();
+            List<Library> libraries = libraryRepository.findAll();
+            
+            model.addAttribute("client", client);
+            model.addAttribute("resources", resources);
+            model.addAttribute("libraries", libraries);
+            
+            return "client/new-loan";
+        } catch (Exception e) {
+            model.addAttribute("error", e.getMessage());
+            return "error";
+        }
     }
 
     // ===============================
@@ -78,19 +103,40 @@ public class ClientLoanController {
     // ===============================
     @PostMapping("/reserve")
     public String reserveResource(
-            Principal principal, // Récupération de l'utilisateur connecté
+            Principal principal,
             @RequestParam Long resourceId,
-            @RequestParam Long libraryId
+            @RequestParam Long libraryId,
+            RedirectAttributes redirectAttributes
     ) {
-        Client client = getClientFromPrincipal(principal); // Récupération du client
-        Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() -> new IllegalArgumentException("Resource not found"));
+        try {
+            Client client = getAuthenticatedClient(principal);
+            
+            Resource resource = resourceRepository.findById(resourceId)
+                    .orElseThrow(() -> new IllegalArgumentException("Resource not found with ID: " + resourceId));
+            
+            Library library = libraryRepository.findById(libraryId)
+                    .orElseThrow(() -> new IllegalArgumentException("Library not found with ID: " + libraryId));
 
-        Library library = libraryRepository.findById(libraryId)
-                .orElseThrow(() -> new IllegalArgumentException("Library not found"));
+            // Validate that the resource belongs to the selected library
+            if (!resource.getLibrary().getId().equals(library.getId())) {
+                throw new IllegalArgumentException("Resource does not belong to the selected library");
+            }
 
-        loanService.reserveResource(client, resource, library);
-        return "redirect:/client/loans";
+            // Check if resource is available for loan
+            if (!(resource.getStatus()==ResourceStatusEnum.AVAILABLE)) {
+                throw new IllegalStateException("Resource is not available for loan");
+            }
+
+            // Reserve the resource
+            loanService.reserveResource(client, resource, library);
+            
+            redirectAttributes.addFlashAttribute("success", "Resource reserved successfully!");
+            return "redirect:/client/loans";
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/client/loans/new";
+        }
     }
 
     // ===============================
@@ -99,12 +145,27 @@ public class ClientLoanController {
     @PostMapping("/{loanId}/close")
     public String closeLoan(
             @PathVariable Long loanId,
-            Principal principal, // Récupération de l'utilisateur connecté
+            Principal principal,
             @RequestParam Integer rating,
-            @RequestParam String comment
+            @RequestParam String comment,
+            RedirectAttributes redirectAttributes
     ) {
-        Client client = getClientFromPrincipal(principal); // Récupération du client
-        loanService.closeLoan(loanId, client, rating, comment);
-        return "redirect:/client/loans";
+        try {
+            Client client = getAuthenticatedClient(principal);
+            
+            // Validate rating (assuming 1-5 scale)
+            if (rating < 1 || rating > 5) {
+                throw new IllegalArgumentException("Rating must be between 1 and 5");
+            }
+            
+            loanService.closeLoan(loanId, client, rating, comment);
+            
+            redirectAttributes.addFlashAttribute("success", "Loan closed successfully with your feedback!");
+            return "redirect:/client/loans";
+            
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/client/loans";
+        }
     }
 }

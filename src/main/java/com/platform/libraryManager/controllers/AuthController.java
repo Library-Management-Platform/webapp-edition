@@ -1,9 +1,12 @@
 package com.platform.libraryManager.controllers;
 
+import com.platform.libraryManager.enums.UserTypeEnum;
 import com.platform.libraryManager.helpers.RedirectHelper;
-import com.platform.libraryManager.payloads.authPayloads.LoginAuthPayload;
-import com.platform.libraryManager.payloads.authPayloads.SignUpAuthPayload;
+import com.platform.libraryManager.payloads.auth.LoginAuthPayload;
+import com.platform.libraryManager.payloads.auth.SignUpAuthPayload;
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginErrorResponse;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginResponse;
+import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginSuccessResponse;
 import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpResponse;
 import com.platform.libraryManager.services.AuthService;
 
@@ -19,7 +22,7 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
-    @Autowired AuthService authService;
+    @Autowired private AuthService authService;
 
     @GetMapping("/login")
     public String login() { return "login"; }
@@ -41,8 +44,17 @@ public class AuthController {
 
         return RedirectHelper.addFlashAttributesAndRedirect(
                 redirectAttributes,
-                Map.of("message", authLoginResponse.getMessage()),
-                authLoginResponse.success() ? "redirect:/client/dashboard" : "redirect:/login"
+                Map.of(
+                        "message", authLoginResponse.getMessage(),
+                        "username", ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUsername(),
+                        "role", ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().name()
+                ),
+                authLoginResponse.success()
+                        ? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.ADMIN) ? "redirect:/admin/dashboard"
+                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/dashboard"
+                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.LIBRARIAN) ? "redirect:/librarian/dashboard"
+                        : "redirect:/login"
+                        : "redirect:/login"
         );
     }
 

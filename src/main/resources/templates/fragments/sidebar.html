@@ -1,0 +1,24 @@
+<div th:fragment="adminSidebar" class="sidebar" style="background-color: #2c3e50; min-height: 82.5vh; color: white;"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <ul class="nav flex-column">
+
+        <li class="nav-item">
+            <a class="nav-link text-white" th:href="@{/admin/manage-admins}">
+                <i class="bi bi-people"></i> Manage Admins
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-white" th:href="@{/admin/manage-libraries}">
+                <i class="bi bi-building"></i> Manage Libraries
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-white" th:href="@{/admin/manage-librarians}">
+                <i class="bi bi-person-badge"></i> Manage Librarians
+            </a>
+        </li>
+
+    </ul>
+</div>
