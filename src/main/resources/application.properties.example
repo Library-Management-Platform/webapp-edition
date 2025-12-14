@@ -1,6 +1,12 @@
 # Application name
 spring.application.name=libraryManager
 
+
+# --- HOST configuration ---
+server.address=localhost
+server.port=8080
+server.protocol=http
+
 # JPA / Hibernate settings
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
@@ -24,3 +30,18 @@ spring.security.password.argon2.hash-length=32
 spring.security.password.argon2.parallelism=1
 spring.security.password.argon2.memory=4096
 spring.security.password.argon2.iterations=3
+
+
+# --- SMTP ---
+spring.mail.smtp.host=smtp.gmail.com
+spring.mail.smtp.port=587
+spring.mail.smtp.username=your-email@gmail.com
+spring.mail.smtp.password=your-app-password
+spring.mail.smtp.auth=true
+spring.mail.smtp.starttlsEnable=true
+spring.mail.smtp.starttlsRequired=true
+
+# --- Email defaults ---
+spring.mail.email.from=your-email@gmail.com
+spring.mail.email.defaultSubject=Notification
+spring.mail.email.templatesPath=/templates/emails

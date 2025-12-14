@@ -19,7 +19,7 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
-    @Autowired AuthService authService;
+    @Autowired private AuthService authService;
 
     @GetMapping("/login")
     public String login() { return "login"; }

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-    @Autowired UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
 
     public GetUniqueUserResponse getUniqueUser(GetUniqueUserPayload getUniqueUserPayload) {

@@ -2,7 +2,7 @@ package com.platform.libraryManager.responses.endpoints.user.getUnique;
 
 import com.platform.libraryManager.models.User;
 import com.platform.libraryManager.responses.Response;
-import com.platform.libraryManager.responses.ResponseType;
+import com.platform.libraryManager.responses.types.ResponseType;
 
 public abstract class GetUniqueUserResponse extends Response {
 

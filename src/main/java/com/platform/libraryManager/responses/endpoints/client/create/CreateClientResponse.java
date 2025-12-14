@@ -1,7 +1,7 @@
 package com.platform.libraryManager.responses.endpoints.client.create;
 
 import com.platform.libraryManager.responses.Response;
-import com.platform.libraryManager.responses.ResponseType;
+import com.platform.libraryManager.responses.types.ResponseType;
 
 public abstract class CreateClientResponse extends Response {
 

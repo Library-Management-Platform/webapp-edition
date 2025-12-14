@@ -1,4 +1,4 @@
-package com.platform.libraryManager.responses;
+package com.platform.libraryManager.responses.types;
 
 public enum ResponseType {
     SUCCESS,

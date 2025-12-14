@@ -1,8 +1,9 @@
 package com.platform.libraryManager.responses.endpoints.auth.login;
 
-import com.platform.libraryManager.responses.ResponseType;
+import com.platform.libraryManager.responses.types.ISuccessResponse;
+import com.platform.libraryManager.responses.types.ResponseType;
 
-public class AuthLoginSuccessResponse extends AuthLoginResponse {
+public class AuthLoginSuccessResponse extends AuthLoginResponse implements ISuccessResponse {
 
     private String token;
 
@@ -10,9 +11,6 @@ public class AuthLoginSuccessResponse extends AuthLoginResponse {
         super(200, "login success", ResponseType.SUCCESS);
         setToken(token);
     }
-
-    @Override public boolean success() { return true; }
-
 
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
