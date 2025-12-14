@@ -2,7 +2,6 @@ package com.platform.libraryManager.managers.auth;
 
 
 import com.platform.libraryManager.payloads.emailVerification.SendEmailVerificationLinkPayload;
-import com.platform.libraryManager.responses.endpoints.emailVerification.sendLink.SendEmailVerificationLinkResponse;
 import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
 import com.platform.libraryManager.services.EmailVerificationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -47,7 +46,7 @@ public class AuthLoginManager {
                 new UsernamePasswordAuthenticationToken(
                         getUniqueUserResponse.getUser().getUsername(),
                         null,
-                        List.of(new SimpleGrantedAuthority("CLIENT"))
+                        List.of(new SimpleGrantedAuthority(getUniqueUserResponse.getUser().getUserType().name()))
                 )
         );
 
@@ -57,6 +56,9 @@ public class AuthLoginManager {
         );
     }
 
+
+
+
     public AuthLoginResponse confirmLogin(
             GetUniqueUserResponse getUniqueUserResponse,
             LoginAuthPayload loginAuthPayload,
@@ -64,7 +66,7 @@ public class AuthLoginManager {
     ) {
 
         if(!getUniqueUserResponse.getUser().isVerified()) {
-            final SendEmailVerificationLinkResponse sendEmailVerificationLinkResponse = emailVerificationService.sendEmailVerificationLink(
+            emailVerificationService.sendEmailVerificationLink(
                     new SendEmailVerificationLinkPayload(getUniqueUserResponse.getUser())
             );
 
@@ -72,7 +74,11 @@ public class AuthLoginManager {
 
         } else if(verifyPassword(loginAuthPayload.getPassword(), getUniqueUserResponse.getUser().getPassword())) {
             setCsrfAuthentication(getUniqueUserResponse, request);
-            return new AuthLoginSuccessResponse(jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser())));
+
+            return new AuthLoginSuccessResponse(
+                    jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser())),
+                    getUniqueUserResponse.getUser()
+            );
 
         }
         return new AuthLoginErrorResponse(401, "The password you entered is incorrect. Please verify your password and try again.");
