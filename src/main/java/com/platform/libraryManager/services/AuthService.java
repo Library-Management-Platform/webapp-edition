@@ -4,13 +4,10 @@ package com.platform.libraryManager.services;
 import com.platform.libraryManager.payloads.user.GetUniqueUserPayload;
 import com.platform.libraryManager.providers.PasswordHashingProvider;
 
-import com.platform.libraryManager.managers.authManagers.AuthLoginManager;
+import com.platform.libraryManager.managers.auth.AuthLoginManager;
 import com.platform.libraryManager.payloads.auth.LoginAuthPayload;
 import com.platform.libraryManager.payloads.auth.SignUpAuthPayload;
 import com.platform.libraryManager.payloads.client.CreateClientPayload;
-import com.platform.libraryManager.payloads.client.GetUniqueClientPayload;
-
-
 
 
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginErrorResponse;
@@ -23,7 +20,6 @@ import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpSuc
 
 
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientResponse;
-import com.platform.libraryManager.responses.endpoints.client.getUnique.GetUniqueClientResponse;
 import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

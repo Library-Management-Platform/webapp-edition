@@ -1,4 +1,4 @@
-package com.platform.libraryManager.managers.authManagers;
+package com.platform.libraryManager.managers.auth;
 
 
 import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
