@@ -1,8 +1,6 @@
 package com.platform.libraryManager.models;
 
-
 import com.platform.libraryManager.enums.LoanStatusEnum;
-import com.platform.libraryManager.enums.ResourceCategoryEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,72 +9,108 @@ import java.time.LocalDateTime;
 @Table(name = "loans")
 public class Loan {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @ManyToOne @JoinColumn(name = "client_id", nullable = false) private Client client;
-    @ManyToOne @JoinColumn(name = "resource_id", nullable = false) private Resource resource;
+    // ---- Relations ----
 
-    private LocalDateTime startDate;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "client_id", nullable = false)
+    private Client client;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "resource_id", nullable = false)
+    private Resource resource;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "library_id", nullable = false)
+    private Library library;
+
+    // ---- Dates ----
+
+    @Column(nullable = false)
+    private LocalDateTime reservationDate;
+
+    private LocalDateTime borrowDate;
+
     private LocalDateTime dueDate;
+
     private LocalDateTime returnDate;
 
-    @Enumerated(EnumType.STRING) private LoanStatusEnum status;
+    // ---- Workflow Status ----
 
-    public Loan() {}
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private LoanStatusEnum status;
 
-    public Loan(
-            Client client,
-            Resource resource,
-            LocalDateTime startDate,
-            LocalDateTime dueDate
-    ) {
-        setClient(client);
-        setResource(resource);
-        setStartDate(startDate);
-        setDueDate(dueDate);
-        setStatus(LoanStatusEnum.RESERVED);
+    // ---- Feedback ----
+
+    private Integer rating;
+
+    @Column(length = 1000)
+    private String comment;
+
+    // ---- Constructors ----
+
+    protected Loan() {
+        // JPA only
     }
 
-
-    public Loan(
-            Long id,
-            Client client,
-            Resource resource,
-            LocalDateTime startDate,
-            LocalDateTime dueDate,
-            LocalDateTime returnDate,
-            LoanStatusEnum status
-    ) {
-        setId(id);
-        setClient(client);
-        setResource(resource);
-        setStartDate(startDate);
-        setDueDate(dueDate);
-        setDueDate(returnDate);
-        setStatus(status);
-
+    // Constructor for reservation
+    public Loan(Client client, Resource resource, Library library) {
+        this.client = client;
+        this.resource = resource;
+        this.library = library;
+        this.reservationDate = LocalDateTime.now();
+        this.status = LoanStatusEnum.RESERVED;
     }
 
+    // ---- Business Methods ----
+
+    public void markAsBorrowed(int loanDurationDays) {
+        if (status != LoanStatusEnum.RESERVED) {
+            throw new IllegalStateException("Only reserved loans can be borrowed");
+        }
+        this.status = LoanStatusEnum.IN_PROGRESS;
+        this.borrowDate = LocalDateTime.now();
+        this.dueDate = borrowDate.plusDays(loanDurationDays);
+    }
+
+    public void markAsReturned() {
+        if (status != LoanStatusEnum.IN_PROGRESS) {
+            throw new IllegalStateException("Only active loans can be returned");
+        }
+        this.status = LoanStatusEnum.RETURNED;
+        this.returnDate = LocalDateTime.now();
+    }
+
+    public void closeLoan(Integer rating, String comment) {
+        if (status != LoanStatusEnum.RETURNED) {
+            throw new IllegalStateException("Loan must be returned before closure");
+        }
+        this.rating = rating;
+        this.comment = comment;
+        this.status = LoanStatusEnum.CLOSED;
+    }
+
+    // ---- Helper Methods ----
+
+    public boolean isActive() {
+        return status != LoanStatusEnum.CLOSED;
+    }
+
+    // ---- Getters (setters intentionally limited) ----
 
     public Long getId() { return id; }
-    private void setId(Long id) { this.id = id; }
-
     public Client getClient() { return client; }
-    private void setClient(Client client) { this.client = client; }
-
     public Resource getResource() { return resource; }
-    private void setResource(Resource resource) { this.resource = resource; }
-
-    public LocalDateTime getStartDate() { return startDate; }
-    private void setStartDate(LocalDateTime startDate) { this.startDate = startDate; }
-
+    public Library getLibrary() { return library; }
+    public LocalDateTime getReservationDate() { return reservationDate; }
+    public LocalDateTime getBorrowDate() { return borrowDate; }
     public LocalDateTime getDueDate() { return dueDate; }
-    private void setDueDate(LocalDateTime dueDate) { this.dueDate = dueDate; }
-
     public LocalDateTime getReturnDate() { return returnDate; }
-    public void setReturnDate(LocalDateTime returnDate) { this.returnDate = returnDate; }
-
     public LoanStatusEnum getStatus() { return status; }
-    public void setStatus(LoanStatusEnum status) { this.status = status; }
-
+    public Integer getRating() { return rating; }
+    public String getComment() { return comment; }
 }

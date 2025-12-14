@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>New Loan</title>
+</head>
+
+<body>
+    <h1>Request a Loan</h1>
+    <form th:action="@{/client/loans}" method="post">
+        <label>Library:</label>
+        <select name="libraryId">
+            <option th:each="lib : ${libraries}" th:value="${lib.id}" th:text="${lib.name}"></option>
+        </select><br />
+
+
+        <label>Resource:</label>
+        <select name="resourceId">
+            <option th:each="res : ${resources}" th:value="${res.id}" th:text="${res.title}"></option>
+        </select><br />
+
+
+        <button type="submit">Submit</button>
+    </form>
+</body>
+
+</html>

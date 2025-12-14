@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Library Loans</title>
+</head>
+
+<body>
+    <h1>Loans for My Library</h1>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>Client</th>
+            <th>Resource</th>
+            <th>Due</th>
+            <th>Action</th>
+        </tr>
+        <tr th:each="loan : ${loans}">
+            <td th:text="${loan.id}"></td>
+            <td th:text="${loan.client.name}"></td>
+            <td th:text="${loan.resource.title}"></td>
+            <td th:text="${loan.dueDate}"></td>
+            <td>
+                <form th:action="@{/librarian/loans/return/{id}(id=${loan.id})}" method="post">
+                    <button type="submit">Mark Returned</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
