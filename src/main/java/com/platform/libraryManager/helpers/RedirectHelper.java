@@ -1,6 +1,7 @@
 package com.platform.libraryManager.helpers;
 
 import jakarta.annotation.Nullable;
+import org.springframework.ui.Model;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Map;
@@ -8,28 +9,25 @@ import java.util.Map;
 public abstract class RedirectHelper {
 
 
-    public static void addFlashAttribute(
-            RedirectAttributes redirectAttributes,
-            String attributeName,
-            @Nullable Object object
-    ) {
-        redirectAttributes.addFlashAttribute(attributeName, object);
-    }
+
 
     public static String redirect(String route) { return route; }
 
 
     public static String addFlashAttributesAndRedirect(
             RedirectAttributes redirectAttributes,
-            Map<String, Object> flasAttributes,
+            Map<String, Object> flashAttributes,
             String redirectRoute
     ) {
-        for(Map.Entry<String, Object> flasAttribute : flasAttributes.entrySet()) addFlashAttribute(
+        for(Map.Entry<String, Object> flashAttribute : flashAttributes.entrySet()) RouteAttributeHelper.addFlashAttribute(
                 redirectAttributes,
-                flasAttribute.getKey(),
-                flasAttribute.getValue()
+                flashAttribute.getKey(),
+                flashAttribute.getValue()
         );
 
         return redirectRoute;
     }
+
+
+
 }

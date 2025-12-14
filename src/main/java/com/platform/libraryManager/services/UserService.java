@@ -34,4 +34,10 @@ public class UserService {
 
     }
 
+
+    public void verifyUser(User user) {
+        user.verify();
+        userRepository.save(user);
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.platform.libraryManager.services;
 
 
+import com.platform.libraryManager.managers.emailVerification.VerifyEmailManager;
+import com.platform.libraryManager.models.User;
 import com.platform.libraryManager.repositories.EmailVerificationRepository;
 
 import com.platform.libraryManager.helpers.StringHelper;
@@ -21,22 +23,48 @@ import com.platform.libraryManager.responses.endpoints.emailVerification.sendLin
 import com.platform.libraryManager.responses.endpoints.emailVerification.sendLink.SendEmailVerificationLinkResponse;
 import com.platform.libraryManager.responses.endpoints.emailVerification.sendLink.SendEmailVerificationLinkSuccessResponse;
 
+import com.platform.libraryManager.responses.endpoints.emailVerification.verify.VerifyEmailErrorResponse;
+import com.platform.libraryManager.responses.endpoints.emailVerification.verify.VerifyEmailResponse;
+import com.platform.libraryManager.responses.endpoints.emailVerification.verify.VerifyEmailSuccessResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+
 @Service
 public class EmailVerificationService {
 
+    @Autowired private UserService userService;
+
     @Autowired private SendEmailVerificationLinkManager sendEmailVerificationLinkManager;
+    @Autowired private VerifyEmailManager verifyEmailManager;
     @Autowired private EmailVerificationRepository emailVerificationRepository;
 
     @Autowired private JavaMailSender mailSender;
 
 
 
-    public void verifyEmail() {}
+    public VerifyEmailResponse verifyEmail(String token) {
+
+        try {
+
+            final EmailVerificationLink emailVerificationLink = emailVerificationRepository.findByToken(token).get();
+            userService.verifyUser(emailVerificationLink.getUser());
+
+            if(emailVerificationLink.isVisited()) return new VerifyEmailErrorResponse(410, "Verification Link Expired");
+
+            verifyEmailManager.markVerificationLinkAsVisited(emailVerificationLink);
+            return new VerifyEmailSuccessResponse();
+
+        }catch(NoSuchElementException noSuchElementException) {
+            return new VerifyEmailErrorResponse(404, "Invalid verification link");
+
+        }catch (Exception exception) {
+            return new VerifyEmailErrorResponse(400, "Unknown error. please login again to receive a new verification link");
+        }
+    }
 
 
 
@@ -66,6 +94,8 @@ public class EmailVerificationService {
         }
 
     }
+
+
 
 
     private CreateEmailVerificationLinkResponse createEmailVerificationLink(SendEmailVerificationLinkPayload sendEmailVerificationLinkPayload) {

@@ -13,6 +13,7 @@ public class EmailVerificationLink {
     @ManyToOne @JoinColumn(name = "user_id") private User user;
 
     @Column(unique = true) private String token;
+    private boolean visited;
 
     private LocalDateTime createdAt;
     private LocalDateTime expiresAt;
@@ -52,8 +53,10 @@ public class EmailVerificationLink {
     private void setId(Long id) { this.id = id; }
 
     public String getToken() { return token; }
-    public void setToken(String token) { this.token = token; }
+    private void setToken(String token) { this.token = token; }
 
+    public boolean isVisited() { return visited; }
+    public void markAsVisited() { this.visited = true; }
 
     public User getUser() { return user; }
     private void setUser(User user) { this.user = user; }
