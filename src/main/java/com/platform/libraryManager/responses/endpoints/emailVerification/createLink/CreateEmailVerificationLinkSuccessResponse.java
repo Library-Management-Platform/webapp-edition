@@ -9,6 +9,7 @@ public class CreateEmailVerificationLinkSuccessResponse extends CreateEmailVerif
 
     public CreateEmailVerificationLinkSuccessResponse(String token) {
         super(201, "email verification link has been created", ResponseType.SUCCESS);
+        setToken(token);
     }
 
     public String getToken() { return token; }

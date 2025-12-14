@@ -14,19 +14,19 @@ public class SendEmailVerificationLinkManager {
     @Autowired private SMTPConfigurationProperties smtpConfigurationProperties;
 
 
-    public SimpleMailMessage createEmail(String recepient, String verificationLink) {
+    public SimpleMailMessage createEmail(String recipient, String token) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(smtpConfigurationProperties.getUsername());
-        message.setTo(recepient);
+        message.setTo(recipient);
         message.setSubject("Email Verification");
-        message.setText("Account verification link: " + verificationLink);
+        message.setText("Account verification link: " + token);
 
         return message;
     }
 
 
     public String getVerificationLink(String token) {
-        return webserverConfigurationProperties.getFullAddress() + "/email-verification/" + "/" + token;
+        return webserverConfigurationProperties.getFullAddress() + "/email-verification/" + token;
     }
 
 }
