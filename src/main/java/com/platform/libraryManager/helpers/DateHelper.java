@@ -8,6 +8,7 @@ import java.util.Date;
 public abstract class DateHelper {
 
     public static LocalDateTime getCurrentLocalDateTime() { return LocalDateTime.now(); }
+    public static LocalDateTime getLocalDateTimePlusHours(long hours) { return LocalDateTime.now().plusHours(hours); }
 
     public static Date getCurrentDate() { return new Date(); }
     public static Date from(Instant instant) { return Date.from(instant); }

@@ -28,10 +28,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    @Autowired ClientService clientService;
-    @Autowired UserService userService;
-    @Autowired AuthLoginManager authLoginManager;
-    @Autowired PasswordHashingProvider passwordHashingProvider;
+    @Autowired private ClientService clientService;
+    @Autowired private UserService userService;
+
+    @Autowired private AuthLoginManager authLoginManager;
+    @Autowired private PasswordHashingProvider passwordHashingProvider;
 
 
     public AuthLoginResponse login(LoginAuthPayload loginAuthPayload, HttpServletRequest request) {

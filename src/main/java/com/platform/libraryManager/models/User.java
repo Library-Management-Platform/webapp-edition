@@ -1,6 +1,8 @@
 package com.platform.libraryManager.models;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 
@@ -11,9 +13,12 @@ import jakarta.persistence.*;
 public abstract class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) private List<EmailVerificationLink> emailVerificationLinks;
 
     @Column(unique = true) private String username;
     @Column(unique = true) private String email;
+    @Column(columnDefinition = "boolean default false") private boolean verified;
+
     private String password;
 
     private LocalDateTime createdAt;
@@ -65,6 +70,9 @@ public abstract class User {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public boolean isVerified() { return verified; }
+    public void verify() { this.verified = true;}
 
     public LocalDateTime getCreationDate() { return createdAt; }
     private void setCreationDate(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -14,13 +14,14 @@ import org.springframework.stereotype.Service;
 import com.platform.libraryManager.factories.ClientFactory;
 import com.platform.libraryManager.models.Client;
 import com.platform.libraryManager.payloads.client.CreateClientPayload;
-import com.platform.libraryManager.repositories.ClientRespository;
+import com.platform.libraryManager.repositories.ClientRepository;
 
 
 @Service
 public class ClientService {
 
-    @Autowired ClientRespository clientRespository;
+    @Autowired
+    ClientRepository clientRespository;
 
     public GetUniqueClientResponse getUniqueClient(GetUniqueClientPayload getUniqueClientPayload) {
 

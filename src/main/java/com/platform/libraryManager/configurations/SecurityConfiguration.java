@@ -22,7 +22,7 @@ public class SecurityConfiguration {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/sign-up").permitAll()
+                        .requestMatchers("/login", "/sign-up", "/email-verification/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable);

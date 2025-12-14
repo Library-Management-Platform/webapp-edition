@@ -1,7 +1,10 @@
 package com.platform.libraryManager.managers.auth;
 
 
+import com.platform.libraryManager.payloads.emailVerification.SendEmailVerificationLinkPayload;
+import com.platform.libraryManager.responses.endpoints.emailVerification.sendLink.SendEmailVerificationLinkResponse;
 import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
+import com.platform.libraryManager.services.EmailVerificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,8 +30,10 @@ import com.platform.libraryManager.providers.PasswordHashingProvider;
 @Component
 public class AuthLoginManager {
 
-    @Autowired PasswordHashingProvider passwordHashingProvider;
-    @Autowired JWTProvider jwtProvider;
+    @Autowired private EmailVerificationService emailVerificationService;
+
+    @Autowired private PasswordHashingProvider passwordHashingProvider;
+    @Autowired private JWTProvider jwtProvider;
 
     private boolean verifyPassword(String inputPassword, String userHashedPassword) {
         return passwordHashingProvider.verify(inputPassword, userHashedPassword);
@@ -57,7 +62,15 @@ public class AuthLoginManager {
             LoginAuthPayload loginAuthPayload,
             HttpServletRequest request
     ) {
-        if(verifyPassword(loginAuthPayload.getPassword(), getUniqueUserResponse.getUser().getPassword())) {
+
+        if(!getUniqueUserResponse.getUser().isVerified()) {
+            final SendEmailVerificationLinkResponse sendEmailVerificationLinkResponse = emailVerificationService.sendEmailVerificationLink(
+                    new SendEmailVerificationLinkPayload(getUniqueUserResponse.getUser())
+            );
+
+            return new AuthLoginErrorResponse(403, "Account email has not been verified. We have sent you a verification link. check your mail inbox");
+
+        } else if(verifyPassword(loginAuthPayload.getPassword(), getUniqueUserResponse.getUser().getPassword())) {
             setCsrfAuthentication(getUniqueUserResponse, request);
             return new AuthLoginSuccessResponse(jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser())));
 

@@ -1,9 +1,10 @@
 package com.platform.libraryManager.responses.endpoints.client.getUnique;
 
 import com.platform.libraryManager.factories.ClientFactory;
-import com.platform.libraryManager.responses.ResponseType;
+import com.platform.libraryManager.responses.types.IErrorResponse;
+import com.platform.libraryManager.responses.types.ResponseType;
 
-public class GetUniqueClientErrorResponse extends GetUniqueClientResponse {
+public class GetUniqueClientErrorResponse extends GetUniqueClientResponse implements IErrorResponse {
 
 
     public GetUniqueClientErrorResponse() {
@@ -11,7 +12,6 @@ public class GetUniqueClientErrorResponse extends GetUniqueClientResponse {
         setClient(ClientFactory.createEmpty());
     }
 
-    @Override public boolean success() { return false; }
 
 
 }
