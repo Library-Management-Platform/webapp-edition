@@ -71,4 +71,13 @@ spring.mail.email.defaultSubject=Notification
 spring.mail.email.templatesPath=/templates/emails
 
 
+# --- Filebase IPFS Configuration ---
+filebase.access-key=1E21E6BDFC495B973212
+filebase.secret-key=tE3kdL7E1jc7Jbk5MFS2L9nP7QMdEAxFtT0YfkBz
+filebase.bucket=safezone-incident-images
+filebase.endpoint=https://s3.filebase.com
+filebase.ipfs-gateway=https://tropical-moccasin-unicorn.myfilebase.com/ipfs
+filebase.region=us-east-1
+
+
 
