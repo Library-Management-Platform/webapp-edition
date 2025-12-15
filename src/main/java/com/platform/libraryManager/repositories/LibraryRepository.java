@@ -1,7 +1,6 @@
 package com.platform.libraryManager.repositories;
 
 
-import com.platform.libraryManager.models.Client;
 import com.platform.libraryManager.models.Library;
 import com.platform.libraryManager.searchQueryParams.LibrarySearchQueryParams;
 import org.springframework.data.jpa.repository.JpaRepository;

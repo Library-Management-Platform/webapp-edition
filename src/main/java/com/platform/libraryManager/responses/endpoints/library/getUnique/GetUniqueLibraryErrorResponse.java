@@ -9,7 +9,7 @@ public class GetUniqueLibraryErrorResponse extends GetUniqueLibraryResponse impl
 
     public GetUniqueLibraryErrorResponse() {
         super(404, "not found", ResponseType.ERROR);
-        setClient(LibraryFactory.createEmpty());
+        setLibrary(LibraryFactory.createEmpty());
     }
 
 

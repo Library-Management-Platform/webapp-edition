@@ -1,9 +1,7 @@
 package com.platform.libraryManager.controllers.admin;
 
-import com.platform.libraryManager.factories.LibraryFactory;
 import com.platform.libraryManager.helpers.RedirectHelper;
 import com.platform.libraryManager.helpers.RouteAttributeHelper;
-import com.platform.libraryManager.models.Library;
 import com.platform.libraryManager.payloads.library.AddLibraryPayload;
 import com.platform.libraryManager.payloads.library.EditLibraryPayload;
 import com.platform.libraryManager.responses.endpoints.library.add.AddLibraryResponse;
@@ -22,10 +20,13 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/admin/libraries")
-public class AdminLibraryController {
+@RequestMapping("/admin/manage-libraries")
+public class AdminLibraryManagementController {
 
     @Autowired private LibraryService libraryService;
+
+
+    // ----------- Template loading ----------
 
     @GetMapping()
     public String getLibraries(Model model) {
@@ -48,50 +49,14 @@ public class AdminLibraryController {
                 )
         );
 
-        return "admin/libraries/library-list";
+        return "admin/pages/manage-libraries/library-list";
     }
-
-
-    @DeleteMapping("/{id}")
-    public String removeLibrary(@PathVariable("id") Long id) {
-        libraryService.removeLibrary(id);
-        return "redirect:/admin/libraries";
-    }
-
-
-
-
-
-
-
-
 
     @GetMapping("/add")
     public String addLibraryForm(Model model) {
         model.addAttribute("addLibraryPayload", new AddLibraryPayload());
-        return "admin/libraries/add-library";
+        return "admin/pages/manage-libraries/add-library";
     }
-
-    @PostMapping("/add")
-    public String addLibrary(
-            Model model,
-            AddLibraryPayload addLibraryPayload
-    ) {
-        final AddLibraryResponse addLibraryResponse = libraryService.addLibrary(addLibraryPayload);
-
-
-        return switch(addLibraryResponse.getCode()) {
-
-            case 201 -> "redirect:/admin/libraries";
-
-            default -> {
-                model.addAttribute("message", addLibraryResponse.getMessage());
-                yield "admin/libraries/add-library";
-            }
-        };
-    }
-
-
 
 
     @GetMapping("/edit/{id}")
@@ -115,10 +80,40 @@ public class AdminLibraryController {
                     )
             );
 
-            return "admin/libraries/edit-library";
+            return "admin/pages/manage-libraries/edit-library";
         }
 
-        return "redirect:/admin/libraries";
+        return "redirect:/admin/manage-libraries";
+    }
+
+
+
+
+
+
+
+
+
+
+    // --------- CRUD opearions -----------
+
+    @PostMapping("/add")
+    public String addLibrary(
+            Model model,
+            AddLibraryPayload addLibraryPayload
+    ) {
+        final AddLibraryResponse addLibraryResponse = libraryService.addLibrary(addLibraryPayload);
+
+
+        return switch(addLibraryResponse.getCode()) {
+
+            case 201 -> "redirect:/admin/manage-libraries";
+
+            default -> {
+                model.addAttribute("message", addLibraryResponse.getMessage());
+                yield "admin/pages/manage-libraries/add-library";
+            }
+        };
     }
 
 
@@ -133,14 +128,22 @@ public class AdminLibraryController {
 
         return switch(editLibraryResponse.getCode()) {
 
-            case 200 -> "redirect:/admin/libraries";
+            case 200 -> "redirect:/admin/manage-libraries";
 
             default -> RedirectHelper.addFlashAttributesAndRedirect(
                     redirectAttributes,
-                    Map.of("message", editLibraryResponse.getMessage()), "redirect:/admin/libraries/edit/{id}"
+                    Map.of("message", editLibraryResponse.getMessage()), "redirect:/admin/manage-libraries/edit/{id}"
             );
 
         };
+    }
+
+
+
+    @DeleteMapping("/remove/{id}")
+    public String removeLibrary(@PathVariable("id") Long id) {
+        libraryService.removeLibrary(id);
+        return "redirect:/admin/manage-libraries";
     }
 
 
