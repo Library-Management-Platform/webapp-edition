@@ -1,4 +1,4 @@
--- =========================
+/* -- =========================
 -- LIBRARIES
 -- =========================
 INSERT INTO libraries (id, name, address, created_at, updated_at) VALUES
@@ -81,3 +81,4 @@ INSERT INTO loans (
     NULL,
     NULL
 );
+ */
