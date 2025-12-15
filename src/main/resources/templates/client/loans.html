@@ -86,7 +86,29 @@
                                 <td th:text="${loan.reservationDate != null ? #temporals.format(loan.reservationDate, 'yyyy-MM-dd HH:mm') : '-'}">2025-01-01 12:00</td>
                                 <td th:text="${loan.dueDate != null ? #temporals.format(loan.dueDate, 'yyyy-MM-dd') : '-'}">-</td>
                                 <td>
-                                    <a th:href="@{/client/loans/{id}(id=${loan.id})}" class="btn btn-sm btn-outline-primary">Details</a>
+                                    <a th:href="@{/client/loans/{id}(id=${loan.id})}" class="btn btn-sm btn-outline-primary mb-2">Details</a>
+
+                                    <!-- Rating form: only available when loan is RETURNED -->
+                                    <div th:if="${loan.status.name() == 'RETURNED'}">
+                                        <form th:action="@{/client/loans/{id}/close(id=${loan.id})}" method="post" class="d-flex flex-column gap-2">
+                                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                            <div class="d-flex align-items-center gap-2">
+                                                <label class="mb-0">Rating:</label>
+                                                <select name="rating" class="form-select form-select-sm w-auto" required>
+                                                    <option value="">--</option>
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                            </div>
+                                            <textarea name="comment" class="form-control form-control-sm" rows="2" placeholder="Leave a comment (optional)"></textarea>
+                                            <div>
+                                                <button type="submit" class="btn btn-sm btn-primary" onclick="return confirm('Submit your rating and close this loan?')">Submit & Close</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

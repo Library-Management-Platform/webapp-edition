@@ -84,6 +84,12 @@ public class LoanService {
         }
 
         loan.markAsBorrowed(loanDurationDays);
+
+        // Update the resource status to BORROWED
+        Resource resource = loan.getResource();
+        resource.setStatus(ResourceStatusEnum.BORROWED);
+        resourceRepository.save(resource);
+
         return loanRepository.save(loan);
     }
 
@@ -99,6 +105,12 @@ public class LoanService {
         }
 
         loan.markAsReturned();
+
+        // Update the resource status to AVAILABLE
+        Resource resource = loan.getResource();
+        resource.setStatus(ResourceStatusEnum.AVAILABLE);
+        resourceRepository.save(resource);
+
         return loanRepository.save(loan);
     }
 

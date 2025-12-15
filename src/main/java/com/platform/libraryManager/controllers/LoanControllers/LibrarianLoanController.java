@@ -76,18 +76,48 @@ public String libraryLoans(java.security.Principal principal, Model model) {
 
 // Validate borrowing
 @PostMapping("/{loanId}/borrow")
-public String borrow(@PathVariable Long loanId,
-@AuthenticationPrincipal Librarian librarian) {
-loanService.borrowResource(loanId, librarian, 14);
-return "redirect:/librarian/loans";
+public String borrow(@PathVariable Long loanId, java.security.Principal principal, Model model) {
+	try {
+		if (principal == null) {
+			model.addAttribute("error", "Not authenticated");
+			return "error";
+		}
+		String username = principal.getName();
+		GetUniqueUserResponse resp = userService.getUniqueUser(new GetUniqueUserPayload(username));
+		if (resp instanceof GetUniqueUserSuccessResponse success && success.getUser() instanceof Librarian librarian) {
+			loanService.borrowResource(loanId, librarian, 14);
+			return "redirect:/librarian/loans";
+		}
+		model.addAttribute("error", "Librarian not found");
+		return "error";
+	} catch (Exception e) {
+		logger.error("error borrowing loan {}", loanId, e);
+		model.addAttribute("error", e.getMessage());
+		return "error";
+	}
 }
 
 
 // Validate return
 @PostMapping("/{loanId}/return")
-public String returnLoan(@PathVariable Long loanId,
-@AuthenticationPrincipal Librarian librarian) {
-loanService.returnResource(loanId, librarian);
-return "redirect:/librarian/loans";
+public String returnLoan(@PathVariable Long loanId, java.security.Principal principal, Model model) {
+	try {
+		if (principal == null) {
+			model.addAttribute("error", "Not authenticated");
+			return "error";
+		}
+		String username = principal.getName();
+		GetUniqueUserResponse resp = userService.getUniqueUser(new GetUniqueUserPayload(username));
+		if (resp instanceof GetUniqueUserSuccessResponse success && success.getUser() instanceof Librarian librarian) {
+			loanService.returnResource(loanId, librarian);
+			return "redirect:/librarian/loans";
+		}
+		model.addAttribute("error", "Librarian not found");
+		return "error";
+	} catch (Exception e) {
+		logger.error("error returning loan {}", loanId, e);
+		model.addAttribute("error", e.getMessage());
+		return "error";
+	}
 }
 }
