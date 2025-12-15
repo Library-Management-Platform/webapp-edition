@@ -11,7 +11,7 @@
 <body class="bg-light">
 
     <!-- Include header fragment -->
-    <div th:replace="fragments/header :: header(${username}, ${role})"></div>
+    <div th:replace="admin/fragments/header :: header(${username}, ${role})"></div>
 
     <div class="row" style="max-width: 90vw; max-height: 100vh">
 
@@ -31,13 +31,13 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Librarian Username</label>
                         <input type="text" th:field="*{username}" id="name" class="form-control"
-                               placeholder="Enter librarian username" required>
+                            placeholder="Enter librarian username" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Admin Email</label>
                         <input type="text" th:field="*{email}" id="address" class="form-control"
-                               placeholder="Enter librarian email" required>
+                            placeholder="Enter librarian email" required>
                     </div>
 
                     <!-- Added select dropdown for libraries -->
@@ -45,9 +45,7 @@
                         <label for="libraryId" class="form-label">Assign Library</label>
                         <select th:field="*{libraryId}" id="libraryId" class="form-select" required>
                             <option value="" disabled selected>Select a library</option>
-                            <option th:each="library : ${libraries}"
-                                    th:value="${library.id}"
-                                    th:text="${library.name}">
+                            <option th:each="library : ${libraries}" th:value="${library.id}" th:text="${library.name}">
                             </option>
                         </select>
                     </div>
@@ -63,7 +61,7 @@
     </div>
 
     <!-- Include footer fragment -->
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="admin/fragments/footer :: footer"></div>
 
 </body>
 

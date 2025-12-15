@@ -11,7 +11,7 @@
 <body class="bg-light">
 
     <!-- Include header fragment -->
-    <div th:replace="fragments/header :: header(${username}, ${role})"></div>
+    <div th:replace="admin/fragments/header :: header(${username}, ${role})"></div>
 
     <div class="row" style="max-width: 90vw; max-height: 100vh">
 
@@ -31,13 +31,13 @@
                     <div class="mb-3">
                         <label for="name" class="form-label">Admin Username</label>
                         <input type="text" th:field="*{username}" id="name" class="form-control"
-                               placeholder="Enter admin username" required>
+                            placeholder="Enter admin username" required>
                     </div>
 
                     <div class="mb-3">
                         <label for="address" class="form-label">Admin Email</label>
                         <input type="text" th:field="*{email}" id="address" class="form-control"
-                               placeholder="Enter admin email" required>
+                            placeholder="Enter admin email" required>
                     </div>
 
                     <!--<div class="mb-3">
@@ -56,7 +56,7 @@
     </div>
 
     <!-- Include footer fragment -->
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="admin/fragments/footer :: footer"></div>
 
 </body>
 
