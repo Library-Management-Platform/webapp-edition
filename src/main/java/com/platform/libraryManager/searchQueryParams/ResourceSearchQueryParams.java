@@ -1,75 +1,57 @@
-package com.platform.libraryManager.models;
-
+package com.platform.libraryManager.searchQueryParams;
 
 import com.platform.libraryManager.enums.ResourceCategoryEnum;
 import com.platform.libraryManager.enums.ResourceStatusEnum;
 import com.platform.libraryManager.enums.ResourceTypeEnum;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "resources")
-public class Resource {
+public class ResourceSearchQueryParams {
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true) private List<Loan> loans;
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @ManyToOne @JoinColumn(name = "library_id") private Library library;
+    private Long id;
+    private Long libraryId;
 
     private String title;
     private String author;
     private String link;
 
-    @Enumerated(EnumType.STRING) private ResourceCategoryEnum category;
-    @Enumerated(EnumType.STRING) private ResourceTypeEnum type;
-    @Enumerated(EnumType.STRING) private ResourceStatusEnum status;
+    private ResourceCategoryEnum category;
+    private ResourceTypeEnum type;
+    private ResourceStatusEnum status;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
 
-    public Resource() {}
-
-    public Resource(
-            Library library,
-            String title,
-            String author,
-            ResourceCategoryEnum category,
-            ResourceTypeEnum type
-    ) {
-        setLibrary(library);
-        setTitle(title);
-        setAuthor(author);
-        setCategory(category);
-        setType(type);
-        setStatus(ResourceStatusEnum.AVAILABLE);
-    }
-
-    public Resource(
+    public ResourceSearchQueryParams(
             Long id,
-            Library library,
+            Long libraryId,
             String title,
             String author,
             ResourceCategoryEnum category,
             ResourceTypeEnum type,
-            ResourceStatusEnum status
+            ResourceStatusEnum status,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
     ) {
         setId(id);
-        setLibrary(library);
+        setLibraryId(libraryId);
         setTitle(title);
         setAuthor(author);
         setCategory(category);
         setType(type);
         setStatus(status);
+        setCreationDate(createdAt);
+        setUpdateDate(updatedAt);
     }
+
 
     public Long getId() { return id; }
     private void setId(Long id) { this.id = id; }
 
-    public Library getLibrary() { return library; }
-    private void setLibrary(Library library) { this.library = library; }
+    public Long getLibraryId() { return libraryId; }
+    private void setLibraryId(Long libraryId) { this.libraryId = libraryId; }
 
     public String getTitle() { return title; }
     public void setTitle(String title) { this.title = title; }
@@ -94,5 +76,4 @@ public class Resource {
 
     public LocalDateTime getUpdateDate() { return updatedAt; }
     private void setUpdateDate(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
-
 }

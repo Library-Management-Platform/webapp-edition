@@ -72,7 +72,7 @@ public class LibrarianService {
             return new EditLibrarianSuccessResponse();
 
         }catch(DataIntegrityViolationException dataIntegrityViolationException) {
-            return new EditLibrarianErrorResponse(409, "An Librarian with the same username already exists");
+            return new EditLibrarianErrorResponse(409, "A Librarian with the same username already exists");
 
         } catch(Exception exception) {
             return new EditLibrarianErrorResponse(400, "Error");
