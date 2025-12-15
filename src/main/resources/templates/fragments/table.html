@@ -1,0 +1,36 @@
+<th:block th:fragment="table(title, fields, rows)" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <div class="card shadow-sm">
+
+        <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+
+                <thead class="table-light">
+                <tr>
+                    <th th:each="field : ${fields}"
+                        th:text="${#strings.capitalize(field)}">
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="row : ${rows}">
+                        <td th:each="field : ${fields}"
+                            th:text="${row.get(field)}">
+                        </td>
+
+                        <td>
+                            <!-- Example action buttons -->
+                            <a th:href="@{/libraries/view/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-primary">View</a>
+                            <a th:href="@{/libraries/edit/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-warning">Edit</a>
+                            <a th:href="@{/libraries/delete/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this library?');">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+
+</th:block>

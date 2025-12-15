@@ -15,7 +15,7 @@ public class Library {
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, orphanRemoval = true) private List<Librarian> librarians;
 
     private String name;
-    private String address;
+    @Column(unique = true) private String address;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
