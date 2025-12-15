@@ -42,8 +42,8 @@ public class AuthLoginController {
                         "role", ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().name()
                 ),
                 authLoginResponse.success()
-                        ? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.ADMIN) ? "redirect:/admin/manage-libraries"
-                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/dashboard"
+                        ? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.ADMIN) ? "redirect:/admin/dashboard"
+                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/resources"
                         : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.LIBRARIAN) ? "redirect:/librarian/dashboard"
                         : "redirect:/login"
                         : "redirect:/login"

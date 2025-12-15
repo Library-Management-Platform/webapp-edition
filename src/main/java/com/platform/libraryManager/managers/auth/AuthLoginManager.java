@@ -13,18 +13,14 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Component;
 import java.util.List;
 
-
-
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginErrorResponse;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginResponse;
 import com.platform.libraryManager.responses.endpoints.auth.login.AuthLoginSuccessResponse;
-
 
 import com.platform.libraryManager.helpers.JSONHelper;
 import com.platform.libraryManager.payloads.auth.LoginAuthPayload;
 import com.platform.libraryManager.providers.JWTProvider;
 import com.platform.libraryManager.providers.PasswordHashingProvider;
-
 
 @Component
 public class AuthLoginManager {
@@ -52,8 +48,7 @@ public class AuthLoginManager {
 
         request.getSession(true).setAttribute(
                 HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
-                SecurityContextHolder.getContext()
-        );
+                SecurityContextHolder.getContext());
     }
 
 
@@ -81,6 +76,7 @@ public class AuthLoginManager {
             );
 
         }
-        return new AuthLoginErrorResponse(401, "The password you entered is incorrect. Please verify your password and try again.");
+        return new AuthLoginErrorResponse(401,
+                "The password you entered is incorrect. Please verify your password and try again.");
     }
 }
