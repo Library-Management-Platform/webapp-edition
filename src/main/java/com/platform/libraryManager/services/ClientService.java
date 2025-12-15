@@ -20,8 +20,7 @@ import com.platform.libraryManager.repositories.ClientRepository;
 @Service
 public class ClientService {
 
-    @Autowired
-    ClientRepository clientRespository;
+    @Autowired private ClientRepository clientRespository;
 
     public GetUniqueClientResponse getUniqueClient(GetUniqueClientPayload getUniqueClientPayload) {
 

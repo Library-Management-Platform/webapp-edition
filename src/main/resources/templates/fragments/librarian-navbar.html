@@ -1,0 +1,42 @@
+<div th:fragment="navbar">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/librarian/dashboard}">
+                <i class="bi bi-book-half me-2"></i>
+                Library Manager
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#librarianNavbar" aria-controls="librarianNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="librarianNavbar">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/librarian/dashboard}">Dashboard</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="manageResourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Manage Resources
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="manageResourcesDropdown">
+                            <!-- Intentionally left empty for future resource actions -->
+                            <li><span class="dropdown-item text-muted">No actions yet</span></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="manageLoansDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Manage Loans
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="manageLoansDropdown">
+                            <li><a class="dropdown-item" th:href="@{/librarian/loans}">View Loans</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

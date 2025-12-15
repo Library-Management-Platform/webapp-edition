@@ -1,10 +1,13 @@
 package com.platform.libraryManager.repositories;
 
-import com.platform.libraryManager.models.Client;
+import com.platform.libraryManager.enums.UserTypeEnum;
+import com.platform.libraryManager.models.Admin;
 import com.platform.libraryManager.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository

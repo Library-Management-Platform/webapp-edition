@@ -1,0 +1,88 @@
+<!-- templates/librarian-list.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <!-- Include header fragment -->
+    <div th:replace="fragments/header :: header(${username}, ${role})"></div>
+
+    <div class="row" style="max-width: 90vw; max-height: 100vh">
+        <!-- Include sidebar fragment -->
+        <div class="col-md-3 col-lg-2">
+            <div th:replace="admin/fragments/sidebar :: adminSidebar"></div>
+        </div>
+
+        <div class="col-md-9 col-lg-10">
+
+            <h1 class="d-flex justify-content-between align-items-center">
+                Manage Libraries
+                <a th:href="@{/admin/manage-libraries/add}" class="btn btn-success btn-sm">Add Library</a>
+            </h1>
+            <!-- Main content goes here -->
+
+            <!-- 🔽 TABLE FRAGMENT HERE -->
+
+            <div class="card shadow-sm">
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th th:each="field : ${fields}" th:text="${#strings.capitalize(field)}">
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr th:each="row : ${rows}">
+                                <td th:each="field : ${fields}" th:text="${row.get(field)}">
+                                </td>
+
+                                <td>
+                                    <!-- Example action buttons -->
+                                    <a th:href="@{/manage-libraries/view/{id}(id=${row.get('ID')})}"
+                                        class="btn btn-sm btn-primary">View</a>
+                                    <a th:href="@{/admin/manage-libraries/edit/{id}(id=${row.get('ID')})}"
+                                        class="btn btn-sm btn-warning">Edit</a>
+
+
+                                    <form th:action="@{/admin/manage-libraries/remove/{id}(id=${row.get('ID')})}"
+                                        method="post" style="display:inline">
+                                        <input type="hidden" name="_method" value="delete" />
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('Are you sure you want to delete this library?');">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+    </div>
+
+    <!-- Include footer fragment -->
+    <div th:replace="fragments/footer :: footer"></div>
+
+</body>
+
+</html>

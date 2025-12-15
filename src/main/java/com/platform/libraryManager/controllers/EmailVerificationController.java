@@ -1,7 +1,6 @@
 package com.platform.libraryManager.controllers;
 
 
-import com.platform.libraryManager.helpers.RedirectHelper;
 import com.platform.libraryManager.helpers.RouteAttributeHelper;
 import com.platform.libraryManager.responses.endpoints.emailVerification.verify.VerifyEmailResponse;
 import com.platform.libraryManager.services.EmailVerificationService;

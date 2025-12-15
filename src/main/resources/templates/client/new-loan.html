@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Reserve a Resource</title>
+</head>
+<body>
+<h1>Reserve a Resource</h1>
+
+<form th:action="@{/client/loans/reserve}" method="post">
+    <!-- Resource Selection -->
+    <label for="resource">Resource:</label>
+    <select id="resource" name="resourceId" onchange="updateLibrary()">
+        <option th:each="res : ${resources}"
+                th:value="${res.id}"
+                th:text="${res.title}"
+                th:data-library-name="${res.library.name}"
+                th:data-library-id="${res.library.id}">
+        </option>
+    </select>
+
+    <!-- Library (readonly, auto-updated based on resource) -->
+    <label for="library">Library:</label>
+    <input type="text" id="library" name="libraryName" readonly/>
+    <input type="hidden" id="libraryId" name="libraryId"/>
+
+    <br><br>
+    <button type="submit">Reserve</button>
+</form>
+
+<script th:inline="javascript">
+    function updateLibrary() {
+        let select = document.getElementById('resource');
+        let selectedOption = select.options[select.selectedIndex];
+        let libraryName = selectedOption.getAttribute('data-library-name');
+        let libraryId = selectedOption.getAttribute('data-library-id');
+
+        document.getElementById('library').value = libraryName;
+        document.getElementById('libraryId').value = libraryId;
+    }
+
+    // Initialize library on page load
+    updateLibrary();
+</script>
+
+</body>
+</html>

@@ -3,6 +3,7 @@ package com.platform.libraryManager.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.platform.libraryManager.enums.UserTypeEnum;
 import jakarta.persistence.*;
 
 
@@ -14,6 +15,8 @@ public abstract class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) private List<EmailVerificationLink> emailVerificationLinks;
+
+    @Column(name = "user_type", insertable = false, updatable = false) @Enumerated(EnumType.STRING) private UserTypeEnum userType;
 
     @Column(unique = true) private String username;
     @Column(unique = true) private String email;
@@ -61,6 +64,8 @@ public abstract class User {
 
     public Long getId() { return id; }
     private void setId(Long id) { this.id = id; }
+
+    public UserTypeEnum getUserType() { return userType; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
