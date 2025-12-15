@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browse Resources - Library Management System</title>
+    <title>Browse My Loans History - Library Management System</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -30,35 +30,17 @@
             <div class="col-12">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h1 class="h2"><i class="bi bi-collection-play me-2"></i>Browse Resources</h1>
+                        <h1 class="h2"><i class="bi bi-collection-play me-2"></i>Browse My Loans History</h1>
                         <p class="text-muted">
-                            <span th:text="${totalItems != null ? totalItems : '0'}">0</span> resources found
-                            <span th:if="${keyword}" class="ms-2">
-                                for "<span th:text="${keyword}"></span>"
-                            </span>
+                           You can manage and update your loaned resources here
+
                         </p>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Search Bar -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <form th:action="@{/client/resources/search}" method="get" class="mb-3">
-                    <div class="input-group">
-                        <input type="text" 
-                               class="form-control" 
-                               name="query"
-                               th:value="${query}"
-                               placeholder="Search by title, author, or keyword...">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="bi bi-search me-1"></i> Search
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+       
         
         <!-- If client has loans, show them first -->
         <div th:if="${not #lists.isEmpty(loans)}" class="row mb-4">
@@ -74,6 +56,7 @@
                                 <th>Status</th>
                                 <th>Reserved At</th>
                                 <th>Due Date</th>
+                                <th>Return Date</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -85,8 +68,8 @@
                                 <td th:text="${loan.status}">Status</td>
                                 <td th:text="${loan.reservationDate != null ? #temporals.format(loan.reservationDate, 'yyyy-MM-dd HH:mm') : '-'}">2025-01-01 12:00</td>
                                 <td th:text="${loan.dueDate != null ? #temporals.format(loan.dueDate, 'yyyy-MM-dd') : '-'}">-</td>
+                                <td th:text="${loan.returnDate != null ? #temporals.format(loan.returnDate, 'yyyy-MM-dd') : 'Still on loan'}">-</td>
                                 <td>
-                                    <a th:href="@{/client/loans/{id}(id=${loan.id})}" class="btn btn-sm btn-outline-primary mb-2">Details</a>
 
                                     <!-- Rating form: only available when loan is RETURNED -->
                                     <div th:if="${loan.status.name() == 'RETURNED'}">
@@ -117,98 +100,8 @@
             </div>
         </div>
 
-        <!-- Resources Grid -->
-        <div class="row">
-            <!-- Resource Cards -->
-            <div th:each="resource : ${resources}" class="col-xl-3 col-lg-4 col-md-6 mb-4">
-                <div class="card resource-card h-100">
-                    <div class="card-body">
-                        <!-- Status Badge -->
-                        <div class="mb-2">
-                            <span th:if="${resource.status.name() == 'AVAILABLE'}" 
-                                  class="badge bg-success">Available</span>
-                            <span th:if="${resource.status.name() == 'RESERVED'}" 
-                                  class="badge bg-warning text-dark">Reserved</span>
-                            <span th:if="${resource.status.name() == 'LOANED'}" 
-                                  class="badge bg-secondary">Loaned</span>
-                        </div>
-                        
-                        <!-- Type Badge -->
-                        <div class="mb-2">
-                            <span class="badge bg-info">
-                                <span th:text="${resource.type}">Type</span>
-                            </span>
-                        </div>
-                        
-                        <!-- Title and Author -->
-                        <h5 class="card-title" th:text="${resource.title}">Title</h5>
-                        <h6 class="card-subtitle mb-2 text-muted" th:text="${resource.author}">Author</h6>
-                        
-                        <!-- Category -->
-                        <div class="mb-3">
-                            <span class="badge bg-light text-dark">
-                                <span th:text="${resource.category}">Category</span>
-                            </span>
-                        </div>
-                        
-                        <!-- Library Information -->
-                        <div class="mb-3 small text-muted">
-                            <i class="bi bi-building"></i>
-                            <span th:text="${resource.library?.name ?: 'Main Library'}">Library</span>
-                        </div>
-                        
-                        <!-- Buttons -->
-                        <div class="mt-3">
-                            <a th:href="@{/client/resources/{id}(id=${resource.id})}" 
-                               class="btn btn-outline-primary btn-sm w-100 mb-2">
-                                <i class="bi bi-info-circle me-1"></i> View Details
-                            </a>
-                            
-                            <!-- Reserve Button (only if available and has library) -->
-                            <div th:if="${resource.status.name() == 'AVAILABLE' and resource.library != null}">
-                                <!-- Form to call ClientLoanController's reserve method -->
-                                <form th:action="@{/client/loans/reserve}" method="post">
-                                    <!-- CSRF Token for security -->
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                                    
-                                    <!-- Resource ID -->
-                                    <input type="hidden" name="resourceId" th:value="${resource.id}" />
-                                    
-                                    <!-- Library ID from the resource -->
-                                    <input type="hidden" name="libraryId" th:value="${resource.library.id}" />
-                                    
-                                    <button type="submit" class="btn btn-success btn-sm w-100">
-                                        <i class="bi bi-bookmark-plus me-1"></i> Reserve
-                                    </button>
-                                </form>
-                            </div>
-                            
-                            <!-- Message if resource has no library -->
-                            <div th:if="${resource.status.name() == 'AVAILABLE' and resource.library == null}" 
-                                 class="alert alert-warning btn-sm p-2 text-center">
-                                <i class="bi bi-exclamation-triangle me-1"></i>
-                                Cannot reserve - No library assigned
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- No Results Message -->
-            <div th:if="${resources.empty}" class="col-12">
-                <div class="text-center py-5">
-                    <i class="bi bi-search display-1 text-muted"></i>
-                    <h3 class="mt-3">No resources found</h3>
-                    <p class="text-muted">
-                        <span th:if="${keyword}">No results for "<span th:text="${keyword}"></span>"</span>
-                        <span th:unless="${keyword}">No resources available</span>
-                    </p>
-                    <a th:href="@{/client/resources}" class="btn btn-primary mt-2">
-                        <i class="bi bi-arrow-clockwise me-1"></i> View All
-                    </a>
-                </div>
-            </div>
-        </div>
+     
+           
         
         <!-- Pagination -->
         <div th:if="${totalPages > 1}" class="row mt-4">
