@@ -34,19 +34,20 @@ public class AuthLoginController {
 
         final AuthLoginResponse authLoginResponse = authService.login(loginAuthPayload, request);
 
+        final Map<UserTypeEnum, String> redirectMap = Map.of(
+                UserTypeEnum.ADMIN, "redirect:/admin/manage-admins",
+                UserTypeEnum.CLIENT, "redirect:/client/resources",
+                UserTypeEnum.LIBRARIAN, "redirect:/librarian/dashboard"
+        );
+
         return RedirectHelper.addFlashAttributesAndRedirect(
                 redirectAttributes,
                 Map.of(
                         "message", authLoginResponse.getMessage(),
-                        "username", ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUsername(),
-                        "role", ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().name()
+                        "username", authLoginResponse.success()? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUsername() : "",
+                        "role", authLoginResponse.success()? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().name() : ""
                 ),
-                authLoginResponse.success()
-                        ? ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.ADMIN) ? "redirect:/admin/manage-admins"
-                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.CLIENT) ? "redirect:/client/resources"
-                        : ((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType().equals(UserTypeEnum.LIBRARIAN) ? "redirect:/librarian/dashboard"
-                        : "redirect:/login"
-                        : "redirect:/login"
+                authLoginResponse.success()? redirectMap.get(((AuthLoginSuccessResponse) authLoginResponse).getUser().getUserType()) : "redirect:/login"
         );
     }
 }

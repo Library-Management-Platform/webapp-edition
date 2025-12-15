@@ -6,7 +6,7 @@ public class AddAdminPayload {
     private String email;
     private String password;
 
-    public AddAdminPayload() {}
+    public AddAdminPayload() { setPassword("admin"); }
 
     public AddAdminPayload(
             String username,

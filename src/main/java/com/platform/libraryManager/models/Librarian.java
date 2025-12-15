@@ -40,6 +40,6 @@ public class Librarian extends User {
     }
 
     public Library getLibrary() { return library; }
-    private void setLibrary(Library library) { this.library = library; }
+    public void setLibrary(Library library) { this.library = library; }
 
 }

@@ -5,6 +5,7 @@ import com.platform.libraryManager.factories.AdminFactory;
 import com.platform.libraryManager.models.Admin;
 import com.platform.libraryManager.payloads.admin.AddAdminPayload;
 import com.platform.libraryManager.payloads.admin.EditAdminPayload;
+import com.platform.libraryManager.providers.PasswordHashingProvider;
 import com.platform.libraryManager.repositories.AdminRepository;
 import com.platform.libraryManager.responses.endpoints.admin.add.AddAdminErrorResponse;
 import com.platform.libraryManager.responses.endpoints.admin.add.AddAdminResponse;
@@ -31,17 +32,20 @@ import java.util.List;
 public class AdminService {
 
     @Autowired private AdminRepository adminRepository;
+    @Autowired private PasswordHashingProvider passwordHashingProvider;
 
     public AddAdminResponse addAdmin(AddAdminPayload addAdminPayload) {
 
         try {
 
             final Admin admin = AdminFactory.create(addAdminPayload);
+            admin.setPassword(passwordHashingProvider.hash(admin.getPassword()));
+
             adminRepository.save(admin);
             return new AddAdminSuccessResponse();
 
         }catch(DataIntegrityViolationException dataIntegrityViolationException) {
-            return new AddAdminErrorResponse(409, "Admin already exists");
+            return new AddAdminErrorResponse(409, "User with the provided username already exists");
 
         } catch(Exception exception) {
             return new AddAdminErrorResponse(400, "Error");

@@ -5,8 +5,8 @@ import com.platform.libraryManager.factories.LibrarianFactory;
 import com.platform.libraryManager.models.Librarian;
 import com.platform.libraryManager.payloads.librarian.AddLibrarianPayload;
 import com.platform.libraryManager.payloads.librarian.EditLibrarianPayload;
+import com.platform.libraryManager.providers.PasswordHashingProvider;
 import com.platform.libraryManager.repositories.LibrarianRepository;
-import com.platform.libraryManager.responses.endpoints.admin.edit.EditAdminErrorResponse;
 import com.platform.libraryManager.responses.endpoints.librarian.add.AddLibrarianErrorResponse;
 import com.platform.libraryManager.responses.endpoints.librarian.add.AddLibrarianResponse;
 import com.platform.libraryManager.responses.endpoints.librarian.add.AddLibrarianSuccessResponse;
@@ -34,6 +34,7 @@ public class LibrarianService {
 
     @Autowired private LibraryService libraryService;
     @Autowired private LibrarianRepository librarianRepository;
+    @Autowired private PasswordHashingProvider passwordHashingProvider;
 
     public AddLibrarianResponse addLibrarian(AddLibrarianPayload addLibrarianPayload) {
 
@@ -44,6 +45,7 @@ public class LibrarianService {
                     libraryService.getUniqueLibrary(new LibrarySearchQueryParams(addLibrarianPayload.getLibraryId(), null, null, null, null)).getLibrary()
             );
 
+            librarian.setPassword(passwordHashingProvider.hash(addLibrarianPayload.getUsername()));
             librarianRepository.save(librarian);
             return new AddLibrarianSuccessResponse();
 
