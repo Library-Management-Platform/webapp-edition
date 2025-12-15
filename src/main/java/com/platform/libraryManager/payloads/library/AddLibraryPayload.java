@@ -7,6 +7,8 @@ public class AddLibraryPayload {
     private String name;
     private String address;
 
+    public AddLibraryPayload() {}
+
     public AddLibraryPayload(
             String name,
             String address,

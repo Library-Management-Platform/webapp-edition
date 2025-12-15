@@ -1,4 +1,4 @@
-<!-- templates/libraries.html -->
+<!-- templates/library-list.html -->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
@@ -20,7 +20,11 @@
             </div>
 
             <div class="col-md-9 col-lg-10">
-                <h1>Manage Libraries</h1>
+
+                <h1 class="d-flex justify-content-between align-items-center">
+                    Manage Libraries
+                    <a th:href="@{/admin/libraries/add}" class="btn btn-success btn-sm">Add Library</a>
+                </h1>
                 <!-- Main content goes here -->
 
                 <!-- 🔽 TABLE FRAGMENT HERE -->
@@ -47,7 +51,7 @@
                                     <td>
                                         <!-- Example action buttons -->
                                         <a th:href="@{/libraries/view/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-primary">View</a>
-                                        <a th:href="@{/libraries/edit/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-warning">Edit</a>
+                                        <a th:href="@{/admin/libraries/edit/{id}(id=${row.get('ID')})}" class="btn btn-sm btn-warning">Edit</a>
 
 
                                         <form th:action="@{/admin/libraries/{id}(id=${row.get('ID')})}" method="post" style="display:inline">
