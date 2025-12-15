@@ -1,16 +1,11 @@
 package com.platform.libraryManager.services;
 
 
-import com.platform.libraryManager.enums.UserTypeEnum;
 import com.platform.libraryManager.factories.AdminFactory;
-import com.platform.libraryManager.factories.LibraryFactory;
 import com.platform.libraryManager.models.Admin;
-import com.platform.libraryManager.models.Library;
 import com.platform.libraryManager.payloads.admin.AddAdminPayload;
 import com.platform.libraryManager.payloads.admin.EditAdminPayload;
-import com.platform.libraryManager.payloads.library.EditLibraryPayload;
 import com.platform.libraryManager.repositories.AdminRepository;
-import com.platform.libraryManager.repositories.UserRepository;
 import com.platform.libraryManager.responses.endpoints.admin.add.AddAdminErrorResponse;
 import com.platform.libraryManager.responses.endpoints.admin.add.AddAdminResponse;
 import com.platform.libraryManager.responses.endpoints.admin.add.AddAdminSuccessResponse;
@@ -25,17 +20,7 @@ import com.platform.libraryManager.responses.endpoints.admin.getUnique.GetUnique
 import com.platform.libraryManager.responses.endpoints.admin.remove.RemoveAdminErrorResponse;
 import com.platform.libraryManager.responses.endpoints.admin.remove.RemoveAdminResponse;
 import com.platform.libraryManager.responses.endpoints.admin.remove.RemoveAdminSuccessResponse;
-import com.platform.libraryManager.responses.endpoints.library.add.AddLibraryErrorResponse;
-import com.platform.libraryManager.responses.endpoints.library.add.AddLibrarySuccessResponse;
-import com.platform.libraryManager.responses.endpoints.library.edit.EditLibraryErrorResponse;
-import com.platform.libraryManager.responses.endpoints.library.edit.EditLibrarySuccessResponse;
-import com.platform.libraryManager.responses.endpoints.library.getAll.GetAllLibrariesSuccessResponse;
-import com.platform.libraryManager.responses.endpoints.library.getUnique.GetUniqueLibraryErrorResponse;
-import com.platform.libraryManager.responses.endpoints.library.getUnique.GetUniqueLibrarySuccessResponse;
-import com.platform.libraryManager.responses.endpoints.library.remove.RemoveLibraryErrorResponse;
-import com.platform.libraryManager.responses.endpoints.library.remove.RemoveLibrarySuccessResponse;
 import com.platform.libraryManager.searchQueryParams.AdminSearchQueryParams;
-import com.platform.libraryManager.searchQueryParams.LibrarySearchQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

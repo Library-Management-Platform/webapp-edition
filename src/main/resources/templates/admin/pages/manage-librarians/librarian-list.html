@@ -23,8 +23,8 @@
         <div class="col-md-9 col-lg-10">
 
             <h1 class="d-flex justify-content-between align-items-center">
-                Manage Admins
-                <a th:href="@{/admin/manage-admins/add}" class="btn btn-success btn-sm">Add Admin</a>
+                Manage Librarians
+                <a th:href="@{/admin/manage-librarians/add}" class="btn btn-success btn-sm">Add Librarian</a>
             </h1>
             <!-- Main content goes here -->
 
@@ -49,17 +49,17 @@
 
                                 <td>
                                     <!-- Example action buttons -->
-                                    <a th:href="@{/manage-admins/view/{id}(id=${row.get('ID')})}"
+                                    <a th:href="@{/manage-librarians/view/{id}(id=${row.get('ID')})}"
                                         class="btn btn-sm btn-primary">View</a>
-                                    <a th:href="@{/admin/manage-admins/edit/{id}(id=${row.get('ID')})}"
+                                    <a th:href="@{/admin/manage-librarians/edit/{id}(id=${row.get('ID')})}"
                                         class="btn btn-sm btn-warning">Edit</a>
 
 
-                                    <form th:action="@{/admin/manage-admins/remove/{id}(id=${row.get('ID')})}"
+                                    <form th:action="@{/admin/manage-librarians/remove/{id}(id=${row.get('ID')})}"
                                         method="post" style="display:inline">
                                         <input type="hidden" name="_method" value="delete" />
                                         <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Are you sure you want to delete this Admin?');">
+                                            onclick="return confirm('Are you sure you want to delete this Librarian?');">
                                             Delete
                                         </button>
                                     </form>
