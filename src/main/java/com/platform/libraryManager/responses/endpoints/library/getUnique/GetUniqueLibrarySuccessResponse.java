@@ -8,7 +8,7 @@ public class GetUniqueLibrarySuccessResponse extends GetUniqueLibraryResponse im
 
     public GetUniqueLibrarySuccessResponse(Library library) {
         super(200, "success", ResponseType.SUCCESS);
-        setClient(library);
+        setLibrary(library);
     }
 
 }

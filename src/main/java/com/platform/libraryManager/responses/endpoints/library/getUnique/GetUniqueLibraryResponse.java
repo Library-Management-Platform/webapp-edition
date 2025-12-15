@@ -13,6 +13,6 @@ public abstract class GetUniqueLibraryResponse extends Response {
     }
 
     public Library getLibrary() { return library; }
-    public void setClient(Library library) { this.library = library; }
+    public void setLibrary(Library library) { this.library = library; }
 
 }
