@@ -5,6 +5,8 @@ import com.platform.libraryManager.enums.ResourceCategoryEnum;
 import com.platform.libraryManager.enums.ResourceStatusEnum;
 import com.platform.libraryManager.enums.ResourceTypeEnum;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,8 +28,8 @@ public class Resource {
     @Enumerated(EnumType.STRING) private ResourceTypeEnum type;
     @Enumerated(EnumType.STRING) private ResourceStatusEnum status;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @CreationTimestamp private LocalDateTime createdAt;
+    @UpdateTimestamp  private LocalDateTime updatedAt;
 
 
     public Resource() {}
