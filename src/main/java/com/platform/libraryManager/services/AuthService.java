@@ -22,7 +22,9 @@ import com.platform.libraryManager.responses.endpoints.auth.signUp.AuthSignUpSuc
 import com.platform.libraryManager.responses.endpoints.client.create.CreateClientResponse;
 import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueUserResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,6 +35,14 @@ public class AuthService {
 
     @Autowired private AuthLoginManager authLoginManager;
     @Autowired private PasswordHashingProvider passwordHashingProvider;
+
+
+    public void logout(HttpServletRequest request) {
+        SecurityContextHolder.clearContext();
+
+        final HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
+    }
 
 
     public AuthLoginResponse login(LoginAuthPayload loginAuthPayload, HttpServletRequest request) {
