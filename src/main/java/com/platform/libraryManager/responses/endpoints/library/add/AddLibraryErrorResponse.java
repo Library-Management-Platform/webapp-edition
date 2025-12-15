@@ -1,0 +1,12 @@
+package com.platform.libraryManager.responses.endpoints.library.add;
+
+import com.platform.libraryManager.responses.types.IErrorResponse;
+import com.platform.libraryManager.responses.types.ResponseType;
+
+public class AddLibraryErrorResponse extends AddLibraryResponse implements IErrorResponse {
+
+    public AddLibraryErrorResponse(int code, String message) {
+        super(code, message, ResponseType.ERROR);
+    }
+
+}
