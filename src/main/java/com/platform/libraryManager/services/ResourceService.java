@@ -74,6 +74,7 @@ public class ResourceService {
             );
 
             resource.setLink(oldResource.getLink());
+            resource.setStatus(oldResource.getStatus());
             resourceRepository.save(resource);
             return new EditResourceSuccessResponse();
 
