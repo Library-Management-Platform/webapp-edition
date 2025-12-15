@@ -28,8 +28,7 @@ public class FilebaseIPFSProvider {
     /**
      * Upload a file to Filebase S3
      *
-     * @param key      the object key (file name in S3)
-     * @param filePath path to the local file
+     * @param file original file to be uploaded
      * @return the public URL via IPFS gateway
      */
     public String uploadFile(MultipartFile file) throws IOException {
