@@ -1,0 +1,74 @@
+spring.application.name=libraryManager
+
+# --- HOST configuration ---
+server.host=localhost
+server.port=8080
+server.protocol=http
+
+# --- JPA / Hibernate settings ---
+spring.jpa.properties.hibernate.hbm2ddl.auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.hbm2ddl.schema_export.show=true
+spring.jpa.properties.hibernate.hbm2ddl.schema_export.delimiter=;
+spring.jpa.properties.hibernate.hbm2ddl.schema_export.create_source=metadata
+spring.jpa.properties.hibernate.hbm2ddl.schema_export.create_script_source=src/main/resources/schema.sql
+spring.jpa.database-platform=org.hibernate.dialect.MySQLDialect
+spring.jpa.hibernate.ddl-auto=update
+# spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+
+# --- Database Configuration ---
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.url=jdbc:mysql://avnadmin:AVNS_kux_LuVMs9tdpTq22vv@mysql-2aa942d1-library-management-platform.i.aivencloud.com:26109/defaultdb?ssl-mode=REQUIRED
+spring.datasource.username=avnadmin
+spring.datasource.password=AVNS_kux_LuVMs9tdpTq22vv
+
+
+
+# spring.datasource.url=jdbc:postgresql://neondb_owner:npg_Tn0ORVC5XNgj@ep-square-meadow-agp1ddil-pooler.c-2.eu-central-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+# spring.datasource.user=neondb_owner
+# spring.datasource.driver-class-name=org.postgresql.Driver
+# spring.datasource.url=jdbc:postgresql://ep-square-meadow-agp1ddil-pooler.c-2.eu-central-1.aws.neon.tech:5432/neondb
+# spring.datasource.host=ep-square-meadow-agp1ddil-pooler.c-2.eu-central-1.aws.neon.tech
+# spring.datasource.name=neondb
+# spring.datasource.port=5432
+# spring.datasource.username=neondb_owner
+# spring.datasource.password=npg_Tn0ORVC5XNgj
+
+
+
+
+# --- Argon2 Hashing Configuration ---
+spring.security.password.argon2.salt-length=16
+spring.security.password.argon2.hash-length=32
+spring.security.password.argon2.parallelism=1
+spring.security.password.argon2.memory=4096
+spring.security.password.argon2.iterations=3
+
+# --- JWT Secret key ---
+spring.security.jwt.secret="2cfd6a6a4aa19cf59e28295d36eb8bcc709e431f819e52199a5b334ae190d10561c1640c1a2a76393ba658e769d08145bb4796bbc28d25e8906bca331f9e725afacfd6dc19bf98c18844a215d5d5846a5d870c6f971b983ff8fe0cddf53b92e8335b71274e8a7b381ba378ca4131dbd67727bbe23340850e4123e4dbf03f786569ddca7c0407d673ee85b5f047a6e61e5a80dbb2dffdcc58429763bccc8c4a582991ac95409c427fe7cd6d6f7e4d3393d1cdcbd207abe7ca3f477bb8fff5bfb9930e0025411388647c63935c3e4262779fee2793fa8ca44f712acb826965932c75d7ce5b54eb2fa1d2b0ccc5fc452aae6c011a557df5ba92e2735f4cf45c80b6"
+spring.security.jwt.expiration-ms=3600000
+spring.security.jwt.issuer=libraryManager
+
+
+
+# --- SMTP ---
+spring.mail.smtp.host=smtp.mailersend.net
+spring.mail.smtp.port=587
+spring.mail.smtp.username=MS_1y1P8r@test-3m5jgrom3kxgdpyo.mlsender.net
+spring.mail.smtp.password=mssp.9F8r2g3.351ndgw3x8q4zqx8.WZcPbKr
+spring.mail.smtp.auth=true
+spring.mail.smtp.starttlsEnable=true
+spring.mail.smtp.starttlsRequired=true
+
+
+
+
+# --- Email defaults ---
+spring.mail.email.from=your-email@gmail.com
+spring.mail.email.defaultSubject=Notification
+spring.mail.email.templatesPath=/templates/emails
+
+
+
