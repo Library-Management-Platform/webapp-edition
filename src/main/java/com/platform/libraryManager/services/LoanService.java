@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -94,6 +96,20 @@ public class LoanService {
     }
 
     /**
+     * Admin-level borrow: allow admin to mark a reserved loan as borrowed without librarian ownership checks
+     */
+    public Loan adminBorrowResource(Long loanId, int loanDurationDays) {
+        Loan loan = getLoanOrThrow(loanId);
+        loan.markAsBorrowed(loanDurationDays);
+
+        Resource resource = loan.getResource();
+        resource.setStatus(ResourceStatusEnum.BORROWED);
+        resourceRepository.save(resource);
+
+        return loanRepository.save(loan);
+    }
+
+    /**
      * Librarian marks resource as returned
      */
     public Loan returnResource(Long loanId, Librarian librarian) {
@@ -107,6 +123,20 @@ public class LoanService {
         loan.markAsReturned();
 
         // Update the resource status to AVAILABLE
+        Resource resource = loan.getResource();
+        resource.setStatus(ResourceStatusEnum.AVAILABLE);
+        resourceRepository.save(resource);
+
+        return loanRepository.save(loan);
+    }
+
+    /**
+     * Admin-level return: allow admin to mark an in-progress loan as returned without librarian ownership checks
+     */
+    public Loan adminReturnResource(Long loanId) {
+        Loan loan = getLoanOrThrow(loanId);
+        loan.markAsReturned();
+
         Resource resource = loan.getResource();
         resource.setStatus(ResourceStatusEnum.AVAILABLE);
         resourceRepository.save(resource);
@@ -160,6 +190,26 @@ public class LoanService {
     @Transactional(readOnly = true)
     public List<Loan> getOverdueLoans() {
         return loanRepository.findOverdueLoans();
+    }
+
+    // Analytics helpers for admin dashboard
+    public Map<String, Long> countLoansByCategory() {
+        return loanRepository.findAll().stream()
+                .filter(l -> l.getResource() != null && l.getResource().getCategory() != null)
+                .collect(Collectors.groupingBy(l -> l.getResource().getCategory().name(), Collectors.counting()));
+    }
+
+    public Map<String, Long> countLoansByLibrary() {
+        return loanRepository.findAll().stream()
+                .filter(l -> l.getLibrary() != null)
+                .collect(Collectors.groupingBy(l -> l.getLibrary().getName(), Collectors.counting()));
+    }
+
+    public double computeTurnoverRate() {
+        long totalLoans = loanRepository.count();
+        long totalResources = resourceRepository.count();
+        if (totalResources == 0) return 0.0;
+        return ((double) totalLoans / (double) totalResources) * 100.0; // percentage
     }
 
     // --------------------------------------------------
