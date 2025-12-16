@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.providers;
+package com.platform.libraryManager.shared.providers;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

@@ -1,11 +1,11 @@
 package com.platform.libraryManager.logic.services;
 
 
-import com.platform.libraryManager.utils.factories.ResourceFactory;
+import com.platform.libraryManager.shared.factories.ResourceFactory;
 import com.platform.libraryManager.dataAccess.models.Resource;
 import com.platform.libraryManager.dto.payloads.resource.AddResourcePayload;
 import com.platform.libraryManager.dto.payloads.resource.EditResourcePayload;
-import com.platform.libraryManager.utils.providers.FilebaseIPFSProvider;
+import com.platform.libraryManager.shared.providers.FilebaseIPFSProvider;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
 import com.platform.libraryManager.dto.responses.endpoints.resource.add.AddResourceErrorResponse;
 import com.platform.libraryManager.dto.responses.endpoints.resource.add.AddResourceResponse;

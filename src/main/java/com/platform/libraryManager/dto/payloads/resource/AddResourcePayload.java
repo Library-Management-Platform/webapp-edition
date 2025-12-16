@@ -1,7 +1,7 @@
 package com.platform.libraryManager.dto.payloads.resource;
 
-import com.platform.libraryManager.dataAccess.enums.ResourceCategoryEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceTypeEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
+import com.platform.libraryManager.shared.enums.ResourceTypeEnum;
 
 public class AddResourcePayload {
 

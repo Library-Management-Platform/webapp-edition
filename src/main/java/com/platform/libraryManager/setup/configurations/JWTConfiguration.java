@@ -2,7 +2,7 @@ package com.platform.libraryManager.setup.configurations;
 
 
 import com.platform.libraryManager.setup.configurationProperties.JWTConfigurationProperties;
-import com.platform.libraryManager.utils.providers.JWTProvider;
+import com.platform.libraryManager.shared.providers.JWTProvider;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

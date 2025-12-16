@@ -3,7 +3,7 @@ package com.platform.libraryManager.dataAccess.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.platform.libraryManager.dataAccess.enums.UserTypeEnum;
+import com.platform.libraryManager.shared.enums.UserTypeEnum;
 import jakarta.persistence.*;
 
 @Entity

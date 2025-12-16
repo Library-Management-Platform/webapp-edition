@@ -1,6 +1,6 @@
 package com.platform.libraryManager.logic.services;
 
-import com.platform.libraryManager.dataAccess.enums.NotificationTypeEnum;
+import com.platform.libraryManager.shared.enums.NotificationTypeEnum;
 import com.platform.libraryManager.dataAccess.models.Client;
 import com.platform.libraryManager.dataAccess.models.Notification;
 import com.platform.libraryManager.dataAccess.models.Resource;

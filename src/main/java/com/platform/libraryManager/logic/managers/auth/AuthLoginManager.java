@@ -17,10 +17,10 @@ import com.platform.libraryManager.dto.responses.endpoints.auth.login.AuthLoginE
 import com.platform.libraryManager.dto.responses.endpoints.auth.login.AuthLoginResponse;
 import com.platform.libraryManager.dto.responses.endpoints.auth.login.AuthLoginSuccessResponse;
 
-import com.platform.libraryManager.utils.helpers.JSONHelper;
+import com.platform.libraryManager.shared.helpers.JSONHelper;
 import com.platform.libraryManager.dto.payloads.auth.LoginAuthPayload;
-import com.platform.libraryManager.utils.providers.JWTProvider;
-import com.platform.libraryManager.utils.providers.PasswordHashingProvider;
+import com.platform.libraryManager.shared.providers.JWTProvider;
+import com.platform.libraryManager.shared.providers.PasswordHashingProvider;
 
 @Component
 public class AuthLoginManager {

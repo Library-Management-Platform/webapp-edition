@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import com.platform.libraryManager.utils.factories.ClientFactory;
+import com.platform.libraryManager.shared.factories.ClientFactory;
 import com.platform.libraryManager.dataAccess.models.Client;
 import com.platform.libraryManager.dto.payloads.client.CreateClientPayload;
 import com.platform.libraryManager.dataAccess.repositories.ClientRepository;

@@ -1,6 +1,6 @@
 package com.platform.libraryManager.dto.responses.endpoints.admin.getUnique;
 
-import com.platform.libraryManager.utils.factories.AdminFactory;
+import com.platform.libraryManager.shared.factories.AdminFactory;
 import com.platform.libraryManager.dto.responses.types.IErrorResponse;
 import com.platform.libraryManager.dto.responses.types.ResponseType;
 

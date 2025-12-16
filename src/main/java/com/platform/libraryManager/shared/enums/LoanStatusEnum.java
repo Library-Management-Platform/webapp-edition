@@ -1,4 +1,4 @@
-package com.platform.libraryManager.dataAccess.enums;
+package com.platform.libraryManager.shared.enums;
 
 public enum LoanStatusEnum {
     RESERVED, //Resource has been reserved but not yet borrowed.

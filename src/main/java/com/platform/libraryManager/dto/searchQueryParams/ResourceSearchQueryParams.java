@@ -1,8 +1,8 @@
 package com.platform.libraryManager.dto.searchQueryParams;
 
-import com.platform.libraryManager.dataAccess.enums.ResourceCategoryEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceTypeEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
+import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceTypeEnum;
 
 import java.time.LocalDateTime;
 

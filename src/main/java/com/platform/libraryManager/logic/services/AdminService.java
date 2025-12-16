@@ -1,11 +1,11 @@
 package com.platform.libraryManager.logic.services;
 
 
-import com.platform.libraryManager.utils.factories.AdminFactory;
+import com.platform.libraryManager.shared.factories.AdminFactory;
 import com.platform.libraryManager.dataAccess.models.Admin;
 import com.platform.libraryManager.dto.payloads.admin.AddAdminPayload;
 import com.platform.libraryManager.dto.payloads.admin.EditAdminPayload;
-import com.platform.libraryManager.utils.providers.PasswordHashingProvider;
+import com.platform.libraryManager.shared.providers.PasswordHashingProvider;
 import com.platform.libraryManager.dataAccess.repositories.AdminRepository;
 import com.platform.libraryManager.dto.responses.endpoints.admin.add.AddAdminErrorResponse;
 import com.platform.libraryManager.dto.responses.endpoints.admin.add.AddAdminResponse;

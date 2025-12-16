@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.providers;
+package com.platform.libraryManager.shared.providers;
 
 import com.platform.libraryManager.setup.configurationProperties.FilebaseIPFSConfigurationProperties;
 import org.springframework.web.multipart.MultipartFile;

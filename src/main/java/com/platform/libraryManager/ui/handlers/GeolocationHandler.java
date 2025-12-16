@@ -1,6 +1,6 @@
 package com.platform.libraryManager.ui.handlers;
 
-import com.platform.libraryManager.utils.providers.RadarGeolocationProvider;
+import com.platform.libraryManager.shared.providers.RadarGeolocationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

@@ -4,7 +4,7 @@ import com.platform.libraryManager.dataAccess.models.Client;
 import com.platform.libraryManager.dataAccess.models.Library;
 import com.platform.libraryManager.dataAccess.models.Loan;
 import com.platform.libraryManager.dataAccess.models.Resource;
-import com.platform.libraryManager.dataAccess.enums.LoanStatusEnum;
+import com.platform.libraryManager.shared.enums.LoanStatusEnum;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -52,7 +52,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
 
     @Query("""
                 SELECT l FROM Loan l
-                WHERE l.status <> com.platform.libraryManager.dataAccess.enums.LoanStatusEnum.CLOSED
+                WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
             """)
     List<Loan> findAllActiveLoans();
 
@@ -63,7 +63,7 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
                 JOIN FETCH l.client
                 JOIN FETCH l.resource
                 JOIN FETCH l.library
-                WHERE l.status <> com.platform.libraryManager.dataAccess.enums.LoanStatusEnum.CLOSED
+                WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
             """)
     List<Loan> findAllActiveLoansWithRelations();
 
@@ -74,12 +74,12 @@ public interface LoanRepository extends JpaRepository<Loan, Long> {
                 JOIN FETCH l.client
                 JOIN FETCH l.resource
                 JOIN FETCH l.library
-                WHERE l.status = com.platform.libraryManager.dataAccess.enums.LoanStatusEnum.IN_PROGRESS
+                WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS
                   AND l.dueDate < CURRENT_TIMESTAMP
             """)
     List<Loan> findOverdueLoansWithRelations();
 
-    @Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.dataAccess.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
+    @Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
     List<Loan> findOverdueLoans();
 
 }

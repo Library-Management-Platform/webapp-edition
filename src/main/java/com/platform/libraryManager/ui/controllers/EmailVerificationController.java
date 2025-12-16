@@ -1,7 +1,7 @@
 package com.platform.libraryManager.ui.controllers;
 
 
-import com.platform.libraryManager.utils.helpers.RouteAttributeHelper;
+import com.platform.libraryManager.shared.helpers.RouteAttributeHelper;
 import com.platform.libraryManager.dto.responses.endpoints.emailVerification.verify.VerifyEmailResponse;
 import com.platform.libraryManager.logic.services.EmailVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;

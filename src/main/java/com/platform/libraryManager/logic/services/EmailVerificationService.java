@@ -4,11 +4,11 @@ package com.platform.libraryManager.logic.services;
 import com.platform.libraryManager.logic.managers.emailVerification.VerifyEmailManager;
 import com.platform.libraryManager.dataAccess.repositories.EmailVerificationRepository;
 
-import com.platform.libraryManager.utils.helpers.StringHelper;
+import com.platform.libraryManager.shared.helpers.StringHelper;
 
 import com.platform.libraryManager.dataAccess.models.EmailVerificationLink;
 
-import com.platform.libraryManager.utils.factories.EmailVerificationLinkFactory;
+import com.platform.libraryManager.shared.factories.EmailVerificationLinkFactory;
 
 import com.platform.libraryManager.logic.managers.emailVerification.SendEmailVerificationLinkManager;
 

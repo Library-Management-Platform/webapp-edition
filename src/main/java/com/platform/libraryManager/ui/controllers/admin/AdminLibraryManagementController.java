@@ -1,7 +1,7 @@
 package com.platform.libraryManager.ui.controllers.admin;
 
-import com.platform.libraryManager.utils.helpers.RedirectHelper;
-import com.platform.libraryManager.utils.helpers.RouteAttributeHelper;
+import com.platform.libraryManager.shared.helpers.RedirectHelper;
+import com.platform.libraryManager.shared.helpers.RouteAttributeHelper;
 import com.platform.libraryManager.dto.payloads.library.AddLibraryPayload;
 import com.platform.libraryManager.dto.payloads.library.EditLibraryPayload;
 import com.platform.libraryManager.dto.responses.endpoints.library.add.AddLibraryResponse;

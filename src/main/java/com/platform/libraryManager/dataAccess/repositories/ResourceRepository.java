@@ -1,8 +1,8 @@
 package com.platform.libraryManager.dataAccess.repositories;
 
-import com.platform.libraryManager.dataAccess.enums.ResourceCategoryEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceTypeEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
+import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceTypeEnum;
 import com.platform.libraryManager.dataAccess.models.Resource;
 import com.platform.libraryManager.dto.searchQueryParams.ResourceSearchQueryParams;
 import org.springframework.data.domain.Page;

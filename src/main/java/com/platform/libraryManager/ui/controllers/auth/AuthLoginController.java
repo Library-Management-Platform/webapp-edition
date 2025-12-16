@@ -1,7 +1,7 @@
 package com.platform.libraryManager.ui.controllers.auth;
 
-import com.platform.libraryManager.dataAccess.enums.UserTypeEnum;
-import com.platform.libraryManager.utils.helpers.RedirectHelper;
+import com.platform.libraryManager.shared.enums.UserTypeEnum;
+import com.platform.libraryManager.shared.helpers.RedirectHelper;
 import com.platform.libraryManager.dto.payloads.auth.LoginAuthPayload;
 import com.platform.libraryManager.dto.responses.endpoints.auth.login.AuthLoginResponse;
 import com.platform.libraryManager.dto.responses.endpoints.auth.login.AuthLoginSuccessResponse;

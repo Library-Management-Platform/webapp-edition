@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.helpers;
+package com.platform.libraryManager.shared.helpers;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
