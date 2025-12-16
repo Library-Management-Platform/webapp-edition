@@ -1,6 +1,6 @@
 package com.platform.libraryManager;
 
-import com.platform.libraryManager.configurationProperties.DatasourceConfigurationProperties;
+import com.platform.libraryManager.setup.configurationProperties.DatasourceConfigurationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
