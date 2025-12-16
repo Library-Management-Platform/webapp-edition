@@ -1,0 +1,28 @@
+package com.platform.libraryManager.setup.configurations;
+
+
+import com.platform.libraryManager.setup.configurationProperties.JWTConfigurationProperties;
+import com.platform.libraryManager.utils.providers.JWTProvider;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+
+@Configuration
+public class JWTConfiguration {
+
+    @Autowired private JWTConfigurationProperties jwtConfigurationProperties;
+
+
+    @Bean
+    public JWTProvider jwtProvider() {
+
+        return new JWTProvider(
+                Keys.hmacShaKeyFor(jwtConfigurationProperties.getSecret().getBytes()),
+                jwtConfigurationProperties.getExpirationMs(),
+                jwtConfigurationProperties.getIssuer()
+        );
+    }
+
+}
