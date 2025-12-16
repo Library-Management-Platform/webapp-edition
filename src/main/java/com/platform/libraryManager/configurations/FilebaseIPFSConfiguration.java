@@ -1,7 +1,6 @@
 package com.platform.libraryManager.configurations;
 
 import com.platform.libraryManager.configurationProperties.FilebaseIPFSConfigurationProperties;
-import com.platform.libraryManager.configurationProperties.JWTConfigurationProperties;
 import com.platform.libraryManager.providers.FilebaseIPFSProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
