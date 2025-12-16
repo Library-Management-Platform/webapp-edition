@@ -13,21 +13,22 @@ import java.util.Optional;
 @Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
-  @Query("""
-      SELECT a FROM Admin a
-      WHERE (COALESCE(:#{#params.id}, a.id) = a.id)
-        AND (COALESCE(LOWER(:#{#params.username}), LOWER(a.username)) LIKE LOWER(CONCAT('%', a.username, '%')))
-        AND (COALESCE(LOWER(:#{#params.email}), LOWER(a.email)) LIKE LOWER(CONCAT('%', a.email, '%')))
-      """)
-  List<Admin> search(@Param("params") AdminSearchQueryParams params);
+    @Query("""
+    SELECT a FROM Admin a
+    WHERE (COALESCE(:#{#params.id}, a.id) = a.id)
+      AND (COALESCE(LOWER(:#{#params.username}), LOWER(a.username)) LIKE LOWER(CONCAT('%', a.username, '%')))
+      AND (COALESCE(LOWER(:#{#params.email}), LOWER(a.email)) LIKE LOWER(CONCAT('%', a.email, '%')))
+    """)
+    List<Admin> search(@Param("params") AdminSearchQueryParams params);
 
-  @Query("""
-      SELECT a FROM Admin a
-      WHERE (COALESCE(:#{#params.id}, a.id) = a.id)
-        AND (COALESCE(LOWER(:#{#params.username}), LOWER(a.username)) LIKE LOWER(CONCAT('%', a.username, '%')))
-        AND (COALESCE(LOWER(:#{#params.email}), LOWER(a.email)) LIKE LOWER(CONCAT('%', a.email, '%')))
-      """)
-  Optional<Admin> searchOne(@Param("params") AdminSearchQueryParams params);
 
-  List<Admin> findAll();
+    @Query("""
+    SELECT a FROM Admin a
+    WHERE (COALESCE(:#{#params.id}, a.id) = a.id)
+      AND (COALESCE(LOWER(:#{#params.username}), LOWER(a.username)) LIKE LOWER(CONCAT('%', a.username, '%')))
+      AND (COALESCE(LOWER(:#{#params.email}), LOWER(a.email)) LIKE LOWER(CONCAT('%', a.email, '%')))
+    """)
+    Optional<Admin> searchOne(@Param("params") AdminSearchQueryParams params);
+
+    List<Admin> findAll();
 }

@@ -1,15 +1,17 @@
 package com.platform.libraryManager.models;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @DiscriminatorValue("ADMIN")
 @Table(name = "admins")
 public class Admin extends User {
+
+    @ManyToOne @JoinColumn(name = "parent_admin_id") private Admin parent;
+    @OneToMany(mappedBy = "parent") private List<Admin> children;
 
     public Admin() {}
 
@@ -18,9 +20,11 @@ public class Admin extends User {
             String email,
             String password,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Admin parent
     ) {
         super(username, email, password, createdAt, updatedAt);
+        setParent(parent);
     }
 
     public Admin(
@@ -33,4 +37,13 @@ public class Admin extends User {
     ) {
         super(id, username, email, password, createdAt, updatedAt);
     }
+
+
+    @PreRemove
+    private void reassignChildren() {
+        if (children != null) for (Admin child : children) child.setParent(this.parent); // assign to grandparent
+    }
+
+
+    private void setParent(Admin parent) { this.parent = parent; }
 }

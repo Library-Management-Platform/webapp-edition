@@ -9,14 +9,15 @@ public abstract class AdminFactory {
 
     public static Admin createEmpty() { return new Admin(); }
 
-    public static Admin create(AddAdminPayload addAdminPayload) {
+    public static Admin create(AddAdminPayload addAdminPayload, Admin parent) {
 
         return new Admin(
                 addAdminPayload.getUsername(),
                 addAdminPayload.getEmail(),
                 addAdminPayload.getPassword(),
                 DateHelper.getCurrentLocalDateTime(),
-                DateHelper.getCurrentLocalDateTime()
+                DateHelper.getCurrentLocalDateTime(),
+                parent
         );
     }
 

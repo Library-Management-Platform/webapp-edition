@@ -31,7 +31,9 @@ public class AdminManagementController {
 
     @GetMapping()
     public String getAdmins(Model model) {
-        final GetAllAdminsResponse getAllAdminsResponse = adminService.getAllAdmins();
+
+        //final GetAllAdminsResponse getAllAdminsResponse = adminService.getAllAdmins();
+        final GetAllAdminsResponse getAllAdminsResponse = adminService.getDescendantAdmins();
 
         RouteAttributeHelper.addModelAttributes(
                 model,

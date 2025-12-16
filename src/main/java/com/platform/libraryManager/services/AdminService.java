@@ -26,19 +26,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class AdminService {
 
+    @Autowired private AuthService authService;
     @Autowired private AdminRepository adminRepository;
     @Autowired private PasswordHashingProvider passwordHashingProvider;
 
     public AddAdminResponse addAdmin(AddAdminPayload addAdminPayload) {
 
         try {
+            final Admin currentAdmin = adminRepository.findByUsername(authService.getAuthenticationName()).get();
 
-            final Admin admin = AdminFactory.create(addAdminPayload);
+            final Admin admin = AdminFactory.create(addAdminPayload, currentAdmin);
             admin.setPassword(passwordHashingProvider.hash(admin.getPassword()));
 
             adminRepository.save(admin);
@@ -93,6 +96,18 @@ public class AdminService {
     public GetAllAdminsResponse getAllAdmins() {
         final List<Admin> admins = adminRepository.findAll();
         return new GetAllAdminsSuccessResponse(admins);
+    }
+
+    public GetAllAdminsResponse getDescendantAdmins() {
+
+        try {
+            final Admin currentAdmin = adminRepository.findByUsername(authService.getAuthenticationName()).get();
+            final List<Admin> admins = adminRepository.findAllDescendants(currentAdmin.getId());
+            return new GetAllAdminsSuccessResponse(admins);
+
+        }catch (Exception exception) {
+            return new GetAllAdminsSuccessResponse(new ArrayList<>());
+        }
     }
 
     public GetUniqueAdminResponse getUniqueAdmin(AdminSearchQueryParams adminSearchQueryParams) {
