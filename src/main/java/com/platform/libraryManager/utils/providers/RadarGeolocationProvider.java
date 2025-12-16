@@ -3,6 +3,7 @@ package com.platform.libraryManager.utils.providers;
 import com.platform.libraryManager.setup.configurationProperties.RadarGeolocationConfigurationProperties;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -12,7 +13,7 @@ public class RadarGeolocationProvider {
     private final RadarGeolocationConfigurationProperties radarGeolocationConfigurationProperties;
     private final RestTemplate restTemplate;
 
-    private static final String HOST = "api.radar.io/v1";
+    private static final String HOST = "api.radar.io";
 
 
     public RadarGeolocationProvider(
@@ -31,7 +32,7 @@ public class RadarGeolocationProvider {
         if (usePublishableKey) key = testMode ? radarGeolocationConfigurationProperties.getTestPublishKey() : radarGeolocationConfigurationProperties.getPublishKey();
         else key = testMode ? radarGeolocationConfigurationProperties.getTestSecretKey() : radarGeolocationConfigurationProperties.getSecretKey();
 
-        headers.setBearerAuth(key);
+        headers.set("Authorization", key);
         return headers;
     }
 
@@ -57,22 +58,28 @@ public class RadarGeolocationProvider {
             String lang,
             boolean testMode
     ) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host(HOST)
-                .path("/search/autocomplete")
-                .queryParam("query", query);
+        try {
 
-        if (near != null) builder.queryParam("near", near);
-        if (layers != null) builder.queryParam("layers", layers);
-        if (limit != null) builder.queryParam("limit", limit);
-        if (countryCode != null) builder.queryParam("countryCode", countryCode);
-        if (lang != null) builder.queryParam("lang", lang);
+            UriComponentsBuilder builder = UriComponentsBuilder.newInstance()
+                    .scheme("https")
+                    .host(HOST)
+                    .path("/v1/search/autocomplete")
+                    .queryParam("query", query);
 
-        return restTemplate.postForObject(
-                builder.toUriString(),
-                new HttpEntity<>(buildHeaders(testMode, true)),
-                String.class
-        );
+            if (near != null) builder.queryParam("near", near);
+            if (layers != null) builder.queryParam("layers", layers);
+            if (limit != null) builder.queryParam("limit", limit);
+            if (countryCode != null) builder.queryParam("countryCode", countryCode);
+            if (lang != null) builder.queryParam("lang", lang);
+
+            return restTemplate.exchange(
+                    builder.toUriString(),
+                    HttpMethod.GET,
+                    new HttpEntity<>(buildHeaders(testMode, true)),
+                    String.class
+            ).getBody();
+        }catch (Exception exception) {
+            return "";
+        }
     }
 }

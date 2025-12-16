@@ -34,11 +34,16 @@
                             placeholder="Enter library name" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label for="address" class="form-label">Address</label>
                         <input type="text" th:field="*{address}" id="address" class="form-control"
-                            placeholder="Enter address" required>
+                               placeholder="Enter address" autocomplete="off" required>
+
+                        <!-- Dropdown for suggestions -->
+                        <ul id="address-suggestions" class="list-group position-absolute w-100"
+                            style="z-index: 1000; top: 100%; display: none;"></ul>
                     </div>
+
 
                     <!--<div class="mb-3">
                             <label for="coordinates" class="form-label">Coordinates (optional)</label>
@@ -57,6 +62,68 @@
 
     <!-- Include footer fragment -->
     <div th:replace="admin/fragments/footer :: footer"></div>
+
+
+
+
+    <script>
+        const input = document.getElementById("address");
+        const suggestionsList = document.getElementById("address-suggestions");
+
+        // Debounce function to limit API calls
+        function debounce(func, delay) {
+            let timeout;
+            return function() {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), delay);
+            }
+        }
+
+        // Fetch suggestions from your Spring Boot endpoint
+        async function fetchSuggestions(query) {
+            if (!query) {
+                suggestionsList.style.display = "none";
+                suggestionsList.innerHTML = "";
+                return;
+            }
+
+            try {
+                const response = await fetch(`/autocomplete?query=${encodeURIComponent(query)}`);
+                const data = await response.json();
+
+                suggestionsList.innerHTML = "";
+                if (data.addresses && data.addresses.length > 0) {
+                    data.addresses.forEach(addr => {
+                        const li = document.createElement("li");
+                        li.textContent = addr.formattedAddress || addr.placeLabel;
+                        li.className = "list-group-item list-group-item-action";
+                        li.style.cursor = "pointer";
+
+                        // When clicked, set the input value and hide suggestions
+                        li.addEventListener("click", () => {
+                            input.value = li.textContent;
+                            suggestionsList.style.display = "none";
+                        });
+
+                        suggestionsList.appendChild(li);
+                    });
+                    suggestionsList.style.display = "block";
+                } else {
+                    suggestionsList.style.display = "none";
+                }
+            } catch (err) {
+                console.error("Autocomplete error:", err);
+                suggestionsList.style.display = "none";
+            }
+        }
+
+        // Add debounce to input event
+        input.addEventListener("input", debounce(() => {
+            fetchSuggestions(input.value);
+        }, 300));
+    </script>
 
 </body>
 
