@@ -1,41 +1,109 @@
+<!-- librarian Navigation Bar Fragment -->
 <div th:fragment="navbar">
+
+    <!-- Bell animation (same as client navbar) -->
+    <style>
+        @keyframes bellShake {
+            0% { transform: rotate(0); }
+            20% { transform: rotate(-10deg); }
+            40% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            80% { transform: rotate(10deg); }
+            100% { transform: rotate(0); }
+        }
+
+        .bell-animate {
+            animation: bellShake 0.6s ease-in-out;
+        }
+    </style>
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
         <div class="container-fluid">
+
             <a class="navbar-brand" th:href="@{/librarian/dashboard}">
                 <i class="bi bi-book-half me-2"></i>
                 Library Manager
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#librarianNavbar" aria-controls="librarianNavbar" aria-expanded="false" aria-label="Toggle navigation">
+
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#librarianNavbar"
+                    aria-controls="librarianNavbar"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <div class="collapse navbar-collapse" id="librarianNavbar">
+
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/librarian/dashboard}">Dashboard</a>
                     </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="manageResourcesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="manageResourcesDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown">
                             Manage Resources
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="manageResourcesDropdown">
-                            <!-- Intentionally left empty for future resource actions -->
-                            <li><span class="dropdown-item text-muted">No actions yet</span></li>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <span class="dropdown-item text-muted">No actions yet</span>
+                            </li>
                         </ul>
                     </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="manageLoansDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle"
+                           href="#"
+                           id="manageLoansDropdown"
+                           role="button"
+                           data-bs-toggle="dropdown">
                             Manage Loans
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="manageLoansDropdown">
-                            <li><a class="dropdown-item" th:href="@{/librarian/loans}">View Loans</a></li>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" th:href="@{/librarian/loans}">
+                                    View Loans
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 </ul>
+
+                <!-- Right side -->
                 <ul class="navbar-nav ms-auto">
+
+                    <!-- Notifications (SAME LOGIC AS CLIENT) -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle position-relative"
+                           href="#"
+                           role="button"
+                           data-bs-toggle="dropdown">
+
+                            <i class="bi bi-bell me-1"></i> Notifications
+
+                            <!-- 🔴 Notification Badge -->
+                            <span id="notificationBadge"
+                                  class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                                0
+                            </span>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end" style="width: 300px;">
+                            <li th:replace="fragments/notifications :: notifications"></li>
+                        </ul>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
+
             </div>
         </div>
     </nav>

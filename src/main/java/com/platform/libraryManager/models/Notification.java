@@ -18,8 +18,9 @@ public class Notification {
     private LocalDateTime sentAt;
 
     @Column(name = "is_read") private boolean read;
-    @Enumerated(EnumType.STRING) private NotificationTypeEnum type;
-
+@Column(length = 50) // plenty of room for future enums
+@Enumerated(EnumType.STRING)
+private NotificationTypeEnum type;
     public Notification() {}
 
     public Notification(

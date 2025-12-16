@@ -16,9 +16,12 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http    
+        .csrf(csrf -> csrf
+                .ignoringRequestMatchers("/ws/**") // WebSocket handshake
+            )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/",  "/login", "/sign-up", "/email-verification/**","/images/**").permitAll()
+                        .requestMatchers( "/",  "/login", "/sign-up", "/email-verification/**","/images/**","/ws/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(AbstractHttpConfigurer::disable);

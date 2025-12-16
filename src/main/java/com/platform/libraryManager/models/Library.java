@@ -62,6 +62,9 @@ public class Library {
     public List<Resource> getResources() { return resources; }
     public void setResources(List<Resource> resources) { this.resources = resources; }
 
+    public List<Librarian> getLibrarians() { return librarians; }
+    public void setLibrarians(List<Librarian> librarians) { this.librarians = librarians; }
+
     public LocalDateTime getCreationDate() { return createdAt; }
     private void setCreationDate(LocalDateTime createdAt) { this.createdAt = createdAt; }
 

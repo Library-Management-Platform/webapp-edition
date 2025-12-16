@@ -133,10 +133,6 @@ public class ClientLoanController {
                 throw new IllegalArgumentException("Resource does not belong to the selected library");
             }
 
-            // Check if resource is available for loan
-            if (!(resource.getStatus() == ResourceStatusEnum.AVAILABLE)) {
-                throw new IllegalStateException("Resource is not available for loan");
-            }
 
             // Reserve the resource
             loanService.reserveResource(client, resource, library);

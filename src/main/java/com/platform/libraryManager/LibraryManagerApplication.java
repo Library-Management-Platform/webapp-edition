@@ -4,8 +4,10 @@ import com.platform.libraryManager.configurationProperties.DatasourceConfigurati
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
+@EnableScheduling
 @EnableConfigurationProperties(DatasourceConfigurationProperties.class)
 public class LibraryManagerApplication {
 	public static void main(String[] args) {

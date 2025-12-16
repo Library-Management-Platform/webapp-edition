@@ -1,12 +1,12 @@
 package com.platform.libraryManager.controllers.LoanControllers;
 
 import com.platform.libraryManager.models.Loan;
-import java.security.Principal;
 import com.platform.libraryManager.services.LoanService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -22,18 +22,23 @@ public class AdminLoanController {
     // View all active loans
     @GetMapping
     public String allActiveLoans(Principal principal, Model model) {
-        List<Loan> loans = loanService.getAllActiveLoans();
-        List<Loan> overdue = loanService.getOverdueLoans();
+
+        List<Loan> loans = loanService.getAllActiveLoansWithRelations();
+        List<Loan> overdue = loanService.getOverdueLoansWithRelations();
+
         model.addAttribute("loans", loans);
         model.addAttribute("overdueLoans", overdue);
+
         return "admin/pages/manage-loans/loans";
     }
 
-    // View overdue loans
+    // View overdue loans only
     @GetMapping("/overdue")
     public String overdueLoans(Principal principal, Model model) {
-        List<Loan> loans = loanService.getOverdueLoans();
+
+        List<Loan> loans = loanService.getOverdueLoansWithRelations();
         model.addAttribute("loans", loans);
+
         return "admin/pages/manage-loans/overdue-loans";
     }
 

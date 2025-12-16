@@ -1,4 +1,4 @@
-package com.platform.libraryManager.config;
+/* package com.platform.libraryManager.config;
 
 import com.platform.libraryManager.enums.ResourceCategoryEnum;
 import com.platform.libraryManager.enums.ResourceTypeEnum;
@@ -174,3 +174,4 @@ public class DataSeeder implements CommandLineRunner {
         System.out.println("DataSeeder: DB seed complete.");
     }
 }
+ */
