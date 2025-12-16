@@ -1,43 +1,82 @@
 package com.platform.libraryManager.repositories;
+
 import com.platform.libraryManager.enums.LoanStatusEnum;
 import com.platform.libraryManager.models.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-// ---- Client scope ----
+    // ---- Client scope ----
 
-List<Loan> findByClient(Client client);
-List<Loan> findByClientAndStatusIn(Client client, List<LoanStatusEnum> statuses);
+    List<Loan> findByClient(Client client);
 
-// ---- Library scope (for librarians) ----
+    List<Loan> findByClientAndStatusIn(Client client, List<LoanStatusEnum> statuses);
 
+    Optional<Loan> findByClientAndResourceAndStatus(
+            Client client,
+            Resource resource,
+            LoanStatusEnum status);
 
-List<Loan> findByLibrary(Library library);
+    // Find first reserved loan for a resource that has not been notified
+    Optional<Loan> findFirstByResourceAndStatusAndAvailabilityNotifiedFalse(
+            Resource resource,
+            LoanStatusEnum status);
 
+    // ---- Library scope ----
 
-List<Loan> findByLibraryAndStatusIn(Library library, List<LoanStatusEnum> statuses);
+    List<Loan> findByLibrary(Library library);
 
-// ---- Resource availability ----
+    List<Loan> findByLibraryAndStatusIn(Library library, List<LoanStatusEnum> statuses);
 
-Optional<Loan> findFirstByResourceAndStatusIn(
-Resource resource,
-List<LoanStatusEnum> statuses
-);
+    // ---- Resource availability ----
 
-// ---- Active loans ----
+    Optional<Loan> findFirstByResourceAndStatusIn(
+            Resource resource,
+            List<LoanStatusEnum> statuses);
 
-@Query("SELECT l FROM Loan l WHERE l.status <> com.platform.libraryManager.enums.LoanStatusEnum.CLOSED")
-List<Loan> findAllActiveLoans();
+    // ---- Simple overdue (used by scheduler) ----
 
-// ---- Overdue loans ----
+    List<Loan> findByStatusAndDueDateBefore(
+            LoanStatusEnum status,
+            LocalDateTime dateTime);
 
-@Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
-List<Loan> findOverdueLoans();
+    // ---- Active loans (NO relations) ----
+
+    @Query("""
+                SELECT l FROM Loan l
+                WHERE l.status <> com.platform.libraryManager.enums.LoanStatusEnum.CLOSED
+            """)
+    List<Loan> findAllActiveLoans();
+
+    // ---- Active loans WITH relations (FOR VIEWS) ----
+
+    @Query("""
+                SELECT l FROM Loan l
+                JOIN FETCH l.client
+                JOIN FETCH l.resource
+                JOIN FETCH l.library
+                WHERE l.status <> com.platform.libraryManager.enums.LoanStatusEnum.CLOSED
+            """)
+    List<Loan> findAllActiveLoansWithRelations();
+
+    // ---- Overdue loans WITH relations (FOR VIEWS & NOTIFICATIONS) ----
+
+    @Query("""
+                SELECT l FROM Loan l
+                JOIN FETCH l.client
+                JOIN FETCH l.resource
+                JOIN FETCH l.library
+                WHERE l.status = com.platform.libraryManager.enums.LoanStatusEnum.IN_PROGRESS
+                  AND l.dueDate < CURRENT_TIMESTAMP
+            """)
+    List<Loan> findOverdueLoansWithRelations();
+
+    @Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
+    List<Loan> findOverdueLoans();
+
 }

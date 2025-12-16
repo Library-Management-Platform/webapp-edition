@@ -14,7 +14,6 @@ public class Loan {
     private Long id;
 
     // ---- Relations ----
-
     @ManyToOne(optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
@@ -28,46 +27,41 @@ public class Loan {
     private Library library;
 
     // ---- Dates ----
-
     @Column(nullable = false)
     private LocalDateTime reservationDate;
 
     private LocalDateTime borrowDate;
-
     private LocalDateTime dueDate;
-
     private LocalDateTime returnDate;
 
     // ---- Workflow Status ----
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoanStatusEnum status;
 
     // ---- Feedback ----
-
     private Integer rating;
 
     @Column(length = 1000)
     private String comment;
 
+    // ---- AVAILABILITY FLAG ----
+    @Column(nullable = false)
+    private boolean availabilityNotified = false;
+
     // ---- Constructors ----
+    Loan() {}
 
-    Loan() {
-        // JPA only
-    }
-
-    // Constructor for reservation
     public Loan(Client client, Resource resource, Library library) {
         this.client = client;
         this.resource = resource;
         this.library = library;
         this.reservationDate = LocalDateTime.now();
         this.status = LoanStatusEnum.RESERVED;
+        this.availabilityNotified = false;
     }
 
     // ---- Business Methods ----
-
     public void markAsBorrowed(int loanDurationDays) {
         if (status != LoanStatusEnum.RESERVED) {
             throw new IllegalStateException("Only reserved loans can be borrowed");
@@ -94,14 +88,16 @@ public class Loan {
         this.status = LoanStatusEnum.CLOSED;
     }
 
-    // ---- Helper Methods ----
-
-    public boolean isActive() {
-        return status != LoanStatusEnum.CLOSED;
+    // ---- Getter / Setter for availabilityNotified ----
+    public boolean isAvailabilityNotified() {
+        return availabilityNotified;
     }
 
-    // ---- Getters (setters intentionally limited) ----
+    public void setAvailabilityNotified(boolean availabilityNotified) {
+        this.availabilityNotified = availabilityNotified;
+    }
 
+    // ---- Other getters/setters ----
     public Long getId() { return id; }
     public Client getClient() { return client; }
     public Resource getResource() { return resource; }
@@ -113,8 +109,6 @@ public class Loan {
     public LoanStatusEnum getStatus() { return status; }
     public Integer getRating() { return rating; }
     public String getComment() { return comment; }
-
-    public void setStatus(LoanStatusEnum status) {
-       this.status = status ;
-    }
+    public void setStatus(LoanStatusEnum status) { this.status = status; }
 }
+

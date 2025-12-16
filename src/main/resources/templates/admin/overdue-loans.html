@@ -45,7 +45,9 @@
                                     <td th:text="${loan.client.username}">user</td>
                                     <td th:text="${loan.resource.title}">Resource</td>
                                     <td th:text="${loan.dueDate != null ? #temporals.format(loan.dueDate, 'yyyy-MM-dd') : '-'}">-</td>
-                                    <td th:text="${loan.daysLate}">0</td>
+<td th:text="${loan.dueDate != null ? T(java.time.Duration).between(loan.dueDate, T(java.time.LocalDateTime).now()).toDays() : 0}">
+    0
+</td>
                                     <td>
                                         <a th:href="@{/admin/loans/{id}(id=${loan.id})}" class="btn btn-sm btn-outline-primary">Details</a>
                                     </td>
