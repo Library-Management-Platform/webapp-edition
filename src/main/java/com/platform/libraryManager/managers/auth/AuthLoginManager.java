@@ -71,12 +71,12 @@ public class AuthLoginManager {
             setCsrfAuthentication(getUniqueUserResponse, request);
 
             return new AuthLoginSuccessResponse(
-                    jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser())),
+                    jwtProvider.generateToken(JSONHelper.createJSONObject(getUniqueUserResponse.getUser().getUsername())),
                     getUniqueUserResponse.getUser()
             );
 
         }
-        return new AuthLoginErrorResponse(401,
-                "The password you entered is incorrect. Please verify your password and try again.");
+
+        return new AuthLoginErrorResponse(401, "The password you entered is incorrect. Please verify your password and try again.");
     }
 }
