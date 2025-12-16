@@ -1,4 +1,4 @@
-package com.platform.libraryManager.configurations;
+package com.platform.libraryManager.setup.configurations;
 
 import io.swagger.v3.oas.models.ExternalDocumentation;
 import io.swagger.v3.oas.models.OpenAPI;
