@@ -65,12 +65,17 @@ public class LibrarianService {
 
         try {
 
+            final Librarian oldLibrarianData = librarianRepository.findById(id).get();
+
             final Librarian librarian = LibrarianFactory.create(
                     id,
                     editLibrarianPayload,
                     libraryService.getUniqueLibrary(
                             new LibrarySearchQueryParams(editLibrarianPayload.getLibraryId(), null, null, null, null))
                             .getLibrary());
+
+            librarian.verify();
+            librarian.setPassword(oldLibrarianData.getPassword());
 
             librarianRepository.save(librarian);
             return new EditLibrarianSuccessResponse();
