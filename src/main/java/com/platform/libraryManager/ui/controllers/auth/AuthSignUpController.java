@@ -1,7 +1,7 @@
 package com.platform.libraryManager.ui.controllers.auth;
 
 
-import com.platform.libraryManager.utils.helpers.RedirectHelper;
+import com.platform.libraryManager.shared.helpers.RedirectHelper;
 import com.platform.libraryManager.dto.payloads.auth.SignUpAuthPayload;
 import com.platform.libraryManager.dto.responses.endpoints.auth.signUp.AuthSignUpResponse;
 import com.platform.libraryManager.logic.services.AuthService;

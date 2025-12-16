@@ -1,9 +1,9 @@
 package com.platform.libraryManager.dataAccess.models;
 
 
-import com.platform.libraryManager.dataAccess.enums.ResourceCategoryEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceTypeEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
+import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceTypeEnum;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

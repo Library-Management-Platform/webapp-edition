@@ -2,9 +2,9 @@ package com.platform.libraryManager.ui.controllers;
 
 import com.platform.libraryManager.dataAccess.models.Resource;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
-import com.platform.libraryManager.dataAccess.enums.ResourceCategoryEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceTypeEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
+import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

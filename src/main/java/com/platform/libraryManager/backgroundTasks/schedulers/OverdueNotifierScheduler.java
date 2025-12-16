@@ -1,7 +1,7 @@
 package com.platform.libraryManager.backgroundTasks.schedulers;
 
-import com.platform.libraryManager.dataAccess.enums.LoanStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.NotificationTypeEnum;
+import com.platform.libraryManager.shared.enums.LoanStatusEnum;
+import com.platform.libraryManager.shared.enums.NotificationTypeEnum;
 import com.platform.libraryManager.dataAccess.models.Librarian;
 import com.platform.libraryManager.dataAccess.models.Loan;
 import com.platform.libraryManager.dataAccess.repositories.LoanRepository;

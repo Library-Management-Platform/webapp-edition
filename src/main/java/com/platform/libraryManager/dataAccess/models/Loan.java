@@ -1,6 +1,6 @@
 package com.platform.libraryManager.dataAccess.models;
 
-import com.platform.libraryManager.dataAccess.enums.LoanStatusEnum;
+import com.platform.libraryManager.shared.enums.LoanStatusEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

@@ -2,7 +2,7 @@ package com.platform.libraryManager.setup.configurations;
 
 
 import com.platform.libraryManager.setup.configurationProperties.PasswordHashingConfigurationProperties;
-import com.platform.libraryManager.utils.providers.PasswordHashingProvider;
+import com.platform.libraryManager.shared.providers.PasswordHashingProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

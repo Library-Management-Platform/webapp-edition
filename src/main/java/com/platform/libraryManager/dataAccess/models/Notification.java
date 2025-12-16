@@ -1,7 +1,7 @@
 package com.platform.libraryManager.dataAccess.models;
 
 
-import com.platform.libraryManager.dataAccess.enums.NotificationTypeEnum;
+import com.platform.libraryManager.shared.enums.NotificationTypeEnum;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

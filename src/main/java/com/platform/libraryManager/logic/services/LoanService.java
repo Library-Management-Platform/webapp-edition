@@ -1,8 +1,8 @@
 package com.platform.libraryManager.logic.services;
 
 import com.platform.libraryManager.dataAccess.models.*;
-import com.platform.libraryManager.dataAccess.enums.LoanStatusEnum;
-import com.platform.libraryManager.dataAccess.enums.ResourceStatusEnum;
+import com.platform.libraryManager.shared.enums.LoanStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
 import com.platform.libraryManager.dataAccess.repositories.LoanRepository;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
 import org.springframework.stereotype.Service;

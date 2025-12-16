@@ -2,7 +2,7 @@ package com.platform.libraryManager.logic.services;
 
 
 import com.platform.libraryManager.dto.payloads.user.GetUniqueUserPayload;
-import com.platform.libraryManager.utils.providers.PasswordHashingProvider;
+import com.platform.libraryManager.shared.providers.PasswordHashingProvider;
 
 import com.platform.libraryManager.logic.managers.auth.AuthLoginManager;
 import com.platform.libraryManager.dto.payloads.auth.LoginAuthPayload;

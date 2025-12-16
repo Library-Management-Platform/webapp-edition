@@ -1,6 +1,6 @@
-package com.platform.libraryManager.utils.providers;
+package com.platform.libraryManager.shared.providers;
 
-import com.platform.libraryManager.utils.helpers.DateHelper;
+import com.platform.libraryManager.shared.helpers.DateHelper;
 import io.jsonwebtoken.Jwts;
 
 import javax.crypto.SecretKey;

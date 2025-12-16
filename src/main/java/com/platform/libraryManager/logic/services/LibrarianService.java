@@ -1,11 +1,11 @@
 package com.platform.libraryManager.logic.services;
 
 
-import com.platform.libraryManager.utils.factories.LibrarianFactory;
+import com.platform.libraryManager.shared.factories.LibrarianFactory;
 import com.platform.libraryManager.dataAccess.models.Librarian;
 import com.platform.libraryManager.dto.payloads.librarian.AddLibrarianPayload;
 import com.platform.libraryManager.dto.payloads.librarian.EditLibrarianPayload;
-import com.platform.libraryManager.utils.providers.PasswordHashingProvider;
+import com.platform.libraryManager.shared.providers.PasswordHashingProvider;
 import com.platform.libraryManager.dataAccess.repositories.LibrarianRepository;
 import com.platform.libraryManager.dto.responses.endpoints.librarian.add.AddLibrarianErrorResponse;
 import com.platform.libraryManager.dto.responses.endpoints.librarian.add.AddLibrarianResponse;

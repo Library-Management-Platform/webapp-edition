@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.factories;
+package com.platform.libraryManager.shared.factories;
 
 import com.platform.libraryManager.dataAccess.models.Library;
 import com.platform.libraryManager.dataAccess.models.Resource;

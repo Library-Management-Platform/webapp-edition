@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.helpers;
+package com.platform.libraryManager.shared.helpers;
 
 import jakarta.annotation.Nullable;
 import org.springframework.ui.Model;

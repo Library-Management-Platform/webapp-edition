@@ -1,4 +1,4 @@
-package com.platform.libraryManager.utils.helpers;
+package com.platform.libraryManager.shared.helpers;
 
 public abstract class StringHelper {
 

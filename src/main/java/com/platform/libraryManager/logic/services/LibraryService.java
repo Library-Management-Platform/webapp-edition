@@ -1,6 +1,6 @@
 package com.platform.libraryManager.logic.services;
 
-import com.platform.libraryManager.utils.factories.LibraryFactory;
+import com.platform.libraryManager.shared.factories.LibraryFactory;
 import com.platform.libraryManager.dataAccess.models.Library;
 import com.platform.libraryManager.dto.payloads.library.AddLibraryPayload;
 import com.platform.libraryManager.dto.payloads.library.EditLibraryPayload;

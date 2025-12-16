@@ -1,6 +1,6 @@
 package com.platform.libraryManager.dto.responses.endpoints.resource.getUnique;
 
-import com.platform.libraryManager.utils.factories.ResourceFactory;
+import com.platform.libraryManager.shared.factories.ResourceFactory;
 import com.platform.libraryManager.dto.responses.types.IErrorResponse;
 import com.platform.libraryManager.dto.responses.types.ResponseType;
 
