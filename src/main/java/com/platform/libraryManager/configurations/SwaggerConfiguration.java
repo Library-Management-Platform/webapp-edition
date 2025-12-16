@@ -1,0 +1,42 @@
+package com.platform.libraryManager.configurations;
+
+import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+
+import org.springdoc.core.models.GroupedOpenApi;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class SwaggerConfiguration {
+
+    // 1️⃣ Main OpenAPI definition (info section)
+    @Bean
+    public OpenAPI libraryManagerOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Library Manager API")
+                        .description("Full API documentation for Library Manager platform")
+                        .version("v0")
+                        .contact(new Contact().name("Library Manager Team").email("support@librarymanager.com"))
+                        .license(new License().name("Apache 2.0").url("http://springdoc.org"))
+                )
+                .externalDocs(new ExternalDocumentation()
+                        .description("Library Manager Docs")
+                        .url("https://github.com/Library-Management-Platform/webapp-edition")
+                );
+    }
+
+    // 2️⃣ Scan all controllers in your project
+    @Bean
+    public GroupedOpenApi libraryManagerApi() {
+        return GroupedOpenApi.builder()
+                .group("Library Manager API")
+                .packagesToScan("com.platform.libraryManager.controllers") // scan all controllers recursively
+                .build();
+    }
+
+}

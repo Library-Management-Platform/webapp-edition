@@ -7,27 +7,42 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
-
 @Configuration
 public class SecurityConfiguration {
 
-
-    @Bean public HiddenHttpMethodFilter hiddenHttpMethodFilter() { return new HiddenHttpMethodFilter(); }
+    @Bean 
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() { 
+        return new HiddenHttpMethodFilter(); 
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-        .csrf(csrf -> csrf
+            .csrf(csrf -> csrf
                 .ignoringRequestMatchers("/ws/**") // WebSocket handshake
             )
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers( "/",  "/login", "/sign-up", "/email-verification/**","/images/**","/ws/**").permitAll()
-                        .requestMatchers("/admin/**").hasAuthority("ADMIN")
-                        .requestMatchers("/client/**").hasAuthority("CLIENT")
-                        .requestMatchers("/librarian/**").hasAuthority("LIBRARIAN")
-                        .anyRequest().authenticated()
-                )
-                .formLogin(AbstractHttpConfigurer::disable);
+            .authorizeHttpRequests(auth -> auth
+                // Public endpoints
+                .requestMatchers("/", "/login", "/sign-up", "/email-verification/**", "/images/**", "/ws/**").permitAll()
+
+                // Swagger endpoints
+                .requestMatchers(
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/v2/api-docs/**",
+                    "/webjars/**"
+                ).permitAll()
+
+                // Role-based endpoints
+                .requestMatchers("/admin/**").hasAuthority("ADMIN")
+                .requestMatchers("/client/**").hasAuthority("CLIENT")
+                .requestMatchers("/librarian/**").hasAuthority("LIBRARIAN")
+
+                // Any other request requires authentication
+                .anyRequest().authenticated()
+            )
+            .formLogin(AbstractHttpConfigurer::disable);
 
         return http.build();
     }
