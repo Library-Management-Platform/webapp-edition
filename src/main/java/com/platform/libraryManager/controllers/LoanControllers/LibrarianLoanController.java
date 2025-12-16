@@ -13,7 +13,7 @@ import com.platform.libraryManager.responses.endpoints.user.getUnique.GetUniqueU
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal; // Import nécessaire
+import org.springframework.security.core.annotation.AuthenticationPrincipal; 
 
 
 import java.util.List;

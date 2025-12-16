@@ -50,7 +50,8 @@ public class Loan {
     private boolean availabilityNotified = false;
 
     // ---- Constructors ----
-    Loan() {}
+    Loan() {
+    }
 
     public Loan(Client client, Resource resource, Library library) {
         this.client = client;
@@ -98,17 +99,51 @@ public class Loan {
     }
 
     // ---- Other getters/setters ----
-    public Long getId() { return id; }
-    public Client getClient() { return client; }
-    public Resource getResource() { return resource; }
-    public Library getLibrary() { return library; }
-    public LocalDateTime getReservationDate() { return reservationDate; }
-    public LocalDateTime getBorrowDate() { return borrowDate; }
-    public LocalDateTime getDueDate() { return dueDate; }
-    public LocalDateTime getReturnDate() { return returnDate; }
-    public LoanStatusEnum getStatus() { return status; }
-    public Integer getRating() { return rating; }
-    public String getComment() { return comment; }
-    public void setStatus(LoanStatusEnum status) { this.status = status; }
-}
+    public Long getId() {
+        return id;
+    }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public Library getLibrary() {
+        return library;
+    }
+
+    public LocalDateTime getReservationDate() {
+        return reservationDate;
+    }
+
+    public LocalDateTime getBorrowDate() {
+        return borrowDate;
+    }
+
+    public LocalDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public LocalDateTime getReturnDate() {
+        return returnDate;
+    }
+
+    public LoanStatusEnum getStatus() {
+        return status;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setStatus(LoanStatusEnum status) {
+        this.status = status;
+    }
+}

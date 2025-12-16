@@ -30,10 +30,6 @@ public class LoanService {
         this.notificationService = notificationService;
     }
 
-    // --------------------------------------------------
-    // CLIENT ACTIONS
-    // --------------------------------------------------
-
     /**
      * Client reserves a resource if it is available
      */
@@ -200,14 +196,12 @@ public class LoanService {
 
         Loan savedLoan = loanRepository.save(loan);
 
-        // 🔔 Notify next reserved client (if any) only if not notified
+        // Notify next reserved client (if any) only if not notified
         loanRepository.findFirstByResourceAndStatusAndAvailabilityNotifiedFalse(
                 resource,
                 LoanStatusEnum.RESERVED).ifPresent(reservedLoan -> {
-                    // Send notification
                     notificationService.notifyAvailability(reservedLoan.getClient(), resource);
 
-                    // Mark as notified
                     reservedLoan.setAvailabilityNotified(true);
                     loanRepository.save(reservedLoan);
                 });
@@ -215,8 +209,7 @@ public class LoanService {
         return savedLoan;
     }
 
-
-     @Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public List<Loan> getAllActiveLoansWithRelations() {
         return loanRepository.findAllActiveLoansWithRelations();
     }
@@ -229,6 +222,5 @@ public class LoanService {
     public List<Loan> getOverdueLoansWithRelations() {
         return loanRepository.findOverdueLoansWithRelations();
     }
-
 
 }

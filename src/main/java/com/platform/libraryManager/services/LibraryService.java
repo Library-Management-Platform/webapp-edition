@@ -26,13 +26,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-
 @Service
 public class LibraryService {
 
-    @Autowired private LibraryRepository libraryRepository;
-
-
+    @Autowired
+    private LibraryRepository libraryRepository;
 
     public AddLibraryResponse addLibrary(AddLibraryPayload addLibraryPayload) {
 
@@ -42,18 +40,15 @@ public class LibraryService {
             libraryRepository.save(library);
             return new AddLibrarySuccessResponse();
 
-        }catch(DataIntegrityViolationException dataIntegrityViolationException) {
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             return new AddLibraryErrorResponse(409, "Library already exists");
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return new AddLibraryErrorResponse(400, "Error");
 
         }
 
     }
-
-
-
 
     public EditLibraryResponse editLibrary(Long id, EditLibraryPayload editLibraryPayload) {
         try {
@@ -62,39 +57,32 @@ public class LibraryService {
             libraryRepository.save(library);
             return new EditLibrarySuccessResponse();
 
-        }catch(DataIntegrityViolationException dataIntegrityViolationException) {
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             return new EditLibraryErrorResponse(409, "A Library with the same address already exists");
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return new EditLibraryErrorResponse(400, "Error");
 
         }
     }
 
-
-
-
     public RemoveLibraryResponse removeLibrary(Long id) {
 
         try {
-            final Library library = getUniqueLibrary(new LibrarySearchQueryParams(id, null, null, null, null)).getLibrary();
+            final Library library = getUniqueLibrary(new LibrarySearchQueryParams(id, null, null, null, null))
+                    .getLibrary();
             libraryRepository.delete(library);
             return new RemoveLibrarySuccessResponse();
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return new RemoveLibraryErrorResponse(400, "Error");
         }
     }
-
-
 
     public GetAllLibrariesResponse getAllLibraries() {
         final List<Library> libraries = libraryRepository.findAll();
         return new GetAllLibrariesSuccessResponse(libraries);
     }
-
-
-
 
     public GetUniqueLibraryResponse getUniqueLibrary(LibrarySearchQueryParams librarySearchQueryParams) {
 
@@ -102,7 +90,7 @@ public class LibraryService {
             final Library library = libraryRepository.searchOne(librarySearchQueryParams).get();
             return new GetUniqueLibrarySuccessResponse(library);
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return new GetUniqueLibraryErrorResponse();
         }
     }

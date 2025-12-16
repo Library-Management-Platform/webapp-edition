@@ -16,27 +16,25 @@ import com.platform.libraryManager.models.Client;
 import com.platform.libraryManager.payloads.client.CreateClientPayload;
 import com.platform.libraryManager.repositories.ClientRepository;
 
-
 @Service
 public class ClientService {
 
-    @Autowired private ClientRepository clientRespository;
+    @Autowired
+    private ClientRepository clientRespository;
 
     public GetUniqueClientResponse getUniqueClient(GetUniqueClientPayload getUniqueClientPayload) {
 
         try {
             final Client client = clientRespository.findByUsername(
-                    getUniqueClientPayload.getUsername()
-            ).get();
+                    getUniqueClientPayload.getUsername()).get();
 
             return new GetUniqueClientSuccessResponse(client);
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return new GetUniqueClientErrorResponse();
         }
 
     }
-
 
     public CreateClientResponse createClient(CreateClientPayload createClientPayload) {
 
@@ -45,14 +43,13 @@ public class ClientService {
             clientRespository.save(client);
             return new CreateClientSuccessResponse();
 
-        }catch(DataIntegrityViolationException exception) {
+        } catch (DataIntegrityViolationException exception) {
             return new CreateClientErrorResponse(409, "Client Already Exists");
 
-        }catch(Exception exception) {
+        } catch (Exception exception) {
             return new CreateClientErrorResponse(400, "Invalid Client data format.");
 
         }
     }
-
 
 }

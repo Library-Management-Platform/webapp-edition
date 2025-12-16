@@ -34,3 +34,4 @@ build/
 
 # Ignore sensitive Spring Boot configuration
 application.properties
+

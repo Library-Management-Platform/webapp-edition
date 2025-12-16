@@ -1,6 +1,5 @@
 package com.platform.libraryManager.services;
 
-
 import com.platform.libraryManager.factories.LibrarianFactory;
 import com.platform.libraryManager.models.Librarian;
 import com.platform.libraryManager.payloads.librarian.AddLibrarianPayload;
@@ -32,9 +31,12 @@ import java.util.List;
 @Service
 public class LibrarianService {
 
-    @Autowired private LibraryService libraryService;
-    @Autowired private LibrarianRepository librarianRepository;
-    @Autowired private PasswordHashingProvider passwordHashingProvider;
+    @Autowired
+    private LibraryService libraryService;
+    @Autowired
+    private LibrarianRepository librarianRepository;
+    @Autowired
+    private PasswordHashingProvider passwordHashingProvider;
 
     public AddLibrarianResponse addLibrarian(AddLibrarianPayload addLibrarianPayload) {
 
@@ -42,17 +44,18 @@ public class LibrarianService {
 
             final Librarian librarian = LibrarianFactory.create(
                     addLibrarianPayload,
-                    libraryService.getUniqueLibrary(new LibrarySearchQueryParams(addLibrarianPayload.getLibraryId(), null, null, null, null)).getLibrary()
-            );
+                    libraryService.getUniqueLibrary(
+                            new LibrarySearchQueryParams(addLibrarianPayload.getLibraryId(), null, null, null, null))
+                            .getLibrary());
 
             librarian.setPassword(passwordHashingProvider.hash(addLibrarianPayload.getUsername()));
             librarianRepository.save(librarian);
             return new AddLibrarianSuccessResponse();
 
-        }catch(DataIntegrityViolationException dataIntegrityViolationException) {
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             return new AddLibrarianErrorResponse(409, "Librarian already exists");
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return new AddLibrarianErrorResponse(400, "Error");
 
         }
@@ -65,30 +68,31 @@ public class LibrarianService {
             final Librarian librarian = LibrarianFactory.create(
                     id,
                     editLibrarianPayload,
-                    libraryService.getUniqueLibrary(new LibrarySearchQueryParams(editLibrarianPayload.getLibraryId(), null, null, null, null)).getLibrary()
-            );
+                    libraryService.getUniqueLibrary(
+                            new LibrarySearchQueryParams(editLibrarianPayload.getLibraryId(), null, null, null, null))
+                            .getLibrary());
 
             librarianRepository.save(librarian);
             return new EditLibrarianSuccessResponse();
 
-        }catch(DataIntegrityViolationException dataIntegrityViolationException) {
+        } catch (DataIntegrityViolationException dataIntegrityViolationException) {
             return new EditLibrarianErrorResponse(409, "A Librarian with the same username already exists");
 
-        } catch(Exception exception) {
+        } catch (Exception exception) {
             return new EditLibrarianErrorResponse(400, "Error");
 
         }
     }
 
-
     public RemoveLibrarianResponse removeLibrarian(Long id) {
 
         try {
-            final Librarian librarian = getUniqueLibrarian(new LibrarianSearchQueryParams(id, null, null, null, null, null)).getLibrarian();
+            final Librarian librarian = getUniqueLibrarian(
+                    new LibrarianSearchQueryParams(id, null, null, null, null, null)).getLibrarian();
             librarianRepository.delete(librarian);
             return new RemoveLibrarianSuccessResponse();
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return new RemoveLibrarianErrorResponse(400, "Error");
         }
     }
@@ -98,14 +102,13 @@ public class LibrarianService {
         return new GetAllLibrariansSuccessResponse(librarians);
     }
 
-
     public GetUniqueLibrarianResponse getUniqueLibrarian(LibrarianSearchQueryParams librarianSearchQueryParams) {
 
         try {
             final Librarian librarian = librarianRepository.searchOne(librarianSearchQueryParams).get();
             return new GetUniqueLibrarianSuccessResponse(librarian);
 
-        }catch (Exception exception) {
+        } catch (Exception exception) {
             return new GetUniqueLibrarianErrorResponse();
         }
 

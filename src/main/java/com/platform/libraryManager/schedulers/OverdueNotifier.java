@@ -1,4 +1,4 @@
-package com.platform.libraryManager.components;
+package com.platform.libraryManager.schedulers;
 
 import com.platform.libraryManager.enums.LoanStatusEnum;
 import com.platform.libraryManager.enums.NotificationTypeEnum;
@@ -23,37 +23,29 @@ public class OverdueNotifier {
     @Autowired
     private NotificationService notificationService;
 
-    /**
-     * Runs every day at 08:00
-     */
-    @Scheduled(cron = "0 * * * * ?") // every minute
+    @Scheduled(cron = "0 0 8 * * ?")
     @Transactional
     public void notifyOverdueLoans() {
 
-        List<Loan> overdueLoans =
-                loanRepository.findByStatusAndDueDateBefore(
-                        LoanStatusEnum.IN_PROGRESS,
-                        LocalDateTime.now()
-                );
+        List<Loan> overdueLoans = loanRepository.findByStatusAndDueDateBefore(
+                LoanStatusEnum.IN_PROGRESS,
+                LocalDateTime.now());
 
         for (Loan loan : overdueLoans) {
 
-            String message =
-                    "Retard détecté : le livre \"" +
+            String message = "Retard détecté : le livre \"" +
                     loan.getResource().getTitle() +
                     "\" emprunté par " +
                     loan.getClient().getUsername() +
                     " est en retard.";
 
-            // Notify ALL librarians of the library
             for (Librarian librarian : loan.getLibrary().getLibrarians()) {
 
                 notificationService.notifyUser(
-                        librarian, // Librarian IS a User
+                        librarian,
                         message,
                         NotificationTypeEnum.OVERDUE,
-                        true
-                );
+                        true);
             }
         }
     }

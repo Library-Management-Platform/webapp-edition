@@ -6,37 +6,43 @@ import java.util.List;
 import com.platform.libraryManager.enums.UserTypeEnum;
 import jakarta.persistence.*;
 
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "user_type")
 @Table(name = "users")
 public abstract class User {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true) private List<EmailVerificationLink> emailVerificationLinks;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<EmailVerificationLink> emailVerificationLinks;
 
-    @Column(name = "user_type", insertable = false, updatable = false) @Enumerated(EnumType.STRING) private UserTypeEnum userType;
+    @Column(name = "user_type", insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private UserTypeEnum userType;
 
-    @Column(unique = true) private String username;
-    @Column(unique = true) private String email;
-    @Column(columnDefinition = "boolean default false") private boolean verified;
+    @Column(unique = true)
+    private String username;
+    @Column(unique = true)
+    private String email;
+    @Column(columnDefinition = "boolean default false")
+    private boolean verified;
 
     private String password;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-
-    public User() {}
+    public User() {
+    }
 
     public User(
             String username,
             String email,
             String password,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
-    ) {
+            LocalDateTime updatedAt) {
         setUsername(username);
         setEmail(email);
         setPassword(password);
@@ -44,15 +50,13 @@ public abstract class User {
         setUpdateDate(updatedAt);
     }
 
-
     public User(
             Long id,
             String username,
             String email,
             String password,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
-    ) {
+            LocalDateTime updatedAt) {
         setId(id);
         setUsername(username);
         setEmail(email);
@@ -61,33 +65,68 @@ public abstract class User {
         setUpdateDate(updatedAt);
     }
 
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
-    private void setId(Long id) { this.id = id; }
+    private void setId(Long id) {
+        this.id = id;
+    }
 
-    public UserTypeEnum getUserType() { return userType; }
+    public UserTypeEnum getUserType() {
+        return userType;
+    }
 
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getUsername() {
+        return username;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public String getEmail() {
+        return email;
+    }
 
-    public boolean isVerified() { return verified; }
-    public void verify() { this.verified = true;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public LocalDateTime getCreationDate() { return createdAt; }
-    private void setCreationDate(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public String getPassword() {
+        return password;
+    }
 
-    public LocalDateTime getUpdateDate() { return updatedAt; }
-    private void setUpdateDate(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
+    public boolean isVerified() {
+        return verified;
+    }
 
+    public void verify() {
+        this.verified = true;
+    }
 
-    public boolean isNull() { return getUsername() == null; }
+    public LocalDateTime getCreationDate() {
+        return createdAt;
+    }
 
+    private void setCreationDate(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdateDate() {
+        return updatedAt;
+    }
+
+    private void setUpdateDate(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public boolean isNull() {
+        return getUsername() == null;
+    }
 
 }

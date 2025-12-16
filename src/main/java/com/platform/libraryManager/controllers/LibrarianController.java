@@ -34,7 +34,6 @@ public class LibrarianController {
 		model.addAttribute("totalPages", 1);
 		model.addAttribute("currentPage", 0);
 
-		// You can also add librarian-specific data later (e.g., loan counts)
 		return "librarian/dashboard";
 	}
 }

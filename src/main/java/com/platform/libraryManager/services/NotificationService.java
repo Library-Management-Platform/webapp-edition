@@ -17,72 +17,58 @@ import java.util.Map;
 @Service
 public class NotificationService {
 
-    @Autowired
-    private NotificationRepository notificationRepository;
+        @Autowired
+        private NotificationRepository notificationRepository;
 
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
+        @Autowired
+        private SimpMessagingTemplate messagingTemplate;
 
-    @Autowired
-    private EmailService emailService;
+        @Autowired
+        private EmailService emailService;
 
-    /* =======================
-       GENERIC NOTIFICATION
-       ======================= */
+        @Transactional
+        public void notifyUser(
+                        User user,
+                        String message,
+                        NotificationTypeEnum type,
+                        boolean sendEmail) {
 
-    @Transactional
-    public void notifyUser(
-            User user,
-            String message,
-            NotificationTypeEnum type,
-            boolean sendEmail
-    ) {
+                Notification notification = new Notification(
+                                message,
+                                LocalDateTime.now(),
+                                type,
+                                user);
 
-        Notification notification = new Notification(
-                message,
-                LocalDateTime.now(),
-                type,
-                user
-        );
+                notificationRepository.save(notification);
 
-        notificationRepository.save(notification);
+                // WebSocket push notification
+                messagingTemplate.convertAndSendToUser(
+                                user.getUsername(),
+                                "/queue/notifications",
+                                Map.of(
+                                                "message", message,
+                                                "type", type.name(),
+                                                "sentAt", notification.getDate().toString()));
 
-        // WebSocket push notification
-        messagingTemplate.convertAndSendToUser(
-                user.getUsername(),
-                "/queue/notifications",
-                Map.of(
-                        "message", message,
-                        "type", type.name(),
-                        "sentAt", notification.getDate().toString()
-                )
-        );
+                // email
+                if (sendEmail && user.getEmail() != null) {
+                        emailService.sendEmail(user.getEmail(), "Notification – Bibliothèque", message);
+                }
+        }
 
-        // Optional email
-     /*    if (sendEmail && user.getEmail() != null) {
-            emailService.sendEmail(user.getEmail(),"Notification – Bibliothèque",message);
-        } */
-    }
+        /**
+         * Notify a client that a reserved resource is now available
+         */
+        public void notifyAvailability(Client client, Resource resource) {
 
-    /* =======================
-       DOMAIN-SPECIFIC EVENTS
-       ======================= */
+                String message = "Votre livre \"" +
+                                resource.getTitle() +
+                                "\" est prêt à être emprunté.";
 
-    /**
-     * Notify a client that a reserved resource is now available
-     */
-    public void notifyAvailability(Client client, Resource resource) {
-
-        String message =
-                "Votre livre \"" +
-                resource.getTitle() +
-                "\" est prêt à être emprunté.";
-
-        notifyUser(
-                client, // Client extends User
-                message,
-                NotificationTypeEnum.AVAILABILITY,
-                true
-        );
-    }
+                notifyUser(
+                                client,
+                                message,
+                                NotificationTypeEnum.AVAILABILITY,
+                                true);
+        }
 }

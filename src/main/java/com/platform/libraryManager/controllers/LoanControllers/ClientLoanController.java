@@ -20,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
 import java.security.Principal;
 import java.util.List;
 import java.util.Collections;
@@ -28,8 +27,6 @@ import java.util.Collections;
 @Controller
 @RequestMapping("/client/loans")
 public class ClientLoanController {
-
-    
 
     private final LoanService loanService;
     private final ResourceRepository resourceRepository;
@@ -65,8 +62,6 @@ public class ClientLoanController {
             throw new IllegalArgumentException("Client not found for username: " + username);
         }
     }
-
-    
 
     // ===============================
     // View my loans
@@ -128,16 +123,12 @@ public class ClientLoanController {
             Library library = libraryRepository.findById(libraryId)
                     .orElseThrow(() -> new IllegalArgumentException("Library not found with ID: " + libraryId));
 
-            // Validate that the resource belongs to the selected library
             if (!resource.getLibrary().getId().equals(library.getId())) {
                 throw new IllegalArgumentException("Resource does not belong to the selected library");
             }
 
-
-            // Reserve the resource
             loanService.reserveResource(client, resource, library);
 
-            // After successful reservation, prepare model and render loans page with updated data
             List<Loan> loans = loanService.getLoansForClient(client);
             model.addAttribute("loans", loans);
             model.addAttribute("client", client);
@@ -150,7 +141,6 @@ public class ClientLoanController {
             return "client/loans";
 
         } catch (Exception e) {
-            // On error, set flash attribute and redirect back
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             String referer = request.getHeader("Referer");
             return "redirect:" + (referer != null ? referer : "/client/resources");
@@ -170,7 +160,6 @@ public class ClientLoanController {
         try {
             Client client = getAuthenticatedClient(principal);
 
-            // Validate rating (assuming 1-5 scale)
             if (rating < 1 || rating > 5) {
                 throw new IllegalArgumentException("Rating must be between 1 and 5");
             }
