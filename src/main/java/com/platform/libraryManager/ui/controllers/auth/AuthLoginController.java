@@ -35,7 +35,7 @@ public class AuthLoginController {
         final AuthLoginResponse authLoginResponse = authService.login(loginAuthPayload, request);
 
         final Map<UserTypeEnum, String> redirectMap = Map.of(
-                UserTypeEnum.ADMIN, "redirect:/admin/manage-admins",
+                UserTypeEnum.ADMIN, "redirect:/admin/dashboard",
                 UserTypeEnum.CLIENT, "redirect:/client/resources",
                 UserTypeEnum.LIBRARIAN, "redirect:/librarian/dashboard"
         );

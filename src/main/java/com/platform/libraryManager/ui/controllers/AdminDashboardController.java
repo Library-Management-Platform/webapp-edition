@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/admin/dashboard")
 public class AdminDashboardController {
 
     private final LoanService loanService;
@@ -23,7 +23,7 @@ public class AdminDashboardController {
         this.loanService = loanService;
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping()
     public String dashboard(Model model) {
         Map<String, Long> byCategory = loanService.countLoansByCategory();
         Map<String, Long> byLibrary = loanService.countLoansByLibrary();
@@ -48,7 +48,7 @@ public class AdminDashboardController {
         return "admin/dashboard";
     }
 
-    @GetMapping("/dashboard/export")
+    @GetMapping("/export")
     public void exportCsv(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
         response.setHeader("Content-Disposition", "attachment; filename=admin-analytics.csv");

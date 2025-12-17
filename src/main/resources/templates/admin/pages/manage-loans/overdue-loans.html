@@ -21,7 +21,7 @@
 <body class="bg-light">
 
     <!-- Include header fragment -->
-    <div th:replace="~{fragments/header :: header(${username}, ${role})}"></div>
+    <div th:replace="~{admin/fragments/header :: header(${username}, ${role})}"></div>
 
     <div class="row" style="max-width: 95vw;">
         <div class="col-md-3 col-lg-2">
@@ -93,7 +93,7 @@
     </div>
 
     <!-- Include footer fragment -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+    <div th:replace="~{admin/fragments/footer :: footer}"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
