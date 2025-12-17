@@ -1,4 +1,4 @@
-package com.platform.libraryManager.ui.controllers;
+package com.platform.libraryManager.ui.controllers.admin;
 
 import com.platform.libraryManager.logic.services.LoanService;
 import jakarta.servlet.http.HttpServletResponse;

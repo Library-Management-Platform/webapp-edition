@@ -1,4 +1,4 @@
-package com.platform.libraryManager.ui.controllers;
+package com.platform.libraryManager.ui.controllers.librarian;
 
 import com.platform.libraryManager.dataAccess.models.Librarian;
 import com.platform.libraryManager.dataAccess.models.Resource;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/librarian")
+@RequestMapping("/librarian/dashboard")
 public class LibrarianController {
 
 	private final ResourceRepository resourceRepository;
@@ -24,7 +24,7 @@ public class LibrarianController {
 		this.loanService = loanService;
 	}
 
-	@GetMapping("/dashboard")
+	@GetMapping()
 	public String dashboard(@AuthenticationPrincipal Librarian librarian, Model model) {
 		List<Resource> resources = resourceRepository.findAll();
 
