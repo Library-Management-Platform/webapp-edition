@@ -11,8 +11,8 @@ import java.util.List;
 public class Library {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
-    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, orphanRemoval = true) private List<Resource> resources;
-    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL, orphanRemoval = true) private List<Librarian> librarians;
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL) private List<Resource> resources;
+    @OneToMany(mappedBy = "library", cascade = CascadeType.ALL) private List<Librarian> librarians;
 
     private String name;
     @Column(unique = true) private String address;

@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "resources")
 public class Resource {
 
-    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL, orphanRemoval = true) private List<Loan> loans;
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.REMOVE) private List<Loan> loans;
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     @ManyToOne @JoinColumn(name = "library_id") private Library library;
