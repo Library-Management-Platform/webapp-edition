@@ -33,9 +33,11 @@ public class Admin extends User {
             String email,
             String password,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Admin parent
     ) {
         super(id, username, email, password, createdAt, updatedAt);
+        setParent(parent);
     }
 
 
@@ -44,6 +46,6 @@ public class Admin extends User {
         if (children != null) for (Admin child : children) child.setParent(this.parent); // assign to grandparent
     }
 
-
+    public Admin getParent() { return parent; }
     private void setParent(Admin parent) { this.parent = parent; }
 }
