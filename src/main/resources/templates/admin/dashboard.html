@@ -8,96 +8,168 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        .stat-card { min-height: 120px; }
+        .stat-card { 
+            min-height: 120px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05 );
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .display-6 {
+            font-size: 2.25rem;
+        }
     </style>
 </head>
 <body class="bg-light">
 
-<div th:replace="admin/fragments/header :: header(${username}, ${role})"></div>
+<div th:replace="~{admin/fragments/header :: header(username=${username}, role=${role})}"></div>
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-3 col-lg-2 p-0">
-            <div th:replace="admin/fragments/sidebar :: adminSidebar"></div>
+            <div th:replace="~{admin/fragments/sidebar :: adminSidebar}"></div>
         </div>
 
-        <div class="col-md-9 col-lg-10 p-4">
-            <div class="d-flex justify-content-between align-items-center mb-4">
+        <main class="col-md-9 col-lg-10 p-4">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                 <div>
-                    <h1 class="h4">Admin Dashboard</h1>
-                    <p class="text-muted mb-0">Analytics and reports</p>
+                    <h1 class="h3">Admin Dashboard</h1>
+                    <p class="text-muted mb-0">Analytics and key performance indicators</p>
                 </div>
                 <div>
-                    <a class="btn btn-outline-secondary" th:href="@{/admin/dashboard/export}">Export CSV</a>
+                    <a class="btn btn-outline-primary" th:href="@{/admin/dashboard/export}">
+                        <i class="bi bi-download me-2"></i>Export CSV
+                    </a>
                 </div>
             </div>
 
-            <div class="row g-3 mb-4">
-                <div class="col-md-4">
-                    <div class="card p-3 stat-card">
-                        <h6>Turnover Rate</h6>
-                        <div class="display-6 fw-bold" th:text="${turnoverRate} + '%'">0.00%</div>
+            <!-- Updated Statistics Cards Section -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card p-3 stat-card text-center">
+                        <h6 class="text-muted">Turnover Rate</h6>
+                        <div class="display-6 fw-bold text-primary" th:text="${turnoverRate} + '%'">0.00%</div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-3 stat-card">
-                        <h6>Total Loans</h6>
-                        <div class="display-6 fw-bold" th:text="${totalLoans}">0</div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card p-3 stat-card text-center">
+                        <h6 class="text-muted">Total Loans</h6>
+                        <div class="display-6 fw-bold text-success" th:text="${totalLoans}">0</div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card p-3 stat-card">
-                        <h6>Total Libraries</h6>
-                        <div class="display-6 fw-bold" th:text="${libraryLabels.size()}">0</div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card p-3 stat-card text-center">
+                        <h6 class="text-muted">Total Libraries</h6>
+                        <div class="display-6 fw-bold text-info" th:text="${totalLibraries}">0</div>
                     </div>
                 </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card p-3 stat-card text-center">
+                        <h6 class="text-muted">Total Clients</h6>
+                        <div class="display-6 fw-bold text-warning" th:text="${totalClients}">0</div>
+                    </div>
+                </div>
+                <!-- You can also add a card for Librarians if needed -->
+                <!--
+                <div class="col-lg-3 col-md-6">
+                    <div class="card p-3 stat-card text-center">
+                        <h6 class="text-muted">Total Librarians</h6>
+                        <div class="display-6 fw-bold text-danger" th:text="${totalLibrarians}">0</div>
+                    </div>
+                </div>
+                -->
             </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-4">
+            <!-- Charts Section -->
+            <div class="row g-4">
+                <div class="col-lg-6">
                     <div class="card p-3">
-                        <h6>Loans by Category</h6>
+                        <h6 class="mb-3">Loans by Category</h6>
                         <canvas id="categoryChart"></canvas>
                     </div>
                 </div>
-                <div class="col-md-6 mb-4">
+                <div class="col-lg-6">
                     <div class="card p-3">
-                        <h6>Loans by Library</h6>
+                        <h6 class="mb-3">Loans by Library</h6>
                         <canvas id="libraryChart"></canvas>
                     </div>
                 </div>
             </div>
 
-        </div>
+        </main>
     </div>
 </div>
 
-<div th:replace="admin/fragments/footer :: footer"></div>
+<div th:replace="~{admin/fragments/footer :: footer}"></div>
 
 <script th:inline="javascript">
+    /*<![CDATA[*/
     const catLabels = /*[[${categoryLabels}]]*/ [];
     const catValues = /*[[${categoryValues}]]*/ [];
     const libLabels = /*[[${libraryLabels}]]*/ [];
     const libValues = /*[[${libraryValues}]]*/ [];
 
-    const ctx1 = document.getElementById('categoryChart').getContext('2d');
-    new Chart(ctx1, {
+    // Chart for Loans by Category (Pie Chart)
+    const ctxCategory = document.getElementById('categoryChart').getContext('2d');
+    new Chart(ctxCategory, {
         type: 'pie',
         data: {
             labels: catLabels,
-            datasets: [{ data: catValues, backgroundColor: ['#007bff','#28a745','#ffc107','#dc3545','#6f42c1','#20c997'] }]
+            datasets: [{
+                data: catValues,
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#20c997', '#fd7e14', '#6610f2'],
+                borderColor: '#fff',
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
         }
     });
 
-    const ctx2 = document.getElementById('libraryChart').getContext('2d');
-    new Chart(ctx2, {
+    // Chart for Loans by Library (Bar Chart)
+    const ctxLibrary = document.getElementById('libraryChart').getContext('2d');
+    new Chart(ctxLibrary, {
         type: 'bar',
         data: {
             labels: libLabels,
-            datasets: [{ label: 'Loans', data: libValues, backgroundColor: '#0d6efd' }]
+            datasets: [{
+                label: 'Number of Loans',
+                data: libValues,
+                backgroundColor: '#0d6efd',
+                borderRadius: 4
+            }]
         },
-        options: { scales: { y: { beginAtZero: true } } }
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1 // Ensure y-axis increments by whole numbers if counts are low
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false // The label is self-explanatory
+                }
+            }
+        }
     });
+    /*]]>*/
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
