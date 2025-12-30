@@ -68,7 +68,6 @@ public abstract class User {
     public Long getId() {
         return id;
     }
-
     private void setId(Long id) {
         this.id = id;
     }
@@ -77,10 +76,7 @@ public abstract class User {
         return userType;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
+    public String getUsername() { return username;}
     public void setUsername(String username) {
         this.username = username;
     }
@@ -88,7 +84,6 @@ public abstract class User {
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -96,7 +91,6 @@ public abstract class User {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -104,7 +98,6 @@ public abstract class User {
     public boolean isVerified() {
         return verified;
     }
-
     public void verify() {
         this.verified = true;
     }
@@ -112,7 +105,6 @@ public abstract class User {
     public LocalDateTime getCreationDate() {
         return createdAt;
     }
-
     private void setCreationDate(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
@@ -120,7 +112,6 @@ public abstract class User {
     public LocalDateTime getUpdateDate() {
         return updatedAt;
     }
-
     private void setUpdateDate(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }

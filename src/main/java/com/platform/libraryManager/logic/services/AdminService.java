@@ -61,7 +61,7 @@ public class AdminService {
         try {
 
             final Admin oldAdminData = adminRepository.findById(id).get();
-            final Admin admin = AdminFactory.create(id, editAdminPayload);
+            final Admin admin = AdminFactory.create(id, editAdminPayload, oldAdminData.getParent());
 
             admin.verify();
             admin.setPassword(oldAdminData.getPassword());

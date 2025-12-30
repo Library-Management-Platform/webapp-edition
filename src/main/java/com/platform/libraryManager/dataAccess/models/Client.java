@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "clients")
 public class Client extends User {
 
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true) private List<Loan> loans;
+    @OneToMany(mappedBy = "client", cascade = CascadeType.REMOVE) private List<Loan> loans;
 
     public Client() {}
 

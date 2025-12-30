@@ -1,4 +1,4 @@
-package com.platform.libraryManager.ui.controllers.LoanControllers;
+package com.platform.libraryManager.ui.controllers.librarian;
 
 import com.platform.libraryManager.dataAccess.models.Librarian;
 import com.platform.libraryManager.dataAccess.models.Library;
@@ -13,7 +13,6 @@ import com.platform.libraryManager.dto.responses.endpoints.user.getUnique.GetUni
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 
 import java.util.List;

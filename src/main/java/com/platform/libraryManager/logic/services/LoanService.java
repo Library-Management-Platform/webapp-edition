@@ -2,6 +2,7 @@ package com.platform.libraryManager.logic.services;
 
 import com.platform.libraryManager.dataAccess.models.*;
 import com.platform.libraryManager.shared.enums.LoanStatusEnum;
+import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
 import com.platform.libraryManager.shared.enums.ResourceStatusEnum;
 import com.platform.libraryManager.dataAccess.repositories.LoanRepository;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -149,29 +151,20 @@ public class LoanService {
         return loanRepository.findOverdueLoans();
     }
 
-    public Map<String, Long> countLoansByCategory() {
-        return loanRepository.findAll().stream()
-                .filter(l -> l.getResource() != null && l.getResource().getCategory() != null)
-                .collect(Collectors.groupingBy(
-                        l -> l.getResource().getCategory().name(),
-                        Collectors.counting()));
-    }
-
-    public Map<String, Long> countLoansByLibrary() {
-        return loanRepository.findAll().stream()
-                .filter(l -> l.getLibrary() != null)
-                .collect(Collectors.groupingBy(
-                        l -> l.getLibrary().getName(),
-                        Collectors.counting()));
-    }
-
     public double computeTurnoverRate() {
-        long totalLoans = loanRepository.count();
-        long totalResources = resourceRepository.count();
-        if (totalResources == 0)
-            return 0.0;
-        return ((double) totalLoans / (double) totalResources) * 100.0;
+    // Numérateur : Combien de livres uniques ont déjà été prêtés ?
+    long engagedResources = loanRepository.countDistinctResourcesInLoans();
+
+    // Dénominateur : Combien de livres y a-t-il au total dans la collection ?
+    long totalResources = resourceRepository.count();
+
+    if (totalResources == 0) {
+        return 0.0; 
     }
+
+    // Le calcul : (livres utilisés / livres totaux) * 100
+    return ((double) engagedResources / totalResources) * 100.0;
+}
 
     // --------------------------------------------------
     // INTERNAL HELPERS
@@ -220,6 +213,29 @@ public class LoanService {
     @Transactional(readOnly = true)
     public List<Loan> getOverdueLoansWithRelations() {
         return loanRepository.findOverdueLoansWithRelations();
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Long> countLoansByCategory() {
+        return loanRepository.countLoansByCategoryName().stream()
+                .collect(Collectors.toMap(
+                        // Solution : Utilisez le nom complet et correct de votre classe Enum
+                        row -> ((ResourceCategoryEnum) row[0]).name(),
+                        row -> (Long) row[1]));
+    }
+
+    @Transactional(readOnly = true)
+    public Map<String, Long> countLoansByLibrary() {
+        return loanRepository.countLoansByLibraryName().stream()
+                .collect(Collectors.toMap(
+                        row -> (String) row[0],
+                        row -> (Long) row[1]));
+    }
+
+    // Ajoutez aussi cette méthode pour l'export CSV, c'est plus propre
+    @Transactional(readOnly = true)
+    public long countTotalLoans() {
+        return loanRepository.count();
     }
 
 }

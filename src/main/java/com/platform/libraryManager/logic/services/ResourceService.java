@@ -1,6 +1,10 @@
 package com.platform.libraryManager.logic.services;
 
 
+import com.platform.libraryManager.dataAccess.models.Librarian;
+import com.platform.libraryManager.dto.responses.endpoints.librarian.getUnique.GetUniqueLibrarianResponse;
+import com.platform.libraryManager.dto.searchQueryParams.LibrarianSearchQueryParams;
+import com.platform.libraryManager.logic.managers.resource.AddResourceManager;
 import com.platform.libraryManager.shared.factories.ResourceFactory;
 import com.platform.libraryManager.dataAccess.models.Resource;
 import com.platform.libraryManager.dto.payloads.resource.AddResourcePayload;
@@ -23,6 +27,7 @@ import com.platform.libraryManager.dto.searchQueryParams.LibrarySearchQueryParam
 import com.platform.libraryManager.dto.searchQueryParams.ResourceSearchQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,8 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class ResourceService {
 
     @Autowired private LibraryService libraryService;
-    @Autowired private ResourceRepository resourceRepository;
+    @Autowired private AddResourceManager addResourceManager;
 
+    @Autowired private ResourceRepository resourceRepository;
     @Autowired private FilebaseIPFSProvider filebaseIPFSProvider;
 
     public AddResourceResponse addResource(
@@ -41,9 +47,12 @@ public class ResourceService {
 
         try {
 
+
             final Resource resource = ResourceFactory.create(
                     addResourcePayload,
-                    libraryService.getUniqueLibrary(new LibrarySearchQueryParams(addResourcePayload.getLibraryId(), null, null, null, null)).getLibrary()
+                    libraryService.getUniqueLibrary(new LibrarySearchQueryParams(
+                            addResourceManager.getResourceLibrarian().getLibrary().getId(), null, null, null, null)
+                    ).getLibrary()
             );
 
             resource.setLink(filebaseIPFSProvider.uploadFile(file));

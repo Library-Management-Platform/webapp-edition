@@ -1,4 +1,4 @@
-package com.platform.libraryManager.ui.controllers.LoanControllers;
+package com.platform.libraryManager.ui.controllers.admin;
 
 import com.platform.libraryManager.dataAccess.models.Loan;
 import com.platform.libraryManager.logic.services.LoanService;

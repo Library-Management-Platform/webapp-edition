@@ -1,4 +1,4 @@
-package com.platform.libraryManager.ui.controllers;
+package com.platform.libraryManager.ui.controllers.client;
 
 import com.platform.libraryManager.dataAccess.models.Resource;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/client/resources")
-public class ResourceController {
+public class ClientResourceController {
 
     @Autowired
     private ResourceRepository resourceRepository;
@@ -24,7 +24,7 @@ public class ResourceController {
     /**
      * Main page to browse all resources
      */
-    @GetMapping("")
+    @GetMapping()
     public String browseResources(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "12") int size,

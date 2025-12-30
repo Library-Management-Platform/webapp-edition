@@ -126,8 +126,18 @@
                         <!-- Buttons -->
                         <div class="mt-3">
                             <!-- View Details Button -->
-                            <a th:href="@{/client/resources/{id}(id=${resource.id})}"
+                            <!--<a th:href="@{/client/resources/{id}(id=${resource.id})}"
                                 class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="bi bi-info-circle me-1"></i> View Details
+                            </a>-->
+
+                            <!--<a class="btn btn-outline-primary btn-sm w-100 mb-2">
+                                <i class="bi bi-info-circle me-1"></i> View Details
+                            </a>-->
+
+                            <a th:if="${resource.status.name() == 'BORROWED'}"
+                               class="btn btn-outline-primary btn-sm w-100 mb-2"
+                               th:href="${resource.link}">
                                 <i class="bi bi-info-circle me-1"></i> View Details
                             </a>
 

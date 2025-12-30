@@ -30,4 +30,6 @@ public interface LibrarianRepository extends JpaRepository<Librarian, Long> {
   Optional<Librarian> searchOne(@Param("params") LibrarianSearchQueryParams params);
 
   List<Librarian> findAll();
+  Optional<Librarian> findByUsername(String username);
+
 }

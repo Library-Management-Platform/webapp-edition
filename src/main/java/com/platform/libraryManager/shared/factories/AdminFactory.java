@@ -22,7 +22,7 @@ public abstract class AdminFactory {
     }
 
 
-    public static Admin create(Long id, EditAdminPayload editAdminPayload) {
+    public static Admin create(Long id, EditAdminPayload editAdminPayload, Admin parent) {
 
         return new Admin(
                 id,
@@ -30,7 +30,8 @@ public abstract class AdminFactory {
                 editAdminPayload.getEmail(),
                 editAdminPayload.getPassword(),
                 DateHelper.getCurrentLocalDateTime(),
-                DateHelper.getCurrentLocalDateTime()
+                DateHelper.getCurrentLocalDateTime(),
+                parent
         );
     }
 }

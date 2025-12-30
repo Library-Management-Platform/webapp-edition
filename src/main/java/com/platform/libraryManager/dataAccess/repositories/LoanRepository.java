@@ -14,72 +14,83 @@ import java.util.Optional;
 
 public interface LoanRepository extends JpaRepository<Loan, Long> {
 
-    // ---- Client scope ----
+        // ---- Client scope ----
 
-    List<Loan> findByClient(Client client);
+        List<Loan> findByClient(Client client);
 
-    List<Loan> findByClientAndStatusIn(Client client, List<LoanStatusEnum> statuses);
+        List<Loan> findByClientAndStatusIn(Client client, List<LoanStatusEnum> statuses);
 
-    Optional<Loan> findByClientAndResourceAndStatus(
-            Client client,
-            Resource resource,
-            LoanStatusEnum status);
+        Optional<Loan> findByClientAndResourceAndStatus(
+                        Client client,
+                        Resource resource,
+                        LoanStatusEnum status);
 
-    // Find first reserved loan for a resource that has not been notified
-    Optional<Loan> findFirstByResourceAndStatusAndAvailabilityNotifiedFalse(
-            Resource resource,
-            LoanStatusEnum status);
+        // Find first reserved loan for a resource that has not been notified
+        Optional<Loan> findFirstByResourceAndStatusAndAvailabilityNotifiedFalse(
+                        Resource resource,
+                        LoanStatusEnum status);
 
-    // ---- Library scope ----
+        // ---- Library scope ----
 
-    List<Loan> findByLibrary(Library library);
+        List<Loan> findByLibrary(Library library);
 
-    List<Loan> findByLibraryAndStatusIn(Library library, List<LoanStatusEnum> statuses);
+        List<Loan> findByLibraryAndStatusIn(Library library, List<LoanStatusEnum> statuses);
 
-    // ---- Resource availability ----
+        // ---- Resource availability ----
 
-    Optional<Loan> findFirstByResourceAndStatusIn(
-            Resource resource,
-            List<LoanStatusEnum> statuses);
+        Optional<Loan> findFirstByResourceAndStatusIn(
+                        Resource resource,
+                        List<LoanStatusEnum> statuses);
 
-    // ---- Simple overdue (used by scheduler) ----
+        // ---- Simple overdue (used by scheduler) ----
 
-    List<Loan> findByStatusAndDueDateBefore(
-            LoanStatusEnum status,
-            LocalDateTime dateTime);
+        List<Loan> findByStatusAndDueDateBefore(
+                        LoanStatusEnum status,
+                        LocalDateTime dateTime);
 
-    // ---- Active loans (NO relations) ----
+        // ---- Active loans (NO relations) ----
 
-    @Query("""
-                SELECT l FROM Loan l
-                WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
-            """)
-    List<Loan> findAllActiveLoans();
+        @Query("""
+                            SELECT l FROM Loan l
+                            WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
+                        """)
+        List<Loan> findAllActiveLoans();
 
-    // ---- Active loans WITH relations (FOR VIEWS) ----
+        // ---- Active loans WITH relations (FOR VIEWS) ----
 
-    @Query("""
-                SELECT l FROM Loan l
-                JOIN FETCH l.client
-                JOIN FETCH l.resource
-                JOIN FETCH l.library
-                WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
-            """)
-    List<Loan> findAllActiveLoansWithRelations();
+        @Query("""
+                            SELECT l FROM Loan l
+                            JOIN FETCH l.client
+                            JOIN FETCH l.resource
+                            JOIN FETCH l.library
+                            WHERE l.status <> com.platform.libraryManager.shared.enums.LoanStatusEnum.CLOSED
+                        """)
+        List<Loan> findAllActiveLoansWithRelations();
 
-    // ---- Overdue loans WITH relations (FOR VIEWS & NOTIFICATIONS) ----
+        // ---- Overdue loans WITH relations (FOR VIEWS & NOTIFICATIONS) ----
 
-    @Query("""
-                SELECT l FROM Loan l
-                JOIN FETCH l.client
-                JOIN FETCH l.resource
-                JOIN FETCH l.library
-                WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS
-                  AND l.dueDate < CURRENT_TIMESTAMP
-            """)
-    List<Loan> findOverdueLoansWithRelations();
+        @Query("""
+                            SELECT l FROM Loan l
+                            JOIN FETCH l.client
+                            JOIN FETCH l.resource
+                            JOIN FETCH l.library
+                            WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS
+                              AND l.dueDate < CURRENT_TIMESTAMP
+                        """)
+        List<Loan> findOverdueLoansWithRelations();
 
-    @Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
-    List<Loan> findOverdueLoans();
+        @Query("SELECT l FROM Loan l WHERE l.status = com.platform.libraryManager.shared.enums.LoanStatusEnum.IN_PROGRESS AND l.dueDate < CURRENT_TIMESTAMP")
+        List<Loan> findOverdueLoans();
 
+        @Query("SELECT l.library.name, COUNT(l) FROM Loan l WHERE l.library.name IS NOT NULL GROUP BY l.library.name")
+        List<Object[]> countLoansByLibraryName();
+
+        /**
+         * Compte les prêts groupés par nom de catégorie de ressource.
+         */
+        @Query("SELECT l.resource.category, COUNT(l) FROM Loan l WHERE l.resource.category IS NOT NULL GROUP BY l.resource.category")
+        List<Object[]> countLoansByCategoryName();
+
+        @Query("SELECT COUNT(DISTINCT l.resource.id) FROM Loan l")
+    long countDistinctResourcesInLoans();
 }
