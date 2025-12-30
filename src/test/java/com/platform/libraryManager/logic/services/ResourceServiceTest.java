@@ -84,13 +84,9 @@ public class ResourceServiceTest {
         final Librarian fakeLibrarian = new Librarian();
         fakeLibrarian.setLibrary(fakeLibrary);
 
-        when(addResourceManager.getResourceLibrarian()).thenReturn(fakeLibrarian);
-        when(libraryService.getUniqueLibrary(any(LibrarySearchQueryParams.class))).thenReturn(new GetUniqueLibrarySuccessResponse(fakeLibrary));
+        final AddResourceResponse addResourceResponse = resourceService.addResource(null, addResourcePayload);
+        Assertions.assertFalse(addResourceResponse.success());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            resourceService.addResource(null, addResourcePayload);
-        });
-
-        Assertions.assertEquals("File must not be null", exception.getMessage());
+        Assertions.assertEquals("File must not be null", addResourceResponse.getMessage());
     }
 }

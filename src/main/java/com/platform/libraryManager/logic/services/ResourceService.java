@@ -22,6 +22,7 @@ import com.platform.libraryManager.dto.responses.endpoints.resource.remove.Remov
 import com.platform.libraryManager.dto.responses.endpoints.resource.remove.RemoveResourceSuccessResponse;
 import com.platform.libraryManager.dto.searchQueryParams.LibrarySearchQueryParams;
 import com.platform.libraryManager.dto.searchQueryParams.ResourceSearchQueryParams;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -43,12 +44,13 @@ public class ResourceService {
 
         try {
 
+            Validate.notNull(file, "File must not be null");
 
             final Resource resource = ResourceFactory.create(
                     addResourcePayload,
                     libraryService.getUniqueLibrary(new LibrarySearchQueryParams(
-                            addResourceManager.getResourceLibrarian().getLibrary().getId(), null, null, null, null)
-                    ).getLibrary()
+                            addResourceManager.getResourceLibrarian().getLibrary().getId(), null, null, null, null
+                    )).getLibrary()
             );
 
             resource.setLink(filebaseIPFSProvider.uploadFile(file));
@@ -57,6 +59,9 @@ public class ResourceService {
 
         }catch(DataIntegrityViolationException dataIntegrityViolationException) {
             return new AddResourceErrorResponse(409, "Resource already exists");
+
+        } catch(NullPointerException exception) {
+            return new AddResourceErrorResponse(400, exception.getMessage());
 
         } catch(Exception exception) {
             return new AddResourceErrorResponse(400, "Error");
