@@ -4,12 +4,9 @@ package com.platform.libraryManager.logic.services;
 import com.platform.libraryManager.dataAccess.models.Librarian;
 import com.platform.libraryManager.dataAccess.models.Library;
 import com.platform.libraryManager.dataAccess.repositories.ResourceRepository;
-import com.platform.libraryManager.dto.payloads.library.AddLibraryPayload;
 import com.platform.libraryManager.dto.payloads.resource.AddResourcePayload;
-import com.platform.libraryManager.dto.responses.endpoints.library.getUnique.GetUniqueLibraryResponse;
 import com.platform.libraryManager.dto.responses.endpoints.library.getUnique.GetUniqueLibrarySuccessResponse;
 import com.platform.libraryManager.dto.responses.endpoints.resource.add.AddResourceResponse;
-import com.platform.libraryManager.dto.responses.endpoints.resource.add.AddResourceSuccessResponse;
 import com.platform.libraryManager.dto.searchQueryParams.LibrarySearchQueryParams;
 import com.platform.libraryManager.logic.managers.resource.AddResourceManager;
 import com.platform.libraryManager.shared.enums.ResourceCategoryEnum;
@@ -24,11 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+
 
 @ExtendWith(MockitoExtension.class)
 public class ResourceServiceTest {
@@ -99,4 +96,6 @@ public class ResourceServiceTest {
         Assertions.assertFalse(addResourceResponse.success());
 
     }
+
+
 }
