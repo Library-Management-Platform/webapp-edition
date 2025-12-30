@@ -89,4 +89,14 @@ public class ResourceServiceTest {
 
         Assertions.assertEquals("File must not be null", addResourceResponse.getMessage());
     }
+
+
+    @Test
+    void shouldThrowException_whenLibraryNotFound() {
+
+        final Librarian fakeLibrarian = new Librarian();
+        final AddResourceResponse addResourceResponse = resourceService.addResource(null, addResourcePayload);
+        Assertions.assertFalse(addResourceResponse.success());
+
+    }
 }
