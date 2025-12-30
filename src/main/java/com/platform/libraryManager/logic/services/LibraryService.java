@@ -29,8 +29,7 @@ import java.util.List;
 @Service
 public class LibraryService {
 
-    @Autowired
-    private LibraryRepository libraryRepository;
+    @Autowired private LibraryRepository libraryRepository;
 
     public AddLibraryResponse addLibrary(AddLibraryPayload addLibraryPayload) {
 
