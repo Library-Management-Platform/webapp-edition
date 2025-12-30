@@ -1,9 +1,6 @@
 package com.platform.libraryManager.logic.services;
 
 
-import com.platform.libraryManager.dataAccess.models.Librarian;
-import com.platform.libraryManager.dto.responses.endpoints.librarian.getUnique.GetUniqueLibrarianResponse;
-import com.platform.libraryManager.dto.searchQueryParams.LibrarianSearchQueryParams;
 import com.platform.libraryManager.logic.managers.resource.AddResourceManager;
 import com.platform.libraryManager.shared.factories.ResourceFactory;
 import com.platform.libraryManager.dataAccess.models.Resource;
@@ -27,7 +24,6 @@ import com.platform.libraryManager.dto.searchQueryParams.LibrarySearchQueryParam
 import com.platform.libraryManager.dto.searchQueryParams.ResourceSearchQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
