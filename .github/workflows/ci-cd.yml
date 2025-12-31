@@ -86,7 +86,22 @@ jobs:
 
       - name: Build and Push Docker Image to ACR with Compose
         run: |
-          docker compose build
-          docker compose push
+          # Build image with SHA tag
+          docker compose build --build-arg TAG=${TAG} app
+          
+          # Tag SHA image as latest for Web App auto-deploy
+          docker tag $ACR_HOST/library-app:${TAG} $ACR_HOST/library-app:latest
+          
+          # Push both tags
+          docker compose push app
+          docker push $ACR_HOST/library-app:latest
+          
+          
+
+      #- name: Build and Push Docker Image to ACR with Compose
+      #  run: |
+      #    docker compose build
+      #    docker compose push
+      #    docker push $ACR_HOST/library-app:latest
 
 
