@@ -9,7 +9,7 @@ on:
 jobs:
 
   cd:
-    name: Docker Build & Deployb
+    name: Docker Build & Deploy
     runs-on: ubuntu-latest
 
     steps:
