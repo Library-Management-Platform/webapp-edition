@@ -66,13 +66,14 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
 
-      - name: Build Docker image
+      - name: Recreate application.properties
         run: |
-          docker build -t library-app:latest .
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.properties
 
-      - name: Deploy with Docker Compose
+      - name: Build and Deploy with Docker Compose
         run: |
           docker compose down || true
-          docker compose up -d --build
+          docker compose build
+      
 
 
