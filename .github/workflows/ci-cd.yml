@@ -88,7 +88,7 @@ jobs:
         run: |
           
           # Build image with SHA tag
-          docker compose build --build-arg TAG=${TAG} library-app
+          docker compose build --build-arg TAG=${TAG} app
       
           # Tag SHA image as latest for Web App auto-deploy
           docker tag $ACR_HOST/library-app:${TAG} $ACR_HOST/library-app:latest
