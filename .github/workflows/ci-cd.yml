@@ -1,4 +1,4 @@
-name: Library Manager Plarform CI Workflow.
+name: Library Manager Plarform CI Workflow
 
 on:
   push:
