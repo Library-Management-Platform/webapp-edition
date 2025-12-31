@@ -46,3 +46,17 @@ jobs:
           # Push both tags
           docker compose push app
           docker push $ACR_HOST/library-app:latest
+
+      - name: Azure CLI Login (For Web App Server Restart)
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Restart Azure Web Application server
+        uses: azure/cli@v2
+        with:
+          azcliversion: 2.60.0
+          inlineScript: |
+            az webapp restart \
+              --name library-app-container \
+              --resource-group Library-app-RG
