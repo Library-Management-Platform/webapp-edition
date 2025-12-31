@@ -1,0 +1,48 @@
+name: Library Manager Plarform CD Workflow.
+
+
+on:
+  push:
+    branches: [master]
+
+
+jobs:
+
+  cd:
+    name: Docker Build & Deployb
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set environment variables
+        run: |
+          echo "ACR_HOST=${{ secrets.AZURE_ACR_HOST }}" >> $GITHUB_ENV
+          echo "TAG=${GITHUB_SHA}" >> $GITHUB_ENV
+
+      - name: Login to Azure Container Registry (ACR)
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ secrets.AZURE_ACR_HOST }}
+          username: ${{ secrets.AZURE_ACR_USERNAME }}
+          password: ${{ secrets.AZURE_ACR_PASSWORD }}
+
+      - name: Recreate application.properties
+        run: |
+          echo "${{ secrets.APPLICATION_PROPERTIES }}" > src/main/resources/application.properties
+
+      - name: Build and Push Docker Image to ACR with Compose
+        run: |
+          # Build image with SHA tag
+          docker compose build --build-arg TAG=${TAG} app
+          
+          # Tag SHA image as latest for Web App auto-deploy
+          docker tag $ACR_HOST/library-app:${TAG} $ACR_HOST/library-app:latest
+          
+          # Push both tags
+          docker compose push app
+          docker push $ACR_HOST/library-app:latest
