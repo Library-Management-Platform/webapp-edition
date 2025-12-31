@@ -182,29 +182,60 @@ mvn spring-boot:run
 
 3. Arrêter le stack : ``` docker compose down ```
 
-## 🔄 CI/CD avec GitHub Actions
+## 🔄 Pipeline CI/CD
 
 Le pipeline CI/CD comprend :
 
-1. **CI** (sur ```dev``` et **PR** vers ```dev```) :
+### 1. Stratégie des Branches Git
 
-   * Configuration du JDK 21
-   * Installation des dépendances Maven (avec Caching si possible)
-   * Création dynamique du application.properties pour tests
-   * Faire le build d'environnement Maven
-   * Exécution des tests unitaires et tests d'intégration
-   * Affichage des résultats des tests exécutés
+ * main/master (branche de production) → push directe interdites 🔒
+ * dev (branche de développement) → push directes interdites 🔒
+ * c. Branches de fonctionnalité (feature/, test/, refactor/, ...etc.)
    
 
-2. **CD** (sur ```master```) :
+### 2. Github Actions
+pour github actions on a 2 workflows :
 
-    * Création dynamique du application.properties pour les injecter dans l'image docker à construire
-    * Build des images Docker avec ```docker-compose build```
+#### CI (Intégration Continue) : Build et Tests ```.github/workflows/ci.yml```:
 
-Exemple de déclencheur pour CD uniquement sur master :
-``` 
-if: github.event_name == 'push' && github.ref_name == 'master' 
-```
+  * Charger le code source sur le runner CI
+  * Configurer l'environnement de développement (JDK 21 et Maven)
+  * Télécharger et installer les dépendances Maven
+  * Injecter les variables d'environnement (en utilisant les secrets GitHub) c'est-à-dire application.properties
+  * Construire l'application (JAR) ===> Build
+  * Exécuter les tests unitaires et d'intégration et afficher les résultats
+
+**Déclenchement** : Lorsqu'une Pull Request est créée vers la branche de développement (dev) ou la branche de production (master)
+
+#### CD (Déploiement Continu) : Build et Déploiement ```.github/workflows/cd.yml```
+
+  * Charger le code source sur le runner CD
+  * Configurer Docker
+  * Configurer les variables d'environnement Docker (tag d'image ```TAG``` et ```ACR_HOST``` - le lien vers Azure Container Registry)
+  * Se connecter à Azure ACR (nom d'utilisateur et mot de passe ACR pris depuis **GitHub secrets**  dans ce cas ```AZURE_ACR_USERNAME``` et ```AZURE_ACR_PASSWORD```)
+  * Injecter les variables d'environnement application.properties (en utilisant **GitHub secrets**)
+  * Construire l'image Docker avec le hash du commit comme tag en utilisant la configuration docker-compose.yml
+  * Créer une copie de l'image Docker créée avec le tag ```latest```
+  * faire un push des 2 images Docker vers ACR
+
+### 3. Microsoft Azure
+Ressources créées manuellement depuis le portail Azure :
+
+### Azure Container Registry (repository : library-app) 
+
+GitHub Actions déploie 2 images à chaque push vers master :
+* Image avec le hash du commit actuel comme tag
+* Image avec le tag ```latest``` (si ```latest``` existe déjà → remplace l'image avec le tag ```latest``` déjà présente dans le registry)
+
+![Azure_ACR.png](https://tropical-moccasin-unicorn.myfilebase.com/ipfs/Qmai6FpPW3VeVePAAJPzBXGr1UwAdxRhXea5sdzy6mw35N)
+
+### Web Application (library-app-container)
+
+* La ressource est mappée sur le registry de conteneurs ```library-app``` avec l'image tag ```latest```
+* La ressource a l'option "déploiement continu" activée, donc chaque fois que l'image Docker avec le tag ```latest``` est mise à jour dans le registry, un nouveau conteneur est créé pour refléter la nouvelle mise à jour et l'ancien est supprimé
+
+![Azure_Webapp.png](https://tropical-moccasin-unicorn.myfilebase.com/ipfs/QmWj4K26JpMr7ZxoKUvJqSxFkhLUcN13aEFoR6Cfr6pfmm)
+
 
 ## 🔗 Points d'Accès API
 
