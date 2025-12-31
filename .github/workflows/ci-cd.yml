@@ -93,7 +93,7 @@ jobs:
           docker tag $ACR_HOST/library-app:${TAG} $ACR_HOST/library-app:latest
           
           # Push both tags
-          docker compose push app:${TAG}
+          docker compose push app
           docker push $ACR_HOST/library-app:latest
           
           
