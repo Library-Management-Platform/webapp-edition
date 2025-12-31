@@ -10,6 +10,7 @@ on:
 jobs:
 
   ci:
+    name: Test and Integrate
     runs-on: ubuntu-latest
 
     steps:
