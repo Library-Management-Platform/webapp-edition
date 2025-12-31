@@ -89,9 +89,4 @@ jobs:
           docker compose build
           docker compose push
 
-      - name: Deploy with Docker Compose
-        run: |
-          docker compose down || true
-          docker compose up -
-
 
