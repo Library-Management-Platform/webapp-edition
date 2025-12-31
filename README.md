@@ -170,6 +170,42 @@ mvn spring-boot:run
 *   **Interface Web :** `http://localhost:8080`
 *   **Documentation API :** `http://localhost:8080/swagger-ui.html`
 
+### Exécution avec Docker (Production)
+
+1. Construire et lancer le stack Docker :
+``` docker-compose up -d --build ```
+
+2. Variables sensibles et production :
+
+   * Les credentials pour DB, SMTP, JWT, etc. doivent être injectés via docker-compose.yml ou secrets GitHub Actions.
+   * application.properties pour la prod peut être fourni via secret ou volume monté.
+
+3. Arrêter le stack : ``` docker compose down ```
+
+## 🔄 CI/CD avec GitHub Actions
+
+Le pipeline CI/CD comprend :
+
+1. **CI** (sur ```dev``` et **PR** vers ```dev```) :
+
+   * Configuration du JDK 21
+   * Installation des dépendances Maven (avec Caching si possible)
+   * Création dynamique du application.properties pour tests
+   * Faire le build d'environnement Maven
+   * Exécution des tests unitaires et tests d'intégration
+   * Affichage des résultats des tests exécutés
+   
+
+2. **CD** (sur ```master```) :
+
+    * Création dynamique du application.properties pour les injecter dans l'image docker à construire
+    * Build des images Docker avec ```docker-compose build```
+
+Exemple de déclencheur pour CD uniquement sur master :
+``` 
+if: github.event_name == 'push' && github.ref_name == 'master' 
+```
+
 ## 🔗 Points d'Accès API
 
 ### 🔐 Points d'Accès d'Authentification
