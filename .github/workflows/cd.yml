@@ -55,7 +55,7 @@ jobs:
       - name: Restart Azure Web Application server
         uses: azure/cli@v2
         with:
-          azcliversion: 2.60.0
+          azcliversion: latest
           inlineScript: |
             az webapp restart \
               --name library-app-container \
