@@ -1,4 +1,4 @@
-name: Library Manager Plarform CI Workflow
+name: Library Manager Plarform CI/CD Workflow.
 
 on:
   push:
@@ -95,13 +95,6 @@ jobs:
           # Push both tags
           docker compose push app
           docker push $ACR_HOST/library-app:latest
-          
-          
-
-      #- name: Build and Push Docker Image to ACR with Compose
-      #  run: |
-      #    docker compose build
-      #    docker compose push
-      #    docker push $ACR_HOST/library-app:latest
+     
 
 
