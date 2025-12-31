@@ -11,7 +11,7 @@ on:
 jobs:
 
   cd:
-    name: Build and Test Java SpringBoot Application and Integrate Updates
+    name: Build and Test Java SpringBoot Application
     runs-on: ubuntu-latest
 
     steps:
